@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NURE — Админ Панель</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Montserrat', sans-serif; background: #f0efec; color: #1a1a1a; }
+a { text-decoration: none; color: inherit; }
+
+/* NAV */
+.admin-nav { background: #1a1a1a; color: white; padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+.admin-nav__logo { font-family: 'Playfair Display', serif; font-size: 16px; letter-spacing: 0.1em; }
+.admin-nav__badge { background: #8B6914; color: white; font-size: 8px; font-weight: 600; letter-spacing: 0.14em; padding: 3px 8px; border-radius: 4px; margin-left: 10px; }
+.admin-nav__right { display: flex; align-items: center; gap: 16px; }
+.nav-link { font-size: 11px; letter-spacing: 0.1em; color: rgba(255,255,255,0.6); cursor: pointer; background: none; border: none; font-family: 'Montserrat', sans-serif; }
+.nav-link:hover { color: white; }
+.nav-link.active { color: white; }
+
+/* LAYOUT */
+.admin-layout { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
+
+/* TABS */
+.admin-tabs { display: flex; gap: 4px; margin-bottom: 24px; background: white; border-radius: 12px; padding: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.admin-tab { flex: 1; padding: 10px; text-align: center; font-size: 10px; font-weight: 500; letter-spacing: 0.12em; border-radius: 8px; cursor: pointer; background: none; border: none; color: rgba(0,0,0,0.4); font-family: 'Montserrat', sans-serif; transition: all 0.2s; }
+.admin-tab.active { background: #1a1a1a; color: white; }
+
+/* SECTION */
+.section-card { background: white; border-radius: 16px; padding: 24px; margin-bottom: 16px; box-shadow: 0 1px 6px rgba(0,0,0,0.06); }
+.section-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 500; margin-bottom: 6px; }
+.section-sub { font-size: 11px; color: rgba(0,0,0,0.4); letter-spacing: 0.04em; margin-bottom: 20px; }
+
+/* PRODUCT LIST */
+.product-list { display: flex; flex-direction: column; gap: 0; }
+.product-row { display: flex; gap: 14px; align-items: center; padding: 14px 0; border-bottom: 1px solid rgba(0,0,0,0.06); cursor: pointer; transition: background 0.15s; border-radius: 8px; padding-left: 8px; }
+.product-row:hover { background: rgba(0,0,0,0.02); }
+.product-row__img { width: 52px; height: 66px; object-fit: cover; border-radius: 6px; background: #ede9e3; flex-shrink: 0; }
+.product-row__info { flex: 1; min-width: 0; }
+.product-row__name { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 500; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.product-row__meta { font-size: 10px; color: rgba(0,0,0,0.4); letter-spacing: 0.06em; }
+.product-row__price { font-size: 14px; font-weight: 600; flex-shrink: 0; }
+.product-row__edit { background: none; border: 1px solid rgba(0,0,0,0.12); color: rgba(0,0,0,0.5); font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 0.08em; padding: 6px 14px; border-radius: 8px; cursor: pointer; white-space: nowrap; }
+
+/* EDIT MODAL */
+.modal-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
+.modal-wrap.open { display: flex; }
+.modal { background: white; border-radius: 20px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; padding: 28px; }
+.modal__title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 500; margin-bottom: 24px; }
+.field { margin-bottom: 18px; }
+.field label { display: block; font-size: 10px; font-weight: 500; letter-spacing: 0.12em; color: rgba(0,0,0,0.4); margin-bottom: 7px; }
+.field input, .field textarea, .field select { width: 100%; border: 1.5px solid rgba(0,0,0,0.12); border-radius: 10px; padding: 11px 14px; font-family: 'Montserrat', sans-serif; font-size: 13px; color: #1a1a1a; outline: none; transition: border-color 0.2s; background: #faf9f7; }
+.field input:focus, .field textarea:focus { border-color: #1a1a1a; }
+.field textarea { min-height: 100px; resize: vertical; line-height: 1.6; }
+.field select { cursor: pointer; }
+.modal__actions { display: flex; gap: 12px; margin-top: 24px; }
+.btn-primary { flex: 1; height: 48px; background: #1a1a1a; color: white; border: none; border-radius: 12px; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.16em; cursor: pointer; }
+.btn-secondary { height: 48px; padding: 0 24px; background: none; color: rgba(0,0,0,0.5); border: 1.5px solid rgba(0,0,0,0.15); border-radius: 12px; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.1em; cursor: pointer; }
+
+/* IMAGES */
+.images-section { margin-top: 20px; }
+.images-section label { display: block; font-size: 10px; font-weight: 500; letter-spacing: 0.12em; color: rgba(0,0,0,0.4); margin-bottom: 12px; }
+.images-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+.img-thumb { position: relative; aspect-ratio: 3/4; }
+.img-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; display: block; }
+.img-thumb__del { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.6); color: white; border: none; width: 20px; height: 20px; border-radius: 50%; cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; }
+.img-upload-area { border: 2px dashed rgba(0,0,0,0.15); border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; transition: border-color 0.2s; }
+.img-upload-area:hover { border-color: #1a1a1a; }
+.img-upload-area input { display: none; }
+.img-upload-label { font-size: 12px; color: rgba(0,0,0,0.4); display: block; cursor: pointer; }
+.img-upload-label svg { display: block; margin: 0 auto 8px; }
+.colors-manager { margin-top: 16px; }
+.color-entry { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+.color-entry input { flex: 1; }
+.color-entry .btn-icon { background: none; border: none; cursor: pointer; color: rgba(0,0,0,0.35); font-size: 16px; }
+.add-color-btn { background: none; border: 1.5px dashed rgba(0,0,0,0.2); color: rgba(0,0,0,0.4); font-family: 'Montserrat', sans-serif; font-size: 11px; letter-spacing: 0.08em; padding: 8px 16px; border-radius: 8px; cursor: pointer; width: 100%; margin-top: 8px; }
+
+/* STATS */
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.stat-card { background: #f8f7f4; border-radius: 12px; padding: 16px; }
+.stat-card__label { font-size: 9px; font-weight: 500; letter-spacing: 0.14em; color: rgba(0,0,0,0.38); margin-bottom: 8px; }
+.stat-card__value { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 500; }
+.stat-card__sub { font-size: 10px; color: rgba(0,0,0,0.35); margin-top: 4px; }
+
+/* USERS */
+.user-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
+.user-row__info { }
+.user-row__name { font-size: 13px; font-weight: 500; margin-bottom: 3px; }
+.user-row__email { font-size: 11px; color: rgba(0,0,0,0.4); }
+.user-row__role { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; padding: 4px 10px; border-radius: 20px; }
+.role-admin { background: #fff3e0; color: #e65100; }
+.role-user  { background: #e8f5e9; color: #2e7d32; }
+
+/* TOAST */
+.toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px); background: #1a1a1a; color: white; font-size: 12px; padding: 12px 24px; border-radius: 100px; opacity: 0; transition: opacity 0.3s, transform 0.3s; z-index: 400; pointer-events: none; white-space: nowrap; }
+.toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* LOGIN SCREEN */
+.login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.login-box { background: white; border-radius: 20px; padding: 40px 32px; width: 100%; max-width: 380px; box-shadow: 0 4px 40px rgba(0,0,0,0.1); }
+.login-logo { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 400; letter-spacing: 0.1em; text-align: center; margin-bottom: 6px; }
+.login-sub { font-size: 11px; color: rgba(0,0,0,0.4); text-align: center; letter-spacing: 0.06em; margin-bottom: 32px; }
+.login-error { color: #9E3B3B; font-size: 11px; text-align: center; margin-top: 12px; display: none; }
+
+/* LOADING */
+.loading { text-align: center; padding: 48px 20px; font-size: 12px; color: rgba(0,0,0,0.35); letter-spacing: 0.06em; }
+    </style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN (показывается если не авторизован) -->
+<div id="loginScreen" class="login-screen">
+    <div class="login-box">
+        <p class="login-logo">nuré</p>
+        <p class="login-sub">ADMIN PANEL</p>
+        <div class="field"><label>EMAIL</label><input type="email" id="loginEmail" placeholder="ismagulshakarim0909@gmail.com"></div>
+        <div class="field"><label>ПАРОЛЬ</label><input type="password" id="loginPass" placeholder="••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+        <p class="login-error" id="loginError"></p>
+        <button class="btn-primary" style="width:100%;margin-top:16px" onclick="doLogin()">ВОЙТИ</button>
+    </div>
+</div>
+
+<!-- ADMIN APP -->
+<div id="adminApp" style="display:none">
+
+<nav class="admin-nav">
+    <div>
+        <span class="admin-nav__logo">nuré</span>
+        <span class="admin-nav__badge">ADMIN</span>
+    </div>
+    <div class="admin-nav__right">
+        <span id="adminName" style="font-size:12px;color:rgba(255,255,255,0.6)"></span>
+        <button class="nav-link" onclick="API.logout()">Выйти</button>
+        <a href="/catalog/index.html" class="nav-link">→ Сайт</a>
+    </div>
+</nav>
+
+<div class="admin-layout">
+    <div class="admin-tabs">
+        <button class="admin-tab active" data-tab="products">ТОВАРЫ</button>
+        <button class="admin-tab" data-tab="users">ПОЛЬЗОВАТЕЛИ</button>
+        <button class="admin-tab" data-tab="settings">НАСТРОЙКИ</button>
+    </div>
+
+    <!-- PRODUCTS TAB -->
+    <div id="tab-products">
+        <div class="section-card">
+            <p class="section-title">Управление товарами</p>
+            <p class="section-sub">Товары загружаются из Paloma365. Здесь вы можете добавить фото, описание и цвета.</p>
+            <div id="productsList" class="product-list">
+                <div class="loading">Загрузка товаров...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- USERS TAB -->
+    <div id="tab-users" style="display:none">
+        <div class="section-card">
+            <p class="section-title">Пользователи</p>
+            <p class="section-sub">Все зарегистрированные аккаунты на сайте.</p>
+            <div id="usersList"><div class="loading">Загрузка...</div></div>
+        </div>
+    </div>
+
+    <!-- SETTINGS TAB -->
+    <div id="tab-settings" style="display:none">
+        <div class="section-card">
+            <p class="section-title">Настройки</p>
+            <p class="section-sub">Управление бэкендом и интеграциями.</p>
+            <div class="field"><label>URL БЭКЕНДА (Render)</label><input type="text" id="backendUrlInput" placeholder="https://nure-backend.onrender.com"></div>
+            <div class="field"><label>WHATSAPP НОМЕР</label><input type="text" id="waNumber" placeholder="+77012345678"></div>
+            <button class="btn-primary" style="width:100%" onclick="saveSettings()">СОХРАНИТЬ</button>
+        </div>
+        <div class="section-card">
+            <p class="section-title">Смена пароля</p>
+            <div class="field"><label>ТЕКУЩИЙ ПАРОЛЬ</label><input type="password" id="oldPass"></div>
+            <div class="field"><label>НОВЫЙ ПАРОЛЬ</label><input type="password" id="newPass"></div>
+            <button class="btn-primary" style="width:100%" onclick="changePassword()">ИЗМЕНИТЬ ПАРОЛЬ</button>
+        </div>
+    </div>
+</div>
+
+</div><!-- /#adminApp -->
+
+<!-- EDIT PRODUCT MODAL -->
+<div class="modal-wrap" id="editModal">
+    <div class="modal">
+        <p class="modal__title" id="editModalTitle">Редактировать товар</p>
+
+        <div class="field"><label>КАТЕГОРИЯ</label>
+            <select id="editCategory">
+                <option value="">Не задано</option>
+                <option value="dress">Платья</option>
+                <option value="outer">Верхняя одежда</option>
+                <option value="suit">Костюмы</option>
+                <option value="top">Топы</option>
+                <option value="acc">Аксессуары</option>
+            </select>
+        </div>
+        <div class="field"><label>ЗНАЧОК (NEW / HIT / SALE / пусто)</label><input type="text" id="editBadge" placeholder="NEW"></div>
+        <div class="field"><label>ОПИСАНИЕ ТОВАРА</label><textarea id="editDescription" placeholder="Введите описание этого изделия..."></textarea></div>
+        <div class="field"><label>РАЗМЕРЫ (через запятую)</label><input type="text" id="editSizes" placeholder="XS, S, M, L, XL"></div>
+
+        <!-- Colors Manager -->
+        <div class="colors-manager">
+            <label style="font-size:10px;font-weight:500;letter-spacing:0.12em;color:rgba(0,0,0,0.4);display:block;margin-bottom:10px">ВАРИАНТЫ ЦВЕТА</label>
+            <div id="colorsContainer"></div>
+            <button class="add-color-btn" onclick="addColorEntry()">+ ДОБАВИТЬ ЦВЕТ</button>
+        </div>
+
+        <!-- Images for default color -->
+        <div class="images-section">
+            <label>ФОТОГРАФИИ ТОВАРА (основные)</label>
+            <div class="images-grid" id="imagesGrid"></div>
+            <div class="img-upload-area" onclick="document.getElementById('imgUploadInput').click()">
+                <label class="img-upload-label">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(0,0,0,0.3)" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    Нажмите чтобы загрузить фото
+                </label>
+                <input type="file" id="imgUploadInput" multiple accept="image/*" onchange="uploadImages(this.files)">
+            </div>
+        </div>
+
+        <div class="modal__actions">
+            <button class="btn-secondary" onclick="closeEditModal()">ОТМЕНА</button>
+            <button class="btn-primary" onclick="saveProduct()">СОХРАНИТЬ</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="/api-client.js"></script>
+<script>
+// ── STATE ──
+let currentEditId = null;
+let currentEditSlug = null;
+let currentEnrichments = {};
+let colorsData = [];
+
+// ── INIT ──
+async function init() {
+    const user = API.getUser();
+    if (!user || user.role !== 'admin') {
+        // Check token validity
+        if (API.getToken()) {
+            try {
+                const r = await API._get('/api/auth/me', true);
+                if (!r.user || r.user.role !== 'admin') { showLoginScreen(); return; }
+                localStorage.setItem('nure_user', JSON.stringify(r.user));
+                showAdminApp(r.user);
+            } catch { showLoginScreen(); }
+        } else { showLoginScreen(); }
+        return;
+    }
+    showAdminApp(user);
+}
+
+function showLoginScreen() {
+    document.getElementById('loginScreen').style.display='flex';
+    document.getElementById('adminApp').style.display='none';
+}
+function showAdminApp(user) {
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('adminApp').style.display='block';
+    document.getElementById('adminName').textContent = user.name;
+    loadProducts();
+    loadSettings();
+}
+
+async function doLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const pass  = document.getElementById('loginPass').value;
+    const err   = document.getElementById('loginError');
+    err.style.display='none';
+    const res = await API.login(email, pass);
+    if (res.error) { err.textContent=res.error; err.style.display='block'; return; }
+    if (res.user.role !== 'admin') { err.textContent='Нет доступа к админ-панели'; err.style.display='block'; API.logout(); return; }
+    showAdminApp(res.user);
+}
+
+// ── TABS ──
+document.querySelectorAll('.admin-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
+        tab.classList.add('active');
+        const name = tab.dataset.tab;
+        document.querySelectorAll('[id^="tab-"]').forEach(t=>t.style.display='none');
+        document.getElementById('tab-'+name).style.display='';
+        if (name==='users') loadUsers();
+    });
+});
+
+// ── PRODUCTS ──
+async function loadProducts() {
+    const list = document.getElementById('productsList');
+    list.innerHTML='<div class="loading">Загрузка товаров...</div>';
+    try {
+        const [productsData, enrichData] = await Promise.all([
+            API.getProducts(),
+            API.adminGetEnrichments()
+        ]);
+        currentEnrichments = enrichData || {};
+        const products = productsData.products || [];
+        if (!products.length) { list.innerHTML='<div class="loading">Товары не найдены в Paloma365</div>'; return; }
+        list.innerHTML = products.map(p => {
+            const enrich = currentEnrichments[p.id] || {};
+            const img = (enrich.images && enrich.images.default && enrich.images.default[0]) || PLACEHOLDER_IMG;
+            const price = parseFloat(p.price || p.price1 || 0);
+            return `<div class="product-row">
+                <img class="product-row__img" src="${img}" alt="${p.name}" onerror="this.src='${PLACEHOLDER_IMG}'">
+                <div class="product-row__info">
+                    <p class="product-row__name">${p.name}</p>
+                    <p class="product-row__meta">ID: ${p.id} ${enrich.category?'· '+enrich.category:''} ${enrich.badge?'· '+enrich.badge:''}</p>
+                </div>
+                <p class="product-row__price">${price>0?formatPrice(price)+' ₸':'—'}</p>
+                <button class="product-row__edit" onclick="openEditModal('${p.id}','${(p.slug||p.id)}','${p.name.replace(/'/g,"\\'")}')">ИЗМЕНИТЬ</button>
+            </div>`;
+        }).join('');
+    } catch(e) {
+        list.innerHTML='<div class="loading">Ошибка загрузки: ' + e.message + '</div>';
+    }
+}
+
+// ── EDIT MODAL ──
+function openEditModal(id, slug, name) {
+    currentEditId = id;
+    currentEditSlug = slug;
+    const enrich = currentEnrichments[id] || {};
+    document.getElementById('editModalTitle').textContent = name;
+    document.getElementById('editCategory').value   = enrich.category || '';
+    document.getElementById('editBadge').value      = enrich.badge    || '';
+    document.getElementById('editDescription').value= enrich.description || '';
+    document.getElementById('editSizes').value      = (enrich.sizes || []).join(', ');
+
+    // Colors
+    colorsData = enrich.colors ? JSON.parse(JSON.stringify(enrich.colors)) : [];
+    renderColorsManager();
+
+    // Images
+    renderImagesGrid(enrich.images && enrich.images.default ? enrich.images.default : []);
+
+    document.getElementById('editModal').classList.add('open');
+}
+function closeEditModal() {
+    document.getElementById('editModal').classList.remove('open');
+    currentEditId = null; currentEditSlug = null;
+}
+document.getElementById('editModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('editModal')) closeEditModal();
+});
+
+function renderImagesGrid(imgs) {
+    const grid = document.getElementById('imagesGrid');
+    grid.innerHTML = imgs.map((url, i) => `
+        <div class="img-thumb">
+            <img src="${url}" alt="" onerror="this.src='${PLACEHOLDER_IMG}'">
+            <button class="img-thumb__del" onclick="deleteImage('${url}', this.closest('.img-thumb'))">✕</button>
+        </div>`).join('');
+}
+
+async function uploadImages(files) {
+    if (!files.length || !currentEditSlug) return;
+    showToast('Загрузка фото...');
+    const res = await API.adminUploadImages(currentEditSlug, [...files], 'default');
+    if (res.error) { showToast('Ошибка: ' + res.error); return; }
+    // Refresh
+    const enrich = currentEnrichments[currentEditId] || {};
+    if (!enrich.images) enrich.images = {};
+    if (!enrich.images.default) enrich.images.default = [];
+    enrich.images.default.push(...res.urls);
+    currentEnrichments[currentEditId] = enrich;
+    renderImagesGrid(enrich.images.default);
+    showToast('Фото загружены ✓');
+}
+
+async function deleteImage(url, thumbEl) {
+    if (!currentEditSlug) return;
+    await API.adminDeleteImage(currentEditSlug, url, 'default');
+    const enrich = currentEnrichments[currentEditId] || {};
+    if (enrich.images && enrich.images.default) {
+        enrich.images.default = enrich.images.default.filter(u=>u!==url);
+    }
+    thumbEl.remove();
+    showToast('Фото удалено');
+}
+
+// ── COLORS ──
+function renderColorsManager() {
+    const container = document.getElementById('colorsContainer');
+    container.innerHTML = colorsData.map((c, i) => `
+        <div class="color-entry" data-idx="${i}">
+            <input type="text" value="${c.name||''}" placeholder="Название (Бежевый)" oninput="colorsData[${i}].name=this.value">
+            <input type="color" value="${c.code||'#cccccc'}" style="width:36px;height:36px;border:none;border-radius:6px;cursor:pointer;padding:2px" oninput="colorsData[${i}].code=this.value">
+            <button class="btn-icon" onclick="removeColor(${i})">✕</button>
+        </div>`).join('');
+}
+function addColorEntry() {
+    colorsData.push({ name: '', code: '#cccccc' });
+    renderColorsManager();
+}
+function removeColor(i) {
+    colorsData.splice(i, 1);
+    renderColorsManager();
+}
+
+async function saveProduct() {
+    if (!currentEditId) return;
+    const sizesRaw = document.getElementById('editSizes').value;
+    const data = {
+        category:    document.getElementById('editCategory').value,
+        badge:       document.getElementById('editBadge').value.trim(),
+        description: document.getElementById('editDescription').value.trim(),
+        sizes:       sizesRaw ? sizesRaw.split(',').map(s=>s.trim()).filter(Boolean) : [],
+        colors:      colorsData.filter(c=>c.name),
+    };
+    const res = await API.adminUpdateProduct(currentEditId, data);
+    if (res.error) { showToast('Ошибка: ' + res.error); return; }
+    currentEnrichments[currentEditId] = { ...(currentEnrichments[currentEditId]||{}), ...data };
+    closeEditModal();
+    loadProducts();
+    showToast('Товар сохранён ✓');
+}
+
+// ── USERS ──
+async function loadUsers() {
+    const list = document.getElementById('usersList');
+    list.innerHTML='<div class="loading">Загрузка...</div>';
+    const res = await API.adminGetUsers();
+    const users = res.users || [];
+    if (!users.length) { list.innerHTML='<div class="loading">Нет пользователей</div>'; return; }
+    list.innerHTML = users.map(u=>`
+        <div class="user-row">
+            <div class="user-row__info">
+                <p class="user-row__name">${u.name}</p>
+                <p class="user-row__email">${u.email}</p>
+                <p style="font-size:10px;color:rgba(0,0,0,0.3);margin-top:3px">${new Date(u.createdAt).toLocaleDateString('ru')}</p>
+            </div>
+            <span class="user-row__role ${u.role==='admin'?'role-admin':'role-user'}">${u.role.toUpperCase()}</span>
+        </div>`).join('');
+}
+
+// ── SETTINGS ──
+function loadSettings() {
+    const url = localStorage.getItem('nure_backend_url') || '';
+    const wa  = localStorage.getItem('nure_wa_number') || '';
+    document.getElementById('backendUrlInput').value = url;
+    document.getElementById('waNumber').value = wa;
+}
+function saveSettings() {
+    const url = document.getElementById('backendUrlInput').value.trim();
+    const wa  = document.getElementById('waNumber').value.trim();
+    if (url) localStorage.setItem('nure_backend_url', url);
+    if (wa)  localStorage.setItem('nure_wa_number', wa);
+    showToast('Настройки сохранены ✓');
+}
+
+async function changePassword() {
+    const oldP = document.getElementById('oldPass').value;
+    const newP = document.getElementById('newPass').value;
+    if (!oldP || !newP) { showToast('Заполните оба поля'); return; }
+    if (newP.length < 6) { showToast('Пароль минимум 6 символов'); return; }
+    const res = await API._post('/api/auth/change-password', { oldPassword:oldP, newPassword:newP }, true);
+    if (res.error) { showToast('Ошибка: ' + res.error); return; }
+    showToast('Пароль изменён ✓');
+    document.getElementById('oldPass').value=''; document.getElementById('newPass').value='';
+}
+
+// ── TOAST ──
+let toastTimer;
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('visible'),2800);}
+
+// ── START ──
+init();
+</script>
+</body>
+</html>

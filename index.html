@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NURE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style/style.css">
+</head>
+<body>
+
+<!-- ═══ ПОИСКОВЫЙ ОВЕРЛЕЙ ═══ -->
+<div class="search-overlay" id="searchOverlay">
+    <div class="search-overlay__top">
+        <div class="search-input-wrap">
+            <svg class="search-icon-inp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="search-input" id="searchInput" type="text" placeholder="Поиск по коллекции..." autocomplete="off">
+            <button class="search-clear" id="searchClear" aria-label="Очистить">✕</button>
+        </div>
+        <button class="search-cancel" id="searchCancel">Отмена</button>
+    </div>
+    <div class="search-suggestions" id="searchSuggestions">
+        <p class="search-hint">Популярные запросы</p>
+        <div class="search-tags">
+            <span class="search-tag">Платья</span>
+            <span class="search-tag">Пальто</span>
+            <span class="search-tag">Костюмы</span>
+            <span class="search-tag">Новинки</span>
+        </div>
+    </div>
+    <div class="search-results" id="searchResults" style="display:none">
+        <p class="search-results__title" id="searchResultsTitle"></p>
+        <div class="search-results__grid" id="searchResultsGrid"></div>
+    </div>
+</div>
+
+<!-- ═══ ИЗБРАННОЕ (DRAWER) ═══ -->
+<div class="wish-backdrop" id="wishBackdrop"></div>
+<div class="wish-drawer" id="wishDrawer">
+    <div class="cart-drawer__header">
+        <p class="cart-drawer__title">ИЗБРАННОЕ</p>
+        <button class="cart-drawer__close" id="wishClose">✕</button>
+    </div>
+    <div class="cart-drawer__body" id="wishBody">
+        <div class="cart-empty" id="wishEmpty">
+            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+            <p>Список пуст</p>
+        </div>
+        <div class="wish-items" id="wishItems"></div>
+    </div>
+</div>
+
+<!-- ═══ КОРЗИНА (DRAWER) ═══ -->
+<div class="cart-backdrop" id="cartBackdrop"></div>
+<div class="cart-drawer" id="cartDrawer">
+    <div class="cart-drawer__header">
+        <p class="cart-drawer__title">КОРЗИНА</p>
+        <button class="cart-drawer__close" id="cartClose">✕</button>
+    </div>
+    <div class="cart-drawer__body" id="cartBody">
+        <div class="cart-empty" id="cartEmpty">
+            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+            </svg>
+            <p>Корзина пуста</p>
+        </div>
+        <div class="cart-items" id="cartItems"></div>
+    </div>
+    <div class="cart-drawer__footer" id="cartFooter" style="display:none">
+        <div class="cart-total">
+            <span>ИТОГО</span>
+            <span id="cartTotal">0 ₸</span>
+        </div>
+        <button class="cart-checkout-btn">ОФОРМИТЬ ЗАКАЗ →</button>
+    </div>
+</div>
+
+<!-- ═══ TOAST ═══ -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══ BACKDROP ═══ -->
+<div class="nav-backdrop" id="navBackdrop"></div>
+
+<!-- ═══ NAV OVERLAY ═══ -->
+<div class="nav-overlay" id="navOverlay">
+    <div class="nav-header">
+        <img class="nav-logo" src="img/logo.png" alt="nuré">
+        <button class="nav-close" id="navClose">✕</button>
+    </div>
+    <nav class="nav-links">
+        <a href="index.html" class="active">ГЛАВНАЯ</a>
+        <a href="catalog/index.html">КАТАЛОГ</a>
+        <a href="#">НОВИНКИ</a>
+        <a href="#">О НАС</a>
+        <a href="#">КОНТАКТЫ</a>
+    </nav>
+
+    <div class="nav-benefits">
+        <p class="nav-benefits__title">НАШИ ПРЕИМУЩЕСТВА</p>
+        <div class="nav-benefit-item">
+            <div class="nav-benefit-icon">◈</div>
+            <div>
+                <p class="nav-benefit-name">ПРЕМИУМ КАЧЕСТВО</p>
+                <p class="nav-benefit-desc">Используем лучшие материалы и фурнитуру</p>
+            </div>
+        </div>
+        <div class="nav-benefit-item">
+            <div class="nav-benefit-icon">⊞</div>
+            <div>
+                <p class="nav-benefit-name">ИТАЛЬЯНСКИЕ ТКАНИ</p>
+                <p class="nav-benefit-desc">Только проверенные поставщики из Италии</p>
+            </div>
+        </div>
+        <div class="nav-benefit-item">
+            <div class="nav-benefit-icon">⊡</div>
+            <div>
+                <p class="nav-benefit-name">БЫСТРАЯ ДОСТАВКА</p>
+                <p class="nav-benefit-desc">Доставка по Казахстану от 1 до 3 дней</p>
+            </div>
+        </div>
+        <div class="nav-benefit-item">
+            <div class="nav-benefit-icon">◇</div>
+            <div>
+                <p class="nav-benefit-name">ЛЕГКИЙ ВОЗВРАТ</p>
+                <p class="nav-benefit-desc">Возврат в течение 14 дней без лишних вопросов</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-socials">
+        <a href="#"><span class="social-icon">◎</span> Instagram</a>
+        <a href="#"><span class="social-icon">✈</span> Telegram</a>
+    </div>
+</div>
+
+<!-- ═══ СЕКЦИЯ 1 — HERO ═══ -->
+<section class="hero">
+    <video autoplay muted loop playsinline>
+        <source src="img/video/nure.MOV" type="video/mp4">
+    </video>
+    <header class="header">
+        <div class="header-inner">
+            <a href="index.html" class="header-logo">
+                <img src="img/logo.png" alt="nuré">
+            </a>
+            <div class="header-icons">
+                <button class="icon-btn" aria-label="Поиск" id="searchBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                </button>
+                <button class="icon-btn" aria-label="Избранное" id="wishBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                    <span class="badge" id="wishlistBadge" style="display:none">0</span>
+                </button>
+                <button class="icon-btn cart-icon-btn" id="cartBtn" aria-label="Корзина">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+                    </svg>
+                    <span class="badge" id="cartBadge" style="display:none">0</span>
+                </button>
+                <button class="burger" id="burgerBtn">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <div class="hero-content">
+        <img src="img/logo.png" alt="nuré">
+        <p class="hero-sub1">ITALIAN CLOTHING</p>
+        <a href="catalog/index.html" class="hero-sub">ПЕРЕЙТИ В КАТАЛОГ →</a>
+    </div>
+    <div class="scroll-hint">
+        <div class="scroll-icon"></div>
+        <p>ПРОКРУТИТЕ ВНИЗ</p>
+    </div>
+</section>
+
+<!-- ═══ СЕКЦИЯ 2 — НОВАЯ КОЛЛЕКЦИЯ ═══ -->
+<section class="s-collection">
+    <p class="s-collection__title">НОВАЯ КОЛЛЕКЦИЯ</p>
+    <p class="s-collection__sub">ОСЕНЬ / ЗИМА 2025</p>
+    <p class="s-collection__text">Элегантность, комфорт<br>и безупречное качество<br>в каждой детали.</p>
+    <a href="catalog/index.html" class="btn-outline">СМОТРЕТЬ КОЛЛЕКЦИЮ →</a>
+</section>
+
+<!-- ═══ СЕКЦИЯ 3 — ФОТО ═══ -->
+<section class="s-photo">
+    <img src="img/img 2.png" alt="">
+</section>
+
+<!-- ═══ СЕКЦИЯ 4 — КАТЕГОРИИ ═══ -->
+<section class="s-categories">
+    <p class="section-title">КАТЕГОРИИ</p>
+    <a class="cat-item" href="catalog/index.html">
+        <img src="img/img 1.png" alt="Женское">
+        <div class="cat-label">
+            <p>ЖЕНСКОЕ</p>
+            <button class="btn-small">СМОТРЕТЬ →</button>
+        </div>
+    </a>
+    <a class="cat-item" href="catalog/index.html">
+        <img src="img/img 2.png" alt="Аксессуары">
+        <div class="cat-label">
+            <p>АКСЕССУАРЫ</p>
+            <button class="btn-small">СМОТРЕТЬ →</button>
+        </div>
+    </a>
+    <a class="cat-item" href="catalog/index.html">
+        <img src="img/img 1.png" alt="Обувь">
+        <div class="cat-label">
+            <p>ОБУВЬ</p>
+            <button class="btn-small">СМОТРЕТЬ →</button>
+        </div>
+    </a>
+</section>
+
+<!-- ═══ СЕКЦИЯ 5 — НАШИ ТОВАРЫ ═══ -->
+<section class="s-products">
+    <div class="s-products__header">
+        <p class="section-title">НАШИ ТОВАРЫ</p>
+        <p class="s-products__sub">НОВИНКИ СЕЗОНА</p>
+    </div>
+    <div class="products-scroll-wrapper">
+        <div class="products-track">
+            <a href="product/aria/index.html" class="product-card">
+                <div class="product-card__img">
+                    <img src="img/img 1.png" alt="Платье Aria">
+                    <div class="product-card__badge">NEW</div>
+                </div>
+                <div class="product-card__info">
+                    <p class="product-card__name">ПЛАТЬЕ ARIA</p>
+                    <p class="product-card__cat">Женское</p>
+                    <p class="product-card__price">89 900 ₸</p>
+                </div>
+            </a>
+            <a href="product/milano/index.html" class="product-card">
+                <div class="product-card__img">
+                    <img src="img/img 2.png" alt="Пальто Milano">
+                    <div class="product-card__badge">HIT</div>
+                </div>
+                <div class="product-card__info">
+                    <p class="product-card__name">ПАЛЬТО MILANO</p>
+                    <p class="product-card__cat">Верхняя одежда</p>
+                    <p class="product-card__price">145 000 ₸</p>
+                </div>
+            </a>
+            <a href="catalog/index.html" class="product-card">
+                <div class="product-card__img">
+                    <img src="img/img 1.png" alt="Блуза Venezia">
+                </div>
+                <div class="product-card__info">
+                    <p class="product-card__name">БЛУЗА VENEZIA</p>
+                    <p class="product-card__cat">Женское</p>
+                    <p class="product-card__price">54 500 ₸</p>
+                </div>
+            </a>
+            <a href="product/soft/index.html" class="product-card">
+                <div class="product-card__img">
+                    <img src="img/img 2.png" alt="Брюки Roma">
+                    <div class="product-card__badge">NEW</div>
+                </div>
+                <div class="product-card__info">
+                    <p class="product-card__name">БРЮКИ ROMA</p>
+                    <p class="product-card__cat">Женское</p>
+                    <p class="product-card__price">67 000 ₸</p>
+                </div>
+            </a>
+            <a href="catalog/index.html" class="product-card">
+                <div class="product-card__img">
+                    <img src="img/img 1.png" alt="Жакет Firenze">
+                </div>
+                <div class="product-card__info">
+                    <p class="product-card__name">ЖАКЕТ FIRENZE</p>
+                    <p class="product-card__cat">Верхняя одежда</p>
+                    <p class="product-card__price">112 000 ₸</p>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="s-products__footer">
+        <a href="catalog/index.html" class="btn-catalog">ПЕРЕЙТИ КО ВСЕМУ КАТАЛОГУ →</a>
+    </div>
+</section>
+
+<!-- ═══ СЕКЦИЯ 6 — О БРЕНДЕ ═══ -->
+<section class="s-about">
+    <p class="section-title">О БРЕНДЕ</p>
+    <p class="s-about__text">NURÉ — это итальянская эстетика, внимание к деталям и любовь к качеству. Мы создаём одежду для женщин, которые ценят стиль, комфорт и индивидуальность.</p>
+    <button class="btn-outline">ПОДРОБНЕЕ О НАС</button>
+    <div class="s-about__photo">
+        <img src="img/img 2.png" alt="">
+    </div>
+</section>
+
+<!-- ═══ СЕКЦИЯ 8 — INSTAGRAM ═══ -->
+<section class="s-instagram">
+    <p class="section-title">INSTAGRAM</p>
+    <p class="s-instagram__handle">@nure_brand</p>
+    <div class="insta-grid">
+        <img src="img/img 1.png" alt="">
+        <img src="img/img 2.png" alt="">
+        <img src="img/img 1.png" alt="">
+        <img src="img/img 2.png" alt="">
+        <img src="img/img 1.png" alt="">
+        <img src="img/img 2.png" alt="">
+    </div>
+    <button class="btn-outline">ПОДПИСАТЬСЯ</button>
+</section>
+
+<!-- ═══ ФУТЕР ═══ -->
+<footer class="footer">
+    <img class="footer-logo" src="img/logo.png" alt="nuré">
+    <p class="footer-sub">ITALIAN CLOTHING</p>
+    <p class="footer-copy">© NURE 2025</p>
+    <nav class="footer-nav">
+        <a href="catalog/index.html">КАТАЛОГ</a>
+        <a href="#">ПОКУПАТЕЛЮ</a>
+        <a href="#">О НАС</a>
+        <a href="#">КОНТАКТЫ</a>
+    </nav>
+    <div class="footer-socials">
+        <a href="#">◎</a>
+        <a href="#">✈</a>
+    </div>
+</footer>
+
+<style>
+/* ─── ПОИСК ОВЕРЛЕЙ (тёмный для главной) ─── */
+.search-overlay {
+    position: fixed; inset: 0;
+    background: #161616;
+    z-index: 300;
+    display: flex; flex-direction: column;
+    transform: translateY(-100%);
+    transition: transform 0.38s cubic-bezier(0.77,0,0.175,1);
+}
+.search-overlay.active { transform: translateY(0); }
+.search-overlay__top {
+    display: flex; align-items: center; gap: 10px;
+    padding: 56px 16px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.09);
+    flex-shrink: 0;
+}
+.search-input-wrap {
+    flex: 1; display: flex; align-items: center;
+    background: rgba(255,255,255,0.07); border-radius: 12px;
+    padding: 0 12px; gap: 10px; height: 44px;
+}
+.search-icon-inp { width: 18px; height: 18px; flex-shrink: 0; color: rgba(255,255,255,0.4); }
+.search-input {
+    flex: 1; background: none; border: none; outline: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px; font-weight: 400; color: white;
+}
+.search-input::placeholder { color: rgba(255,255,255,0.32); }
+.search-clear {
+    background: none; border: none;
+    font-size: 14px; color: rgba(255,255,255,0.35); cursor: pointer;
+    display: none; padding: 4px;
+}
+.search-clear.visible { display: block; }
+.search-cancel {
+    background: none; border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px; font-weight: 400; color: white;
+    cursor: pointer; white-space: nowrap; padding: 4px 0;
+}
+.search-suggestions { padding: 20px 20px; flex-shrink: 0; }
+.search-hint {
+    font-size: 10px; font-weight: 500; letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.38); margin-bottom: 14px;
+}
+.search-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.search-tag {
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 30px; padding: 7px 16px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px; font-weight: 400; color: rgba(255,255,255,0.8);
+    cursor: pointer; transition: background 0.15s;
+}
+.search-results { flex: 1; overflow-y: auto; padding: 0 16px 20px; }
+.search-results__title {
+    font-size: 10px; font-weight: 500; letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.38); padding: 16px 4px 12px;
+}
+.search-results__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.search-pcard { cursor: pointer; }
+.search-pcard__img {
+    width: 100%; aspect-ratio: 3/4; object-fit: cover;
+    border-radius: 6px; background: #2a2a2a; display: block; margin-bottom: 8px;
+}
+.search-pcard__name {
+    font-family: 'Playfair Display', serif;
+    font-size: 12px; font-weight: 500; color: white; margin-bottom: 2px;
+}
+.search-pcard__price { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.8); }
+
+/* ─── КОРЗИНА / ИЗБРАННОЕ ДРАВЕР (тёмный) ─── */
+.wish-backdrop, .cart-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0);
+    z-index: 190; pointer-events: none;
+    transition: background 0.3s;
+}
+.wish-backdrop.active, .cart-backdrop.active { background: rgba(0,0,0,0.6); pointer-events: auto; }
+.wish-drawer, .cart-drawer {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #1a1a1a;
+    z-index: 200; border-radius: 18px 18px 0 0;
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.77,0,0.175,1);
+    max-height: 85vh; display: flex; flex-direction: column;
+    box-shadow: 0 -4px 40px rgba(0,0,0,0.4);
+}
+.wish-drawer::before, .cart-drawer::before {
+    content: ''; display: block; width: 40px; height: 4px;
+    background: rgba(255,255,255,0.15); border-radius: 2px;
+    margin: 12px auto 0; flex-shrink: 0;
+}
+.wish-drawer.open, .cart-drawer.open { transform: translateY(0); }
+.cart-drawer__header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 20px 24px 16px; border-bottom: 1px solid rgba(255,255,255,0.08);
+    flex-shrink: 0;
+}
+.cart-drawer__title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px; font-weight: 500; letter-spacing: 0.06em; color: white;
+}
+.cart-drawer__close {
+    background: none; border: none; color: rgba(255,255,255,0.5);
+    font-size: 18px; cursor: pointer; padding: 4px;
+}
+.cart-drawer__body { flex: 1; overflow-y: auto; }
+.cart-drawer__footer {
+    padding: 16px 24px 32px; border-top: 1px solid rgba(255,255,255,0.08); flex-shrink: 0;
+}
+.cart-total {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px;
+    font-size: 13px; font-weight: 500; letter-spacing: 0.1em; color: white;
+}
+.cart-checkout-btn {
+    width: 100%; height: 52px; background: white; color: #1a1a1a;
+    border: none; border-radius: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px; font-weight: 500; letter-spacing: 0.2em;
+    cursor: pointer;
+}
+.cart-empty {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 12px;
+    min-height: 200px; color: rgba(255,255,255,0.3);
+    font-size: 13px; letter-spacing: 0.05em;
+}
+.wish-items, .cart-items { padding: 0 24px 24px; }
+.cart-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.cart-item__info { flex: 1; }
+.cart-item__name {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px; font-weight: 500; color: white; margin-bottom: 4px;
+}
+.cart-item__size { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 6px; }
+.cart-item__price { font-size: 13px; font-weight: 600; color: white; }
+.cart-item__controls { display: flex; align-items: center; gap: 8px; }
+.qty-btn {
+    width: 28px; height: 28px; border: 1px solid rgba(255,255,255,0.2);
+    background: none; color: white; border-radius: 50%; cursor: pointer; font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+}
+.qty-val { font-size: 14px; font-weight: 500; color: white; min-width: 20px; text-align: center; }
+.remove-btn { background: none; border: none; color: rgba(255,255,255,0.3); font-size: 14px; cursor: pointer; margin-left: 4px; }
+.wish-item {
+    display: flex; gap: 14px; align-items: center;
+    padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.wish-item__img { width: 56px; height: 70px; object-fit: cover; border-radius: 6px; background: #2a2a2a; flex-shrink: 0; }
+.wish-item__info { flex: 1; }
+.wish-item__name { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 500; color: white; margin-bottom: 3px; }
+.wish-item__price { font-size: 13px; font-weight: 600; color: white; }
+.wish-item__remove { background: none; border: none; color: rgba(255,255,255,0.25); font-size: 16px; cursor: pointer; }
+
+/* ─── TOAST ─── */
+.toast {
+    position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: rgba(255,255,255,0.95); color: #1a1a1a;
+    padding: 12px 22px; border-radius: 30px;
+    font-size: 12px; font-weight: 500; letter-spacing: 0.06em;
+    opacity: 0; transition: opacity 0.3s, transform 0.3s; pointer-events: none; z-index: 999;
+    white-space: nowrap;
+}
+.toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ─── BADGE ─── */
+.badge {
+    position: absolute; top: -4px; right: -6px;
+    width: 16px; height: 16px;
+    background: white; color: #1a1a1a;
+    border-radius: 50%; font-size: 8px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; line-height: 1;
+}
+</style>
+
+<script>
+const PRODUCTS = [
+    { id: 1, name: 'ПЛАТЬЕ ARIA',   cat: 'dress', price: 89900,  img: 'img/img 1.png', badge: 'NEW', slug: 'aria' },
+    { id: 2, name: 'ПАЛЬТО MILANO', cat: 'outer', price: 145000, img: 'img/img 2.png', badge: 'HIT', slug: 'milano' },
+    { id: 3, name: 'ПЛАТЬЕ LUNA',   cat: 'dress', price: 79900,  img: 'img/img 1.png', badge: '',    slug: 'luna' },
+    { id: 4, name: 'КОСТЮМ SOFT',   cat: 'suit',  price: 129900, img: 'img/img 2.png', badge: '',    slug: 'soft' },
+    { id: 5, name: 'ТОП SETA',      cat: 'top',   price: 34900,  img: 'img/img 1.png', badge: 'NEW', slug: '' },
+    { id: 6, name: 'ПЛАЩ AQUA',     cat: 'outer', price: 189000, img: 'img/img 2.png', badge: '',    slug: '' },
+    { id: 7, name: 'ПЛАТЬЕ SERA',   cat: 'dress', price: 94900,  img: 'img/img 1.png', badge: 'HIT', slug: '' },
+    { id: 8, name: 'СУМКА ROMA',    cat: 'acc',   price: 28900,  img: 'img/img 2.png', badge: 'NEW', slug: '' },
+];
+
+let cart = JSON.parse(localStorage.getItem('nure_cart') || '[]');
+let wishlist = JSON.parse(localStorage.getItem('nure_wishlist') || '[]');
+function saveCart() { localStorage.setItem('nure_cart', JSON.stringify(cart)); }
+function saveWishlist() { localStorage.setItem('nure_wishlist', JSON.stringify(wishlist)); }
+function formatPrice(p) { return p.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
+
+function updateBadges() {
+    const total = cart.reduce((s, i) => s + i.qty, 0);
+    const cb = document.getElementById('cartBadge');
+    cb.textContent = total; cb.style.display = total > 0 ? 'flex' : 'none';
+    const wb = document.getElementById('wishlistBadge');
+    wb.textContent = wishlist.length; wb.style.display = wishlist.length > 0 ? 'flex' : 'none';
+}
+
+// ── КОРЗИНА ──
+function renderCart() {
+    const body = document.getElementById('cartItems');
+    const empty = document.getElementById('cartEmpty');
+    const footer = document.getElementById('cartFooter');
+    if (cart.length === 0) { empty.style.display = 'flex'; body.innerHTML = ''; footer.style.display = 'none'; return; }
+    empty.style.display = 'none'; footer.style.display = 'block';
+    body.innerHTML = cart.map(item => `
+        <div class="cart-item">
+            <div class="cart-item__info">
+                <p class="cart-item__name">${item.name}</p>
+                <p class="cart-item__size">Размер: ${item.size}</p>
+                <p class="cart-item__price">${formatPrice(item.price)} ₸</p>
+            </div>
+            <div class="cart-item__controls">
+                <button class="qty-btn" onclick="changeQty(${item.id},'${item.size}',-1)">−</button>
+                <span class="qty-val">${item.qty}</span>
+                <button class="qty-btn" onclick="changeQty(${item.id},'${item.size}',1)">+</button>
+                <button class="remove-btn" onclick="removeItem(${item.id},'${item.size}')">✕</button>
+            </div>
+        </div>
+    `).join('');
+    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    document.getElementById('cartTotal').textContent = formatPrice(total) + ' ₸';
+}
+function changeQty(id, size, delta) {
+    const idx = cart.findIndex(i => i.id === id && i.size === size);
+    if (idx === -1) return;
+    cart[idx].qty += delta;
+    if (cart[idx].qty <= 0) cart.splice(idx, 1);
+    saveCart(); renderCart(); updateBadges();
+}
+function removeItem(id, size) {
+    cart = cart.filter(i => !(i.id === id && i.size === size));
+    saveCart(); renderCart(); updateBadges();
+}
+
+// ── ИЗБРАННОЕ ──
+function renderWishlist() {
+    const body = document.getElementById('wishItems');
+    const empty = document.getElementById('wishEmpty');
+    if (wishlist.length === 0) { empty.style.display = 'flex'; body.innerHTML = ''; return; }
+    empty.style.display = 'none';
+    const items = wishlist.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean);
+    body.innerHTML = items.map(p => `
+        <div class="wish-item">
+            <img class="wish-item__img" src="${p.img}" alt="${p.name}">
+            <div class="wish-item__info">
+                <p class="wish-item__name">${p.name}</p>
+                <p class="wish-item__price">${formatPrice(p.price)} ₸</p>
+            </div>
+            <button class="wish-item__remove" onclick="removeFromWish(${p.id})">✕</button>
+        </div>
+    `).join('');
+}
+function removeFromWish(id) {
+    wishlist = wishlist.filter(i => i !== id);
+    saveWishlist(); renderWishlist(); updateBadges();
+}
+
+// ── TOAST ──
+let toastTimer;
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('visible'), 2500);
+}
+
+// ── ДРАВЕР КОРЗИНА ──
+const cartBtn = document.getElementById('cartBtn');
+const cartDrawer = document.getElementById('cartDrawer');
+const cartBackdrop = document.getElementById('cartBackdrop');
+const cartClose = document.getElementById('cartClose');
+function openCart() { cartDrawer.classList.add('open'); cartBackdrop.classList.add('active'); document.body.style.overflow = 'hidden'; renderCart(); }
+function closeCart() { cartDrawer.classList.remove('open'); cartBackdrop.classList.remove('active'); document.body.style.overflow = ''; }
+cartBtn.addEventListener('click', openCart);
+cartClose.addEventListener('click', closeCart);
+cartBackdrop.addEventListener('click', closeCart);
+
+// ── ДРАВЕР ИЗБРАННОЕ ──
+const wishBtn = document.getElementById('wishBtn');
+const wishDrawer = document.getElementById('wishDrawer');
+const wishBackdrop = document.getElementById('wishBackdrop');
+const wishClose = document.getElementById('wishClose');
+function openWish() { wishDrawer.classList.add('open'); wishBackdrop.classList.add('active'); document.body.style.overflow = 'hidden'; renderWishlist(); }
+function closeWish() { wishDrawer.classList.remove('open'); wishBackdrop.classList.remove('active'); document.body.style.overflow = ''; }
+wishBtn.addEventListener('click', openWish);
+wishClose.addEventListener('click', closeWish);
+wishBackdrop.addEventListener('click', closeWish);
+
+// ── БУРГЕР ──
+const burger = document.getElementById('burgerBtn');
+const overlay = document.getElementById('navOverlay');
+const backdrop = document.getElementById('navBackdrop');
+const navClose = document.getElementById('navClose');
+function openMenu() { overlay.classList.add('active'); backdrop.classList.add('active'); document.body.style.overflow = 'hidden'; }
+function closeMenu() { overlay.classList.remove('active'); backdrop.classList.remove('active'); document.body.style.overflow = ''; }
+burger.addEventListener('click', openMenu);
+navClose.addEventListener('click', closeMenu);
+backdrop.addEventListener('click', closeMenu);
+
+// ── ПОИСК ──
+const searchBtn = document.getElementById('searchBtn');
+const searchOverlay = document.getElementById('searchOverlay');
+const searchInput = document.getElementById('searchInput');
+const searchClear = document.getElementById('searchClear');
+const searchCancel = document.getElementById('searchCancel');
+const searchSuggestions = document.getElementById('searchSuggestions');
+const searchResults = document.getElementById('searchResults');
+const searchResultsGrid = document.getElementById('searchResultsGrid');
+const searchResultsTitle = document.getElementById('searchResultsTitle');
+
+function openSearch() {
+    searchOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => searchInput.focus(), 350);
+}
+function closeSearch() {
+    searchOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+    searchInput.value = ''; searchClear.classList.remove('visible');
+    searchSuggestions.style.display = ''; searchResults.style.display = 'none';
+}
+searchBtn.addEventListener('click', openSearch);
+searchCancel.addEventListener('click', closeSearch);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSearch(); });
+
+searchInput.addEventListener('input', () => {
+    const q = searchInput.value.trim().toLowerCase();
+    searchClear.classList.toggle('visible', q.length > 0);
+    if (q.length === 0) { searchSuggestions.style.display = ''; searchResults.style.display = 'none'; return; }
+    searchSuggestions.style.display = 'none'; searchResults.style.display = '';
+    const found = PRODUCTS.filter(p =>
+        p.name.toLowerCase().includes(q) ||
+        (p.cat === 'dress' && 'платье'.includes(q)) ||
+        (p.cat === 'outer' && ('пальто'.includes(q) || 'плащ'.includes(q))) ||
+        (p.cat === 'suit' && 'костюм'.includes(q)) ||
+        (p.cat === 'top' && 'топ'.includes(q)) ||
+        (p.cat === 'acc' && ('аксессуар'.includes(q) || 'сумка'.includes(q)))
+    );
+    searchResultsTitle.textContent = found.length > 0 ? `НАЙДЕНО ${found.length} ТОВАРА` : 'НИЧЕГО НЕ НАЙДЕНО';
+    searchResultsGrid.innerHTML = found.map(p => `
+        <div class="search-pcard" onclick="if('${p.slug}') location.href='product/${p.slug}/index.html'; else location.href='catalog/index.html';">
+            <img class="search-pcard__img" src="${p.img}" alt="${p.name}">
+            <p class="search-pcard__name">${p.name}</p>
+            <p class="search-pcard__price">${formatPrice(p.price)} ₸</p>
+        </div>
+    `).join('');
+});
+searchClear.addEventListener('click', () => {
+    searchInput.value = ''; searchClear.classList.remove('visible');
+    searchSuggestions.style.display = ''; searchResults.style.display = 'none';
+    searchInput.focus();
+});
+document.querySelectorAll('.search-tag').forEach(tag => {
+    tag.addEventListener('click', () => {
+        searchInput.value = tag.textContent;
+        searchInput.dispatchEvent(new Event('input'));
+    });
+});
+
+updateBadges();
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+@media (min-width: 1000px) {
+
+    .main video {
+        display: none;
+    }
+
+}
