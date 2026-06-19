@@ -196,12 +196,12 @@ a { text-decoration: none; color: inherit; }
 <div class="nav-backdrop" id="navBackdrop"></div>
 <div class="nav-overlay" id="navOverlay">
     <div class="nav-header">
-        <img class="nav-logo" src="/img/logo.png" alt="nuré">
+        <img class="nav-logo" src="../img/logo.png" alt="nuré">
         <button class="nav-close" id="navClose">✕</button>
     </div>
     <nav class="nav-links">
-        <a href="/index.html">ГЛАВНАЯ</a>
-        <a href="/catalog/index.html" class="active">КАТАЛОГ</a>
+        <a href="../index.html">ГЛАВНАЯ</a>
+        <a href="index.html" class="active">КАТАЛОГ</a>
         <a href="#">НОВИНКИ</a>
         <a href="#">О НАС</a>
         <a href="#">КОНТАКТЫ</a>
@@ -218,7 +218,7 @@ a { text-decoration: none; color: inherit; }
 <!-- HEADER -->
 <header class="header">
     <div class="header-inner">
-        <a href="/index.html" class="header-logo"><img src="/img/logo.png" alt="nuré"></a>
+        <a href="../index.html" class="header-logo"><img src="../img/logo.png" alt="nuré"></a>
         <div class="header-icons">
             <button class="icon-btn" id="wishBtn" aria-label="Избранное">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
@@ -357,14 +357,14 @@ a { text-decoration: none; color: inherit; }
 
 <!-- FOOTER -->
 <footer class="footer">
-    <img class="footer-logo" src="/img/logo.png" alt="nuré">
+    <img class="footer-logo" src="../img/logo.png" alt="nuré">
     <p class="footer-sub">ITALIAN CLOTHING</p>
-    <nav class="footer-nav"><a href="/catalog/index.html">КАТАЛОГ</a><a href="#">О НАС</a><a href="#">КОНТАКТЫ</a></nav>
+    <nav class="footer-nav"><a href="index.html">КАТАЛОГ</a><a href="#">О НАС</a><a href="#">КОНТАКТЫ</a></nav>
     <div class="footer-socials"><a href="#">◎</a><a href="#">✈</a></div>
     <p class="footer-copy">© NURE 2025</p>
 </footer>
 
-<script src="/api-client.js"></script>
+<script src="../api-client.js"></script>
 <script>
 // ════════════════════════════════
 // ДАННЫЕ
@@ -499,7 +499,7 @@ function handleCardClick(event, card) {
     // Если есть отдельная страница товара — перейти
     const slug = card.dataset.slug;
     const hasPage = allProducts.find(p => (p.slug || p.id) == slug && p.hasPage);
-    if (hasPage) { window.location.href = `/product/${slug}/index.html`; return; }
+    if (hasPage) { window.location.href = `../product/${slug}/index.html`; return; }
     openAddSheet(card);
 }
 

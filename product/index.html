@@ -168,7 +168,7 @@ a { text-decoration: none; color: inherit; }
 <!-- HEADER -->
 <header class="header">
     <div class="header-inner">
-        <a href="/catalog/index.html" class="back-btn">
+        <a href="../catalog/index.html" class="back-btn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"/></svg>
             КАТАЛОГ
         </a>
@@ -183,9 +183,9 @@ a { text-decoration: none; color: inherit; }
 
 <!-- BREADCRUMB -->
 <div class="breadcrumb">
-    <a href="/index.html">Главная</a>
+    <a href="../index.html">Главная</a>
     <span>›</span>
-    <a href="/catalog/index.html">Каталог</a>
+    <a href="../catalog/index.html">Каталог</a>
     <span>›</span>
     <p id="breadcrumbName">Загрузка...</p>
 </div>
@@ -329,15 +329,15 @@ a { text-decoration: none; color: inherit; }
 
 <!-- FOOTER -->
 <footer class="footer">
-    <img class="footer-logo" src="/img/logo.png" alt="nuré">
+    <img class="footer-logo" src="../img/logo.png" alt="nuré">
     <p class="footer-sub">ITALIAN CLOTHING</p>
-    <nav class="footer-nav"><a href="/catalog/index.html">КАТАЛОГ</a><a href="#">О НАС</a><a href="#">КОНТАКТЫ</a></nav>
+    <nav class="footer-nav"><a href="../catalog/index.html">КАТАЛОГ</a><a href="#">О НАС</a><a href="#">КОНТАКТЫ</a></nav>
     <p class="footer-copy">© NURE 2025</p>
 </footer>
 
 <div class="toast" id="toast"></div>
 
-<script src="/api-client.js"></script>
+<script src="../api-client.js"></script>
 <script>
 // ── Конфиг товара из URL ──
 // URL вида /product/?id=12345
@@ -576,7 +576,7 @@ async function loadRelated() {
         grid.innerHTML = products.map(p => {
             const img = (p.images && p.images.default && p.images.default[0]) || PLACEHOLDER_IMG;
             const price = parseFloat(p.price||0);
-            return `<a href="/product/?id=${p.id}" class="related-card">
+            return `<a href="../product/?id=${p.id}" class="related-card">
                 <img class="related-card__img" src="${img}" alt="${p.name}" onerror="this.src='${PLACEHOLDER_IMG}'">
                 <p class="related-card__name">${p.name}</p>
                 <p class="related-card__price">${price>0?formatPrice(price)+' ₸':'Цена по запросу'}</p>
