@@ -14,7 +14,6 @@ a { text-decoration: none; color: inherit; }
 .admin-nav__logo { font-family: 'Playfair Display', serif; font-size: 16px; letter-spacing: 0.1em; }
 .admin-nav__badge { background: #8B6914; color: white; font-size: 8px; font-weight: 600; letter-spacing: 0.14em; padding: 3px 8px; border-radius: 4px; margin-left: 10px; }
 .nav-link { font-size: 11px; letter-spacing: 0.1em; color: rgba(255,255,255,0.6); cursor: pointer; background: none; border: none; font-family: 'Montserrat', sans-serif; }
-.nav-link:hover { color: white; }
 
 .admin-layout { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
 
@@ -35,19 +34,16 @@ a { text-decoration: none; color: inherit; }
 .product-row__info { flex: 1; min-width: 0; }
 .product-row__name { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 500; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .product-row__meta { font-size: 10px; color: rgba(0,0,0,0.4); letter-spacing: 0.06em; }
-.product-row__badge-out { display: inline-block; background: #f5e0e0; color: #c0392b; font-size: 9px; font-weight: 600; letter-spacing: 0.08em; padding: 2px 7px; border-radius: 4px; margin-left: 6px; }
 .product-row__price { font-size: 14px; font-weight: 600; flex-shrink: 0; }
 .product-row__actions { display: flex; gap: 6px; flex-shrink: 0; }
 .btn-edit { background: none; border: 1px solid rgba(0,0,0,0.15); color: rgba(0,0,0,0.5); font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 0.08em; padding: 6px 12px; border-radius: 8px; cursor: pointer; }
 .btn-edit:hover { border-color: #1a1a1a; color: #1a1a1a; }
-.btn-deactivate { background: none; border: 1px solid rgba(180,0,0,0.2); color: #c0392b; font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 0.08em; padding: 6px 12px; border-radius: 8px; cursor: pointer; }
-.btn-deactivate:hover { background: #fff0f0; }
-.btn-activate { background: none; border: 1px solid rgba(0,120,0,0.2); color: #27ae60; font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 0.08em; padding: 6px 12px; border-radius: 8px; cursor: pointer; }
-.btn-activate:hover { background: #f0fff4; }
+.btn-deactivate { background: none; border: 1px solid rgba(180,0,0,0.2); color: #c0392b; font-family: 'Montserrat', sans-serif; font-size: 10px; padding: 6px 12px; border-radius: 8px; cursor: pointer; }
+.btn-activate { background: none; border: 1px solid rgba(0,120,0,0.2); color: #27ae60; font-family: 'Montserrat', sans-serif; font-size: 10px; padding: 6px 12px; border-radius: 8px; cursor: pointer; }
 
-/* CREATE FORM */
-.create-form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-.create-form .full { grid-column: 1 / -1; }
+/* FORM */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-grid .full { grid-column: 1 / -1; }
 .form-group { display: flex; flex-direction: column; gap: 6px; }
 .form-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: rgba(0,0,0,0.5); text-transform: uppercase; }
 .form-input, .form-select, .form-textarea { font-family: 'Montserrat', sans-serif; font-size: 13px; padding: 10px 14px; border: 1px solid rgba(0,0,0,0.12); border-radius: 10px; background: #fafafa; color: #1a1a1a; outline: none; transition: border 0.2s; width: 100%; }
@@ -56,30 +52,39 @@ a { text-decoration: none; color: inherit; }
 .btn-primary { background: #1a1a1a; color: white; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.12em; padding: 13px 28px; border: none; border-radius: 10px; cursor: pointer; transition: opacity 0.2s; }
 .btn-primary:hover { opacity: 0.85; }
 .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
-
-/* MODAL */
-.modal-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; display: none; align-items: flex-end; justify-content: center; }
-.modal-wrap.open { display: flex; }
-@media (min-width: 600px) { .modal-wrap { align-items: center; } }
-.modal { background: white; border-radius: 20px 20px 0 0; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; padding: 28px; }
-@media (min-width: 600px) { .modal { border-radius: 20px; } }
-.modal__title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 500; margin-bottom: 24px; }
-.modal__close { float: right; background: none; border: none; font-size: 20px; cursor: pointer; color: rgba(0,0,0,0.4); margin-top: -4px; }
-
-/* IMAGES GRID */
-.images-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; margin-bottom: 16px; }
-.img-thumb { position: relative; aspect-ratio: 3/4; border-radius: 8px; overflow: hidden; }
-.img-thumb img { width: 100%; height: 100%; object-fit: cover; }
-.img-thumb__del { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.btn-secondary { background: none; color: #1a1a1a; font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.1em; padding: 10px 20px; border: 1.5px solid rgba(0,0,0,0.2); border-radius: 10px; cursor: pointer; }
 
 /* UPLOAD ZONE */
-.upload-zone { border: 2px dashed rgba(0,0,0,0.15); border-radius: 12px; padding: 24px; text-align: center; cursor: pointer; transition: border-color 0.2s; }
+.upload-zone { border: 2px dashed rgba(0,0,0,0.15); border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: border-color 0.2s; }
 .upload-zone:hover { border-color: #1a1a1a; }
 .upload-zone input { display: none; }
 .upload-zone__text { font-size: 11px; color: rgba(0,0,0,0.4); letter-spacing: 0.04em; }
 
-/* COUNTDOWN BADGE */
-.countdown { font-size: 9px; color: #c0392b; font-weight: 600; }
+/* IMAGES GRID */
+.images-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; margin-bottom: 12px; }
+.img-thumb { position: relative; aspect-ratio: 3/4; border-radius: 8px; overflow: hidden; }
+.img-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.img-thumb__del { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+/* COLORS SECTION */
+.colors-section { margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(0,0,0,0.08); }
+.color-variant { background: #f8f7f4; border-radius: 12px; padding: 16px; margin-bottom: 12px; position: relative; }
+.color-variant__header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+.color-variant__title { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; }
+.btn-remove-color { background: none; border: none; color: rgba(0,0,0,0.3); font-size: 18px; cursor: pointer; line-height: 1; }
+.add-color-btn { display: flex; align-items: center; gap: 8px; background: none; border: 1.5px dashed rgba(0,0,0,0.2); color: rgba(0,0,0,0.5); font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.1em; padding: 12px 20px; border-radius: 10px; cursor: pointer; width: 100%; justify-content: center; margin-top: 8px; transition: border-color 0.2s, color 0.2s; }
+.add-color-btn:hover { border-color: #1a1a1a; color: #1a1a1a; }
+.preview-thumbs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.preview-thumb { width: 64px; height: 80px; object-fit: cover; border-radius: 6px; }
+
+/* MODAL */
+.modal-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; display: none; align-items: flex-end; justify-content: center; overflow-y: auto; }
+.modal-wrap.open { display: flex; }
+@media (min-width: 600px) { .modal-wrap { align-items: center; } }
+.modal { background: white; border-radius: 20px 20px 0 0; width: 100%; max-width: 600px; max-height: 92vh; overflow-y: auto; padding: 28px; }
+@media (min-width: 600px) { .modal { border-radius: 20px; margin: 20px; } }
+.modal__title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 500; margin-bottom: 24px; }
+.modal__close { float: right; background: none; border: none; font-size: 20px; cursor: pointer; color: rgba(0,0,0,0.4); margin-top: -4px; }
 
 /* USERS TABLE */
 .users-table { width: 100%; border-collapse: collapse; font-size: 12px; }
@@ -97,6 +102,11 @@ a { text-decoration: none; color: inherit; }
 
 .tab-content { display: none; }
 .tab-content.active { display: block; }
+
+.countdown { font-size: 9px; color: #c0392b; font-weight: 600; }
+.badge-out { display: inline-block; background: #f5e0e0; color: #c0392b; font-size: 9px; font-weight: 600; letter-spacing: 0.08em; padding: 2px 7px; border-radius: 4px; margin-left: 6px; }
+
+hr.divider { border: none; border-top: 1px solid rgba(0,0,0,0.08); margin: 20px 0; }
   </style>
 </head>
 <body>
@@ -142,19 +152,20 @@ a { text-decoration: none; color: inherit; }
     <div class="tab-content active" id="tab-products">
       <div class="section-card">
         <div class="section-title">Товары</div>
-        <div class="section-sub">Нажмите «Изм.» чтобы редактировать товар или загрузить фото</div>
+        <div class="section-sub">Нажмите «Изм.» чтобы редактировать товар</div>
         <div class="product-list" id="productList">
           <div style="text-align:center;padding:40px;color:rgba(0,0,0,0.3);font-size:12px">Загрузка...</div>
         </div>
       </div>
     </div>
 
-    <!-- ДОБАВИТЬ -->
+    <!-- ДОБАВИТЬ ТОВАР -->
     <div class="tab-content" id="tab-add">
       <div class="section-card">
         <div class="section-title">Новый товар</div>
-        <div class="section-sub">Заполните основные данные. Фото можно добавить после создания</div>
-        <div class="create-form">
+        <div class="section-sub">Заполните данные, загрузите фото и добавьте цвета</div>
+
+        <div class="form-grid">
           <div class="form-group full">
             <label class="form-label">Название *</label>
             <input class="form-input" id="newName" placeholder="Платье из шёлка">
@@ -186,10 +197,31 @@ a { text-decoration: none; color: inherit; }
             <label class="form-label">Описание</label>
             <textarea class="form-textarea" id="newDesc" placeholder="Описание товара..."></textarea>
           </div>
-          <div class="form-group full">
-            <button class="btn-primary" id="btnCreate" onclick="createProduct()">СОЗДАТЬ ТОВАР</button>
-          </div>
         </div>
+
+        <!-- ОСНОВНЫЕ ФОТО -->
+        <hr class="divider">
+        <div class="form-label" style="margin-bottom:12px">ОСНОВНЫЕ ФОТО (1 или более)</div>
+        <div class="images-grid" id="newImagesPreview"></div>
+        <label class="upload-zone" id="newImagesZone">
+          <input type="file" multiple accept="image/*" id="newImagesInput" onchange="previewNewImages(this)">
+          <div class="upload-zone__text">Нажмите чтобы загрузить фото (jpg, png, webp)</div>
+        </label>
+
+        <!-- ЦВЕТА -->
+        <div class="colors-section">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+            <div>
+              <div class="form-label">ВАРИАНТЫ ЦВЕТОВ</div>
+              <div style="font-size:10px;color:rgba(0,0,0,0.4);margin-top:4px">Если товар имеет несколько цветов — добавьте каждый цвет отдельно</div>
+            </div>
+          </div>
+          <div id="newColorsContainer"></div>
+          <button class="add-color-btn" onclick="addNewColorVariant()">+ ДОБАВИТЬ ЕЩЁ ЦВЕТ</button>
+        </div>
+
+        <hr class="divider">
+        <button class="btn-primary" id="btnCreate" onclick="createProduct()" style="width:100%">СОЗДАТЬ ТОВАР</button>
       </div>
     </div>
 
@@ -213,7 +245,7 @@ a { text-decoration: none; color: inherit; }
     <button class="modal__close" onclick="closeEdit()">✕</button>
     <div class="modal__title" id="editTitle">Редактировать</div>
 
-    <div class="create-form" style="margin-bottom:20px">
+    <div class="form-grid" style="margin-bottom:20px">
       <div class="form-group full">
         <label class="form-label">Название</label>
         <input class="form-input" id="eName">
@@ -248,16 +280,32 @@ a { text-decoration: none; color: inherit; }
     </div>
     <button class="btn-primary" style="width:100%;margin-bottom:20px" onclick="saveEdit()">СОХРАНИТЬ</button>
 
-    <div style="border-top:1px solid rgba(0,0,0,0.08);padding-top:20px;margin-bottom:20px">
-      <div class="form-label" style="margin-bottom:12px">ФОТОГРАФИИ</div>
-      <div class="images-grid" id="editImages"></div>
-      <label class="upload-zone">
-        <input type="file" multiple accept="image/*" onchange="uploadImages(this)">
-        <div class="upload-zone__text">Нажмите чтобы загрузить фото (jpg, png, webp)</div>
-      </label>
+    <hr class="divider">
+
+    <!-- ОСНОВНЫЕ ФОТО -->
+    <div class="form-label" style="margin-bottom:12px">ОСНОВНЫЕ ФОТО</div>
+    <div class="images-grid" id="editImages"></div>
+    <label class="upload-zone">
+      <input type="file" multiple accept="image/*" onchange="uploadImages(this,'default')">
+      <div class="upload-zone__text">Нажмите чтобы загрузить фото</div>
+    </label>
+
+    <!-- ЦВЕТА В РЕДАКТИРОВАНИИ -->
+    <div class="colors-section" id="editColorsSection">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <div>
+          <div class="form-label">ВАРИАНТЫ ЦВЕТОВ</div>
+          <div style="font-size:10px;color:rgba(0,0,0,0.4);margin-top:4px">Каждый цвет — отдельные фото и размеры</div>
+        </div>
+      </div>
+      <div id="editColorsContainer"></div>
+      <button class="add-color-btn" onclick="addEditColorVariant()">+ ДОБАВИТЬ ЕЩЁ ЦВЕТ</button>
     </div>
 
-    <div style="border-top:1px solid rgba(0,0,0,0.08);padding-top:20px" id="deactivateSection">
+    <hr class="divider">
+
+    <!-- СТАТУС -->
+    <div>
       <div class="form-label" style="margin-bottom:8px">СТАТУС ТОВАРА</div>
       <div id="deactivateInfo" style="font-size:11px;color:rgba(0,0,0,0.5);margin-bottom:12px"></div>
       <button id="btnDeactivate" class="btn-deactivate" onclick="toggleActivation()"></button>
@@ -281,7 +329,7 @@ async function doLogin() {
   try {
     const res = await API.login(email, pass);
     if (!res.token) { err.textContent = res.error || 'Ошибка входа'; return; }
-    if (res.user.role !== 'admin') { err.textContent = 'Нет доступа к админ-панели'; API.logout(); return; }
+    if (res.user.role !== 'admin') { err.textContent = 'Нет доступа'; API.logout(); return; }
     showAdmin();
   } catch { err.textContent = 'Ошибка соединения'; }
 }
@@ -312,23 +360,25 @@ async function loadProducts() {
 function renderProducts() {
   const list = document.getElementById('productList');
   if (!allProducts.length) {
-    list.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(0,0,0,0.3);font-size:12px">Товаров пока нет. Добавьте первый!</div>';
+    list.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(0,0,0,0.3);font-size:12px">Товаров пока нет.</div>';
     return;
   }
   list.innerHTML = allProducts.map(p => {
     const img = (p.images && p.images.default && p.images.default[0]) || PLACEHOLDER_IMG;
     const isDeactivated = !!p.deactivatedAt;
     const countdown = isDeactivated ? getDaysLeft(p.deactivatedAt) : null;
+    const colors = p.colors || [];
     return `
       <div class="product-row ${isDeactivated ? 'inactive' : ''}">
         <img class="product-row__img" src="${img}" onerror="this.src='${PLACEHOLDER_IMG}'">
         <div class="product-row__info">
           <div class="product-row__name">
             ${p.name}
-            ${isDeactivated ? `<span class="product-row__badge-out">НЕТ В НАЛИЧИИ</span>` : ''}
+            ${isDeactivated ? '<span class="badge-out">НЕТ</span>' : ''}
           </div>
           <div class="product-row__meta">
             ${p.category || '—'}
+            ${colors.length > 1 ? ` · ${colors.length} цвета` : ''}
             ${isDeactivated ? `<span class="countdown"> · удалится через ${countdown}</span>` : ''}
           </div>
         </div>
@@ -336,43 +386,178 @@ function renderProducts() {
         <div class="product-row__actions">
           <button class="btn-edit" onclick="openEdit('${p.id}')">Изм.</button>
         </div>
-      </div>
-    `;
+      </div>`;
   }).join('');
 }
 
 function getDaysLeft(deactivatedAt) {
-  const ms   = 7 * 24 * 60 * 60 * 1000 - (Date.now() - new Date(deactivatedAt).getTime());
-  const days = Math.ceil(ms / (24 * 60 * 60 * 1000));
-  if (days <= 0) return 'менее дня';
-  return days + ' д.';
+  const ms = 7*24*60*60*1000 - (Date.now() - new Date(deactivatedAt).getTime());
+  const days = Math.ceil(ms / (24*60*60*1000));
+  return days <= 0 ? 'менее дня' : days + ' д.';
 }
 
-// ── CREATE ──
+// ── CREATE: NEW IMAGE PREVIEW ──
+let newImageFiles = [];
+function previewNewImages(input) {
+  const files = [...input.files];
+  newImageFiles.push(...files);
+  const grid = document.getElementById('newImagesPreview');
+  grid.innerHTML = '';
+  newImageFiles.forEach((file, i) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const div = document.createElement('div');
+      div.className = 'img-thumb';
+      div.innerHTML = `<img src="${e.target.result}"><button class="img-thumb__del" onclick="removeNewImg(${i})">✕</button>`;
+      grid.appendChild(div);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function removeNewImg(idx) {
+  newImageFiles.splice(idx, 1);
+  // Rebuild preview
+  const grid = document.getElementById('newImagesPreview');
+  grid.innerHTML = '';
+  newImageFiles.forEach((file, i) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const div = document.createElement('div');
+      div.className = 'img-thumb';
+      div.innerHTML = `<img src="${e.target.result}"><button class="img-thumb__del" onclick="removeNewImg(${i})">✕</button>`;
+      grid.appendChild(div);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+// ── COLOR VARIANTS (ADD FORM) ──
+let newColorVariants = []; // [{name, sizes, files}]
+
+function addNewColorVariant() {
+  const idx = newColorVariants.length;
+  newColorVariants.push({ name: '', sizes: '', files: [] });
+  renderNewColors();
+}
+
+function renderNewColors() {
+  const container = document.getElementById('newColorsContainer');
+  container.innerHTML = newColorVariants.map((c, i) => `
+    <div class="color-variant">
+      <div class="color-variant__header">
+        <span class="color-variant__title">ЦВЕТ ${i+1}</span>
+        <button class="btn-remove-color" onclick="removeNewColor(${i})">✕</button>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Название цвета</label>
+          <input class="form-input" value="${c.name}" onchange="newColorVariants[${i}].name=this.value" placeholder="Чёрный, Белый...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Размеры (через запятую)</label>
+          <input class="form-input" value="${c.sizes}" onchange="newColorVariants[${i}].sizes=this.value" placeholder="XS, S, M, L">
+        </div>
+      </div>
+      <div style="margin-top:12px">
+        <label class="form-label" style="margin-bottom:8px;display:block">ФОТО ЭТОГО ЦВЕТА</label>
+        <div class="preview-thumbs" id="colorPreviews${i}"></div>
+        <label class="upload-zone">
+          <input type="file" multiple accept="image/*" onchange="addColorImages(${i}, this)">
+          <div class="upload-zone__text">Загрузить фото цвета</div>
+        </label>
+      </div>
+    </div>`).join('');
+}
+
+function removeNewColor(idx) {
+  newColorVariants.splice(idx, 1);
+  renderNewColors();
+}
+
+function addColorImages(idx, input) {
+  const files = [...input.files];
+  newColorVariants[idx].files.push(...files);
+  const previewEl = document.getElementById('colorPreviews' + idx);
+  if (!previewEl) return;
+  previewEl.innerHTML = '';
+  newColorVariants[idx].files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      img.className = 'preview-thumb';
+      previewEl.appendChild(img);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+// ── CREATE PRODUCT ──
 async function createProduct() {
   const name = document.getElementById('newName').value.trim();
   if (!name) { showToast('Введите название'); return; }
   const btn = document.getElementById('btnCreate');
   btn.disabled = true; btn.textContent = 'СОЗДАНИЕ...';
+
+  // Собрать данные цветов из DOM (т.к. onchange может не сработать)
+  const colorInputs = document.querySelectorAll('#newColorsContainer .color-variant');
+  colorInputs.forEach((el, i) => {
+    if (newColorVariants[i]) {
+      newColorVariants[i].name = el.querySelector('input:nth-of-type(1)').value;
+      newColorVariants[i].sizes = el.querySelector('input:nth-of-type(2)').value;
+    }
+  });
+
+  const sizesRaw = document.getElementById('newSizes').value;
+  const sizes = sizesRaw.split(',').map(s=>s.trim()).filter(Boolean);
+
+  const colors = newColorVariants.map((c, i) => ({
+    name: c.name || ('Цвет ' + (i+1)),
+    key: 'color_' + i,
+    sizes: c.sizes.split(',').map(s=>s.trim()).filter(Boolean)
+  }));
+
   const res = await API.adminCreateProduct({
     name,
     price:       parseFloat(document.getElementById('newPrice').value) || 0,
     category:    document.getElementById('newCategory').value,
     badge:       document.getElementById('newBadge').value.trim(),
-    sizes:       document.getElementById('newSizes').value.split(',').map(s => s.trim()).filter(Boolean),
+    sizes,
+    colors,
     description: document.getElementById('newDesc').value.trim(),
   });
-  btn.disabled = false; btn.textContent = 'СОЗДАТЬ ТОВАР';
-  if (res.success) {
-    showToast('Товар создан!');
-    ['newName','newPrice','newBadge','newSizes','newDesc'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('newCategory').value = '';
-    allProducts.unshift(res.product);
-    renderProducts();
-    switchTab('products');
-  } else {
-    showToast(res.error || 'Ошибка');
+
+  if (!res.success) { showToast(res.error || 'Ошибка'); btn.disabled=false; btn.textContent='СОЗДАТЬ ТОВАР'; return; }
+
+  const productId = res.product.id;
+
+  // Загрузить основные фото
+  if (newImageFiles.length > 0) {
+    btn.textContent = 'ЗАГРУЗКА ФОТО...';
+    await API.adminUploadImages(productId, newImageFiles, 'default').catch(()=>{});
   }
+
+  // Загрузить фото цветов
+  for (let i=0; i<newColorVariants.length; i++) {
+    const c = newColorVariants[i];
+    if (c.files && c.files.length > 0) {
+      btn.textContent = `ЗАГРУЗКА ФОТО ЦВЕТА ${i+1}...`;
+      await API.adminUploadImages(productId, c.files, 'color_' + i).catch(()=>{});
+    }
+  }
+
+  showToast('Товар создан!');
+  // Reset form
+  ['newName','newPrice','newBadge','newSizes','newDesc'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('newCategory').value='';
+  document.getElementById('newImagesPreview').innerHTML='';
+  newImageFiles = [];
+  newColorVariants = [];
+  document.getElementById('newColorsContainer').innerHTML='';
+
+  await loadProducts();
+  btn.disabled=false; btn.textContent='СОЗДАТЬ ТОВАР';
+  switchTab('products');
 }
 
 // ── EDIT MODAL ──
@@ -389,22 +574,16 @@ function openEdit(id) {
   document.getElementById('eSizes').value    = (p.sizes || []).join(', ');
   document.getElementById('eDesc').value     = p.description || '';
 
-  // Фото
   renderEditImages(p);
+  renderEditColors(p);
 
-  // Статус
   const isDeactivated = !!p.deactivatedAt;
-  const infoEl = document.getElementById('deactivateInfo');
-  const btnEl  = document.getElementById('btnDeactivate');
-  if (isDeactivated) {
-    infoEl.textContent = `Деактивирован ${new Date(p.deactivatedAt).toLocaleDateString('ru')} · удалится через ${getDaysLeft(p.deactivatedAt)}`;
-    btnEl.textContent  = 'РЕАКТИВИРОВАТЬ';
-    btnEl.className    = 'btn-activate';
-  } else {
-    infoEl.textContent = 'Товар активен и отображается в каталоге';
-    btnEl.textContent  = 'ДЕАКТИВИРОВАТЬ';
-    btnEl.className    = 'btn-deactivate';
-  }
+  document.getElementById('deactivateInfo').textContent = isDeactivated
+    ? `Деактивирован ${new Date(p.deactivatedAt).toLocaleDateString('ru')} · удалится через ${getDaysLeft(p.deactivatedAt)}`
+    : 'Товар активен и отображается в каталоге';
+  const btnD = document.getElementById('btnDeactivate');
+  btnD.textContent = isDeactivated ? 'РЕАКТИВИРОВАТЬ' : 'ДЕАКТИВИРОВАТЬ';
+  btnD.className = isDeactivated ? 'btn-activate' : 'btn-deactivate';
 
   document.getElementById('editModal').classList.add('open');
 }
@@ -417,64 +596,146 @@ function closeEdit() {
 function renderEditImages(p) {
   const grid = document.getElementById('editImages');
   const imgs = (p.images && p.images.default) || [];
-  if (!imgs.length) { grid.innerHTML = ''; return; }
   grid.innerHTML = imgs.map(url => `
     <div class="img-thumb">
       <img src="${url}" onerror="this.src='${PLACEHOLDER_IMG}'">
-      <button class="img-thumb__del" onclick="deleteImage('${url}')">✕</button>
-    </div>
-  `).join('');
+      <button class="img-thumb__del" onclick="deleteImage('${url}','default')">✕</button>
+    </div>`).join('');
+}
+
+// ── EDIT COLORS ──
+function renderEditColors(p) {
+  const container = document.getElementById('editColorsContainer');
+  const colors = p.colors || [];
+  container.innerHTML = colors.map((c, i) => {
+    const key = c.key || ('color_' + i);
+    const imgs = (p.images && p.images[key]) || [];
+    return `
+    <div class="color-variant" data-key="${key}">
+      <div class="color-variant__header">
+        <span class="color-variant__title">${c.name || 'Цвет ' + (i+1)}</span>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Название цвета</label>
+          <input class="form-input" value="${c.name||''}" onchange="updateEditColorName('${key}', this.value)" placeholder="Чёрный...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Размеры</label>
+          <input class="form-input" value="${(c.sizes||[]).join(', ')}" onchange="updateEditColorSizes('${key}', this.value)" placeholder="XS, S, M, L">
+        </div>
+      </div>
+      <div style="margin-top:12px">
+        <label class="form-label" style="margin-bottom:8px;display:block">ФОТО ЭТОГО ЦВЕТА</label>
+        <div class="images-grid" id="colorImgs_${key}">
+          ${imgs.map(url => `<div class="img-thumb"><img src="${url}" onerror="this.src='${PLACEHOLDER_IMG}'"><button class="img-thumb__del" onclick="deleteImage('${url}','${key}')">✕</button></div>`).join('')}
+        </div>
+        <label class="upload-zone">
+          <input type="file" multiple accept="image/*" onchange="uploadImages(this,'${key}')">
+          <div class="upload-zone__text">Загрузить фото цвета</div>
+        </label>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function updateEditColorName(key, value) {
+  const p = allProducts.find(x => x.id === currentEditId);
+  if (!p || !p.colors) return;
+  const c = p.colors.find(x => x.key === key);
+  if (c) c.name = value;
+}
+function updateEditColorSizes(key, value) {
+  const p = allProducts.find(x => x.id === currentEditId);
+  if (!p || !p.colors) return;
+  const c = p.colors.find(x => x.key === key);
+  if (c) c.sizes = value.split(',').map(s=>s.trim()).filter(Boolean);
+}
+
+function addEditColorVariant() {
+  const p = allProducts.find(x => x.id === currentEditId);
+  if (!p) return;
+  if (!p.colors) p.colors = [];
+  const idx = p.colors.length;
+  const key = 'color_' + Date.now();
+  p.colors.push({ name: '', key, sizes: [] });
+  renderEditColors(p);
 }
 
 async function saveEdit() {
   if (!currentEditId) return;
+  const p = allProducts.find(x => x.id === currentEditId);
+
+  // Collect color updates from DOM
+  const colorEls = document.querySelectorAll('#editColorsContainer .color-variant');
+  const colors = [...colorEls].map(el => {
+    const key = el.dataset.key;
+    const name = el.querySelector('input:nth-of-type(1)').value.trim();
+    const sizesVal = el.querySelector('input:nth-of-type(2)').value;
+    return { key, name, sizes: sizesVal.split(',').map(s=>s.trim()).filter(Boolean) };
+  });
+
   const res = await API.adminUpdateProduct(currentEditId, {
     name:        document.getElementById('eName').value.trim(),
     price:       parseFloat(document.getElementById('ePrice').value) || 0,
     category:    document.getElementById('eCategory').value,
     badge:       document.getElementById('eBadge').value.trim(),
-    sizes:       document.getElementById('eSizes').value.split(',').map(s => s.trim()).filter(Boolean),
+    sizes:       document.getElementById('eSizes').value.split(',').map(s=>s.trim()).filter(Boolean),
     description: document.getElementById('eDesc').value.trim(),
+    colors,
   });
   if (res.success) {
-    const idx = allProducts.findIndex(p => p.id === currentEditId);
+    const idx = allProducts.findIndex(x => x.id === currentEditId);
     if (idx !== -1) allProducts[idx] = { ...allProducts[idx], ...res.product };
-    renderProducts();
-    showToast('Сохранено');
-    closeEdit();
+    renderProducts(); showToast('Сохранено'); closeEdit();
   } else {
     showToast(res.error || 'Ошибка');
   }
 }
 
-async function uploadImages(input) {
+async function uploadImages(input, colorKey) {
   if (!currentEditId || !input.files.length) return;
   showToast('Загрузка...');
-  const res = await API.adminUploadImages(currentEditId, [...input.files]);
+  const res = await API.adminUploadImages(currentEditId, [...input.files], colorKey);
   if (res.success) {
-    const idx = allProducts.findIndex(p => p.id === currentEditId);
+    const idx = allProducts.findIndex(x => x.id === currentEditId);
     if (idx !== -1) {
       if (!allProducts[idx].images) allProducts[idx].images = {};
-      if (!allProducts[idx].images.default) allProducts[idx].images.default = [];
-      allProducts[idx].images.default.push(...res.urls);
-      renderEditImages(allProducts[idx]);
+      if (!allProducts[idx].images[colorKey]) allProducts[idx].images[colorKey] = [];
+      allProducts[idx].images[colorKey].push(...res.urls);
+      if (colorKey === 'default') renderEditImages(allProducts[idx]);
+      else {
+        const grid = document.getElementById('colorImgs_' + colorKey);
+        if (grid) {
+          res.urls.forEach(url => {
+            const div = document.createElement('div'); div.className='img-thumb';
+            div.innerHTML=`<img src="${url}" onerror="this.src='${PLACEHOLDER_IMG}'"><button class="img-thumb__del" onclick="deleteImage('${url}','${colorKey}')">✕</button>`;
+            grid.appendChild(div);
+          });
+        }
+      }
       renderProducts();
     }
     showToast('Фото загружены!');
-  } else {
-    showToast(res.error || 'Ошибка загрузки');
-  }
-  input.value = '';
+  } else { showToast(res.error || 'Ошибка загрузки'); }
+  input.value='';
 }
 
-async function deleteImage(url) {
+async function deleteImage(url, colorKey) {
   if (!currentEditId) return;
-  const res = await API.adminDeleteImage(currentEditId, url);
+  const res = await API.adminDeleteImage(currentEditId, url, colorKey);
   if (res.success) {
-    const idx = allProducts.findIndex(p => p.id === currentEditId);
-    if (idx !== -1 && allProducts[idx].images && allProducts[idx].images.default) {
-      allProducts[idx].images.default = allProducts[idx].images.default.filter(u => u !== url);
-      renderEditImages(allProducts[idx]);
+    const idx = allProducts.findIndex(x => x.id === currentEditId);
+    if (idx !== -1 && allProducts[idx].images && allProducts[idx].images[colorKey]) {
+      allProducts[idx].images[colorKey] = allProducts[idx].images[colorKey].filter(u => u !== url);
+      if (colorKey === 'default') renderEditImages(allProducts[idx]);
+      else {
+        const grid = document.getElementById('colorImgs_' + colorKey);
+        if (grid) {
+          const found = [...grid.querySelectorAll('.img-thumb')].find(el => el.querySelector('img').src === url);
+          if (found) found.remove();
+        }
+      }
       renderProducts();
     }
     showToast('Фото удалено');
@@ -486,18 +747,13 @@ async function toggleActivation() {
   const p = allProducts.find(x => x.id === currentEditId);
   if (!p) return;
   const isDeactivated = !!p.deactivatedAt;
-  const res = isDeactivated
-    ? await API.adminActivateProduct(currentEditId)
-    : await API.adminDeactivateProduct(currentEditId);
+  const res = isDeactivated ? await API.adminActivateProduct(currentEditId) : await API.adminDeactivateProduct(currentEditId);
   if (res.success) {
     const idx = allProducts.findIndex(x => x.id === currentEditId);
     if (idx !== -1) allProducts[idx] = { ...allProducts[idx], ...res.product };
-    renderProducts();
-    closeEdit();
+    renderProducts(); closeEdit();
     showToast(isDeactivated ? 'Товар реактивирован' : 'Товар деактивирован — удалится через 7 дней');
-  } else {
-    showToast(res.error || 'Ошибка');
-  }
+  } else { showToast(res.error || 'Ошибка'); }
 }
 
 // ── USERS ──
@@ -505,17 +761,9 @@ async function loadUsers() {
   const res = await API.adminGetUsers();
   const tbody = document.getElementById('usersBody');
   const users = res.users || [];
-  if (!users.length) {
-    tbody.innerHTML = '<tr><td colspan="4" style="padding:20px;text-align:center;color:rgba(0,0,0,0.3)">Нет пользователей</td></tr>';
-    return;
-  }
+  if (!users.length) { tbody.innerHTML='<tr><td colspan="4" style="padding:20px;text-align:center;color:rgba(0,0,0,0.3)">Нет пользователей</td></tr>'; return; }
   tbody.innerHTML = users.map(u => `
-    <tr>
-      <td>${u.name}</td>
-      <td>${u.email}</td>
-      <td style="color:${u.role==='admin'?'#8B6914':'inherit'}">${u.role}</td>
-      <td>${new Date(u.createdAt).toLocaleDateString('ru')}</td>
-    </tr>
+    <tr><td>${u.name}</td><td>${u.email}</td><td style="color:${u.role==='admin'?'#8B6914':'inherit'}">${u.role}</td><td>${new Date(u.createdAt).toLocaleDateString('ru')}</td></tr>
   `).join('');
 }
 
@@ -523,25 +771,16 @@ async function loadUsers() {
 let toastTimer;
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),2500);
 }
 
 // ── INIT ──
-document.getElementById('loginPass').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doLogin();
-});
-
-document.getElementById('editModal').addEventListener('click', e => {
-  if (e.target === document.getElementById('editModal')) closeEdit();
-});
+document.getElementById('loginPass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+document.getElementById('editModal').addEventListener('click', e => { if(e.target===document.getElementById('editModal')) closeEdit(); });
 
 const user = API.getUser();
-if (user && user.role === 'admin' && API.getToken()) {
-  showAdmin();
-}
+if (user && user.role === 'admin' && API.getToken()) showAdmin();
 </script>
 </body>
 </html>

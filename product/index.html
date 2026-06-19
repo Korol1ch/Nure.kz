@@ -12,9 +12,9 @@
 body { font-family: 'Montserrat', sans-serif; background: #f8f7f4; color: #1a1a1a; overflow-x: hidden; }
 a { text-decoration: none; color: inherit; }
 
-/* HEADER */
-.header { position: sticky; top: 0; width: 100%; height: 56px; background: #f8f7f4; border-bottom: 1px solid rgba(0,0,0,0.07); z-index: 100; }
-.header-inner { width: 92%; max-width: 600px; margin: 0 auto; height: 100%; display: flex; justify-content: space-between; align-items: center; }
+/* ─── HEADER ─── */
+.header { position: sticky; top: 0; width: 100%; height: 56px; background: #f8f7f4; border-bottom: 1px solid rgba(0,0,0,0.07); z-index: 100; display: flex; justify-content: center; }
+.header-inner { width: 92%; height: 100%; display: flex; justify-content: space-between; align-items: center; }
 .header-logo img { height: 22px; }
 .header-icons { display: flex; gap: 16px; align-items: center; }
 .icon-btn { background: none; border: none; cursor: pointer; color: #1a1a1a; padding: 4px; position: relative; display: flex; align-items: center; }
@@ -23,16 +23,16 @@ a { text-decoration: none; color: inherit; }
 .back-btn { display: flex; align-items: center; gap: 6px; font-size: 11px; letter-spacing: 0.06em; color: rgba(0,0,0,0.4); cursor: pointer; background: none; border: none; font-family: 'Montserrat', sans-serif; }
 .back-btn svg { width: 16px; height: 16px; }
 
-/* BREADCRUMB */
+/* ─── BREADCRUMB ─── */
 .breadcrumb { padding: 14px 20px 0; display: flex; align-items: center; gap: 8px; }
 .breadcrumb a { font-size: 10px; color: rgba(0,0,0,0.38); letter-spacing: 0.06em; }
 .breadcrumb span { font-size: 10px; color: rgba(0,0,0,0.22); }
 .breadcrumb p { font-size: 10px; color: rgba(0,0,0,0.6); letter-spacing: 0.04em; }
 
-/* GALLERY */
+/* ─── GALLERY ─── */
 .gallery { position: relative; background: #ede9e3; }
 .gallery__main-wrap { position: relative; overflow: hidden; }
-.gallery__main { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; transition: opacity 0.3s; user-select: none; }
+.gallery__main { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; transition: opacity 0.25s; user-select: none; }
 .gallery__nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.75); backdrop-filter: blur(4px); border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #1a1a1a; transition: background 0.2s; }
 .gallery__nav:hover { background: rgba(255,255,255,0.95); }
 .gallery__nav--prev { left: 12px; }
@@ -40,60 +40,39 @@ a { text-decoration: none; color: inherit; }
 .gallery__dots { position: absolute; bottom: 12px; left: 0; right: 0; display: flex; justify-content: center; gap: 5px; }
 .gallery__dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.5); cursor: pointer; transition: background 0.2s, transform 0.2s; }
 .gallery__dot.active { background: white; transform: scale(1.3); }
-.gallery__thumbs { display: flex; gap: 6px; padding: 10px 16px; overflow-x: auto; scrollbar-width: none; background: #f8f7f4; }
-.gallery__thumbs::-webkit-scrollbar { display: none; }
-.gallery__thumb { width: 60px; height: 76px; object-fit: cover; border-radius: 5px; cursor: pointer; opacity: 0.5; transition: opacity 0.2s; flex-shrink: 0; border: 1.5px solid transparent; }
-.gallery__thumb.active { opacity: 1; border-color: #1a1a1a; }
-.gallery__zoom-badge { position: absolute; bottom: 56px; right: 12px; background: rgba(0,0,0,0.55); color: white; font-size: 9px; letter-spacing: 0.1em; padding: 5px 10px; border-radius: 20px; }
+.gallery__count { position: absolute; bottom: 12px; right: 14px; background: rgba(0,0,0,0.45); color: white; font-size: 9px; letter-spacing: 0.1em; padding: 4px 9px; border-radius: 20px; }
 
-/* PRODUCT INFO */
+/* ─── COLOR THUMBS (под большим фото) ─── */
+.color-thumbs-row { display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto; scrollbar-width: none; background: #f8f7f4; }
+.color-thumbs-row::-webkit-scrollbar { display: none; }
+.color-thumb-item { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; flex-shrink: 0; }
+.color-thumb-img { width: 52px; height: 66px; object-fit: cover; border-radius: 6px; border: 2px solid transparent; transition: border-color 0.2s, transform 0.2s; }
+.color-thumb-item.active .color-thumb-img { border-color: #1a1a1a; transform: scale(1.05); }
+.color-thumb-label { font-size: 8px; letter-spacing: 0.06em; color: rgba(0,0,0,0.45); text-align: center; max-width: 54px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ─── PRODUCT INFO ─── */
 .product-info { padding: 20px 20px 0; max-width: 600px; margin: 0 auto; }
-.product-info__top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
-.product-info__name { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 500; letter-spacing: 0.02em; line-height: 1.2; flex: 1; }
-.wish-toggle { background: none; border: none; cursor: pointer; padding: 4px; color: rgba(0,0,0,0.3); flex-shrink: 0; margin-top: 4px; }
-.wish-toggle svg { width: 22px; height: 22px; }
-.wish-toggle.active svg { fill: #1a1a1a; stroke: #1a1a1a; }
+.product-info__name { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 500; letter-spacing: 0.02em; line-height: 1.2; margin-bottom: 4px; }
 .product-info__cat { font-size: 10px; font-weight: 400; color: rgba(0,0,0,0.38); letter-spacing: 0.12em; margin-bottom: 10px; text-transform: uppercase; }
-.product-info__price-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px; }
-.product-info__price { font-size: 24px; font-weight: 600; }
-.product-info__price-old { font-size: 14px; color: rgba(0,0,0,0.32); text-decoration: line-through; }
-.stock-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; font-weight: 500; letter-spacing: 0.08em; padding: 5px 10px; border-radius: 20px; margin-bottom: 18px; }
-.stock-badge.in  { background: #e8f5e9; color: #2e7d32; }
-.stock-badge.out { background: #fce4ec; color: #c62828; }
-.stock-badge.low { background: #fff8e1; color: #f57f17; }
+.product-info__price { font-size: 24px; font-weight: 600; margin-bottom: 16px; }
 
-/* COLORS */
-.section-label { font-size: 10px; font-weight: 500; letter-spacing: 0.14em; color: rgba(0,0,0,0.38); margin-bottom: 12px; }
-.color-section { margin-bottom: 22px; }
-.color-row { display: flex; gap: 10px; flex-wrap: wrap; }
-.color-btn { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; background: none; border: none; padding: 0; }
-.color-thumb { width: 46px; height: 58px; border-radius: 6px; overflow: hidden; border: 2px solid transparent; transition: border-color 0.2s, transform 0.2s; }
-.color-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.color-btn.active .color-thumb { border-color: #1a1a1a; transform: scale(1.05); }
-.color-name { font-size: 9px; letter-spacing: 0.06em; color: rgba(0,0,0,0.45); }
-
-/* SIZES */
+/* ─── SIZES ─── */
+.section-label { font-size: 10px; font-weight: 500; letter-spacing: 0.14em; color: rgba(0,0,0,0.38); margin-bottom: 12px; display: block; }
 .size-section { margin-bottom: 24px; }
-.size-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.size-guide-link { font-size: 10px; color: rgba(0,0,0,0.4); letter-spacing: 0.06em; text-decoration: underline; cursor: pointer; background: none; border: none; font-family: 'Montserrat', sans-serif; }
 .size-row { display: flex; gap: 8px; flex-wrap: wrap; }
-.size-btn { height: 42px; min-width: 54px; border: 1.5px solid rgba(0,0,0,0.16); background: none; color: rgba(0,0,0,0.55); font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; border-radius: 8px; cursor: pointer; padding: 0 14px; transition: all 0.15s; position: relative; }
+.size-btn { height: 42px; min-width: 54px; border: 1.5px solid rgba(0,0,0,0.16); background: none; color: rgba(0,0,0,0.55); font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; border-radius: 8px; cursor: pointer; padding: 0 14px; transition: all 0.15s; }
 .size-btn.active { background: #1a1a1a; color: white; border-color: #1a1a1a; }
-.size-btn.low-stock::after { content: '•'; position: absolute; top: 3px; right: 4px; color: #f57f17; font-size: 10px; }
-.size-btn:disabled { opacity: 0.3; cursor: not-allowed; text-decoration: line-through; }
 
-/* ACTION BUTTONS */
+/* ─── ACTION BUTTONS ─── */
 .action-section { margin-bottom: 28px; display: flex; flex-direction: column; gap: 12px; }
 .btn-cart { width: 100%; height: 54px; background: #1a1a1a; color: white; border: none; border-radius: 14px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.2em; cursor: pointer; transition: background 0.2s; }
 .btn-cart:active { background: #333; }
-.btn-cart:disabled { background: #ccc; cursor: not-allowed; }
-.btn-whatsapp { width: 100%; height: 52px; background: none; color: #1a1a1a; border: 1.5px solid rgba(0,0,0,0.2); border-radius: 14px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.12em; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: border-color 0.2s; }
+.btn-whatsapp { width: 100%; height: 52px; background: none; color: #1a1a1a; border: 1.5px solid rgba(0,0,0,0.2); border-radius: 14px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.12em; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
 
-/* DESCRIPTION */
-.desc-section { margin-bottom: 24px; padding: 0; }
-.product-description { font-size: 13px; font-weight: 300; color: rgba(0,0,0,0.65); line-height: 1.85; letter-spacing: 0.02em; }
+/* ─── DESCRIPTION ─── */
+.product-description { font-size: 13px; font-weight: 300; color: rgba(0,0,0,0.65); line-height: 1.85; letter-spacing: 0.02em; margin-bottom: 24px; }
 
-/* ACCORDION */
+/* ─── ACCORDION ─── */
 .accordion { border-top: 1px solid rgba(0,0,0,0.09); margin: 0 -20px; }
 .accordion-item { border-bottom: 1px solid rgba(0,0,0,0.09); }
 .accordion-head { display: flex; justify-content: space-between; align-items: center; padding: 17px 20px; cursor: pointer; }
@@ -102,60 +81,53 @@ a { text-decoration: none; color: inherit; }
 .accordion-item.open .accordion-icon { transform: rotate(180deg); }
 .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
 .accordion-item.open .accordion-body { max-height: 600px; }
-.accordion-content { padding: 0 20px 20px; font-size: 12px; font-weight: 300; color: rgba(0,0,0,0.55); line-height: 1.9; letter-spacing: 0.02em; }
+.accordion-content { padding: 0 20px 20px; font-size: 12px; font-weight: 300; color: rgba(0,0,0,0.55); line-height: 1.9; }
 .accordion-content ul { padding-left: 16px; }
 .accordion-content ul li { margin-bottom: 6px; }
+.size-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 4px; }
+.size-table th, .size-table td { padding: 8px; text-align: center; border-bottom: 1px solid rgba(0,0,0,0.07); }
+.size-table th { font-weight: 600; font-size: 10px; letter-spacing: 0.1em; color: rgba(0,0,0,0.4); }
 
-/* RELATED */
-.related-section { padding: 32px 20px 0; max-width: 600px; margin: 0 auto; }
+/* ─── RELATED ─── */
+.related-section { padding: 32px 16px 48px; max-width: 600px; margin: 0 auto; }
 .related-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 400; letter-spacing: 0.06em; margin-bottom: 20px; }
-.related-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 40px; }
+.related-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .related-card { display: block; cursor: pointer; }
-.related-card__img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 8px; background: #ede9e3; display: block; margin-bottom: 8px; transition: transform 0.4s; }
-.related-card:hover .related-card__img { transform: scale(1.02); overflow: hidden; }
+.related-card__img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 8px; background: #ede9e3; display: block; margin-bottom: 8px; }
 .related-card__name { font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 500; margin-bottom: 4px; }
 .related-card__price { font-size: 12px; font-weight: 600; }
 
-/* SIZE GUIDE MODAL */
-.modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 300; display: none; align-items: flex-end; }
-.modal-backdrop.open { display: flex; }
-.size-modal { background: #faf9f7; border-radius: 20px 20px 0 0; width: 100%; padding: 32px 24px 48px; max-height: 90vh; overflow-y: auto; }
-.size-modal h3 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 500; margin-bottom: 20px; }
-.size-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-.size-table th, .size-table td { padding: 10px 8px; text-align: center; border-bottom: 1px solid rgba(0,0,0,0.07); }
-.size-table th { font-weight: 600; font-size: 10px; letter-spacing: 0.1em; color: rgba(0,0,0,0.4); }
-.close-modal { position: absolute; top: 20px; right: 24px; background: none; border: none; font-size: 20px; cursor: pointer; color: rgba(0,0,0,0.35); }
-
-/* CART DRAWER */
+/* ─── CART DRAWER ─── */
 .cart-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0); z-index: 190; pointer-events: none; transition: background 0.3s; }
 .cart-backdrop.active { background: rgba(0,0,0,0.35); pointer-events: auto; }
-.cart-drawer { position: fixed; bottom: 0; left: 0; right: 0; background: #faf9f7; z-index: 200; border-radius: 18px 18px 0 0; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.77,0,0.175,1); max-height: 85vh; display: flex; flex-direction: column; }
+.cart-drawer { position: fixed; bottom: 0; left: 0; right: 0; background: #faf9f7; z-index: 200; border-radius: 18px 18px 0 0; transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.77,0,0.175,1); max-height: 88vh; display: flex; flex-direction: column; }
 .cart-drawer.open { transform: translateY(0); }
 .cart-drawer__header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px 16px; border-bottom: 1px solid rgba(0,0,0,0.07); flex-shrink: 0; }
 .cart-drawer__title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 500; letter-spacing: 0.1em; }
 .cart-drawer__close { background: none; border: none; font-size: 18px; color: rgba(0,0,0,0.35); cursor: pointer; }
-.cart-drawer__body { flex: 1; overflow-y: auto; padding: 0 24px; }
+.cart-drawer__body { flex: 1; overflow-y: auto; padding: 0 16px; }
 .cart-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 48px 0; color: rgba(0,0,0,0.3); font-size: 12px; letter-spacing: 0.06em; }
-.cart-item { display: flex; gap: 14px; align-items: center; padding: 14px 0; border-bottom: 1px solid rgba(0,0,0,0.07); }
-.cart-item__img { width: 56px; height: 70px; object-fit: cover; border-radius: 6px; background: #ede9e3; flex-shrink: 0; }
-.cart-item__info { flex: 1; }
-.cart-item__name { font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 500; margin-bottom: 4px; }
-.cart-item__size { font-size: 10px; color: rgba(0,0,0,0.4); letter-spacing: 0.06em; margin-bottom: 6px; }
-.cart-item__price { font-size: 13px; font-weight: 600; }
-.cart-item__controls { display: flex; align-items: center; gap: 8px; flex-direction: column; }
+.cart-item { display: flex; gap: 14px; padding: 16px 0; border-bottom: 1px solid rgba(0,0,0,0.07); }
+.cart-item__img { width: 72px; height: 96px; object-fit: cover; border-radius: 8px; background: #ede9e3; flex-shrink: 0; }
+.cart-item__body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.cart-item__name { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 500; margin-bottom: 3px; }
+.cart-item__meta { font-size: 10px; color: rgba(0,0,0,0.4); letter-spacing: 0.06em; margin-bottom: 4px; }
+.cart-item__price { font-size: 14px; font-weight: 600; }
+.cart-item__bottom { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+.qty-controls { display: flex; align-items: center; gap: 10px; }
 .qty-btn { width: 28px; height: 28px; background: none; border: 1px solid rgba(0,0,0,0.15); border-radius: 50%; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 .qty-val { font-size: 13px; font-weight: 600; min-width: 16px; text-align: center; }
-.remove-btn { background: none; border: none; color: rgba(0,0,0,0.25); font-size: 14px; cursor: pointer; margin-top: 4px; }
+.remove-btn { background: none; border: none; color: rgba(0,0,0,0.25); font-size: 14px; cursor: pointer; }
 .cart-drawer__footer { padding: 16px 24px 36px; border-top: 1px solid rgba(0,0,0,0.07); flex-shrink: 0; }
 .cart-total { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; letter-spacing: 0.08em; margin-bottom: 16px; }
 .cart-checkout-btn { width: 100%; height: 52px; background: #1a1a1a; color: white; border: none; border-radius: 12px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.2em; cursor: pointer; }
 
-/* TOAST */
+/* ─── TOAST ─── */
 .toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px); background: #1a1a1a; color: white; font-size: 12px; padding: 12px 24px; border-radius: 100px; opacity: 0; transition: opacity 0.3s, transform 0.3s; z-index: 400; pointer-events: none; white-space: nowrap; }
 .toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-/* FOOTER */
-.footer { text-align: center; padding: 40px 20px; border-top: 1px solid rgba(0,0,0,0.07); margin-top: 20px; }
+/* ─── FOOTER ─── */
+.footer { text-align: center; padding: 40px 20px; border-top: 1px solid rgba(0,0,0,0.07); }
 .footer-logo { height: 24px; margin-bottom: 8px; }
 .footer-sub { font-size: 9px; letter-spacing: 0.2em; color: rgba(0,0,0,0.3); margin-bottom: 16px; }
 .footer-nav { display: flex; justify-content: center; gap: 24px; margin-bottom: 16px; }
@@ -165,7 +137,7 @@ a { text-decoration: none; color: inherit; }
 </head>
 <body>
 
-<!-- HEADER -->
+<!-- HEADER: лого слева | корзина бургер справа -->
 <header class="header">
     <div class="header-inner">
         <a href="../catalog/index.html" class="back-btn">
@@ -193,7 +165,7 @@ a { text-decoration: none; color: inherit; }
 <!-- GALLERY -->
 <div class="gallery" id="gallery">
     <div class="gallery__main-wrap">
-        <img class="gallery__main" id="mainImg" src="" alt="" onerror="this.src=PLACEHOLDER_IMG">
+        <img class="gallery__main" id="mainImg" src="" alt="">
         <button class="gallery__nav gallery__nav--prev" id="galleryPrev">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
@@ -201,38 +173,21 @@ a { text-decoration: none; color: inherit; }
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
         </button>
         <div class="gallery__dots" id="galleryDots"></div>
-        <span class="gallery__zoom-badge" id="photoCount"></span>
+        <span class="gallery__count" id="galleryCount"></span>
     </div>
-    <div class="gallery__thumbs" id="thumbs"></div>
+    <!-- Миниатюры цветов -->
+    <div class="color-thumbs-row" id="colorThumbsRow" style="display:none"></div>
 </div>
 
 <!-- PRODUCT INFO -->
 <div class="product-info">
-    <div class="product-info__top">
-        <h1 class="product-info__name" id="productName">Загрузка...</h1>
-        <button class="wish-toggle" id="wishToggle">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        </button>
-    </div>
+    <h1 class="product-info__name" id="productName">Загрузка...</h1>
     <p class="product-info__cat" id="productCat"></p>
-    <div class="product-info__price-row">
-        <p class="product-info__price" id="productPrice"></p>
-        <p class="product-info__price-old" id="productPriceOld" style="display:none"></p>
-    </div>
-    <div id="stockBadge" style="display:none"></div>
-
-    <!-- COLORS -->
-    <div class="color-section" id="colorSection" style="display:none">
-        <p class="section-label">ЦВЕТ — <span id="colorName"></span></p>
-        <div class="color-row" id="colorRow"></div>
-    </div>
+    <p class="product-info__price" id="productPrice"></p>
 
     <!-- SIZES -->
     <div class="size-section">
-        <div class="size-header">
-            <p class="section-label" style="margin-bottom:0">РАЗМЕР</p>
-            <button class="size-guide-link" id="sizeGuideBtn">Таблица размеров</button>
-        </div>
+        <span class="section-label" id="sizeLabel">РАЗМЕР</span>
         <div class="size-row" id="sizeRow"></div>
     </div>
 
@@ -246,63 +201,32 @@ a { text-decoration: none; color: inherit; }
     </div>
 
     <!-- DESCRIPTION -->
-    <div class="desc-section" id="descSection" style="display:none">
-        <p class="product-description" id="productDescription"></p>
-    </div>
+    <p class="product-description" id="productDescription" style="display:none"></p>
 
     <!-- ACCORDION -->
-    <div class="accordion" id="accordion">
+    <div class="accordion">
         <div class="accordion-item">
-            <div class="accordion-head">
-                <p class="accordion-head-title">СОСТАВ И УХОД</p>
-                <span class="accordion-icon">⌄</span>
-            </div>
-            <div class="accordion-body">
-                <div class="accordion-content" id="compositionContent">
-                    <ul>
-                        <li>Итальянская ткань высшего качества</li>
-                        <li>Деликатная стирка при 30°C</li>
-                        <li>Не отжимать</li>
-                        <li>Гладить при низкой температуре</li>
-                    </ul>
-                </div>
-            </div>
+            <div class="accordion-head"><p class="accordion-head-title">СОСТАВ И УХОД</p><span class="accordion-icon">⌄</span></div>
+            <div class="accordion-body"><div class="accordion-content"><ul><li>Итальянская ткань высшего качества</li><li>Деликатная стирка при 30°C</li><li>Не отжимать</li><li>Гладить при низкой температуре</li></ul></div></div>
         </div>
         <div class="accordion-item">
-            <div class="accordion-head">
-                <p class="accordion-head-title">ДОСТАВКА И ВОЗВРАТ</p>
-                <span class="accordion-icon">⌄</span>
-            </div>
-            <div class="accordion-body">
-                <div class="accordion-content">
-                    <ul>
-                        <li>Доставка по Казахстану 1–3 рабочих дня</li>
-                        <li>Самовывоз: г. Актау, ул. Нурсат 12</li>
-                        <li>Возврат в течение 14 дней при сохранении вида</li>
-                        <li>Обмен размера бесплатно</li>
-                    </ul>
-                </div>
-            </div>
+            <div class="accordion-head"><p class="accordion-head-title">ДОСТАВКА И ВОЗВРАТ</p><span class="accordion-icon">⌄</span></div>
+            <div class="accordion-body"><div class="accordion-content"><ul><li>Доставка по Казахстану 1–3 рабочих дня</li><li>Самовывоз: г. Актау, ул. Нурсат 12</li><li>Возврат в течение 14 дней</li><li>Обмен размера бесплатно</li></ul></div></div>
         </div>
         <div class="accordion-item">
-            <div class="accordion-head">
-                <p class="accordion-head-title">РАЗМЕРНАЯ ТАБЛИЦА</p>
-                <span class="accordion-icon">⌄</span>
-            </div>
-            <div class="accordion-body">
-                <div class="accordion-content">
-                    <table class="size-table" style="width:100%;border-collapse:collapse;font-size:11px;margin-top:4px">
-                        <thead><tr><th>Размер</th><th>Грудь (см)</th><th>Талия (см)</th><th>Бёдра (см)</th></tr></thead>
-                        <tbody>
-                            <tr><td>XS</td><td>82–84</td><td>62–64</td><td>88–90</td></tr>
-                            <tr><td>S</td><td>86–88</td><td>66–68</td><td>92–94</td></tr>
-                            <tr><td>M</td><td>90–92</td><td>70–72</td><td>96–98</td></tr>
-                            <tr><td>L</td><td>94–96</td><td>74–76</td><td>100–102</td></tr>
-                            <tr><td>XL</td><td>98–100</td><td>78–80</td><td>104–106</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            <div class="accordion-head"><p class="accordion-head-title">РАЗМЕРНАЯ ТАБЛИЦА</p><span class="accordion-icon">⌄</span></div>
+            <div class="accordion-body"><div class="accordion-content">
+                <table class="size-table">
+                    <thead><tr><th>Размер</th><th>Грудь (см)</th><th>Талия (см)</th><th>Бёдра (см)</th></tr></thead>
+                    <tbody>
+                        <tr><td>XS</td><td>82–84</td><td>62–64</td><td>88–90</td></tr>
+                        <tr><td>S</td><td>86–88</td><td>66–68</td><td>92–94</td></tr>
+                        <tr><td>M</td><td>90–92</td><td>70–72</td><td>96–98</td></tr>
+                        <tr><td>L</td><td>94–96</td><td>74–76</td><td>100–102</td></tr>
+                        <tr><td>XL</td><td>98–100</td><td>78–80</td><td>104–106</td></tr>
+                    </tbody>
+                </table>
+            </div></div>
         </div>
     </div>
 </div>
@@ -319,7 +243,7 @@ a { text-decoration: none; color: inherit; }
     <div class="cart-drawer__header"><p class="cart-drawer__title">КОРЗИНА</p><button class="cart-drawer__close" id="cartClose">✕</button></div>
     <div class="cart-drawer__body" id="cartBody">
         <div class="cart-empty" id="cartEmpty"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><p>Корзина пуста</p></div>
-        <div class="cart-items" id="cartItems"></div>
+        <div id="cartItems"></div>
     </div>
     <div class="cart-drawer__footer" id="cartFooter" style="display:none">
         <div class="cart-total"><span>ИТОГО</span><span id="cartTotal">0 ₸</span></div>
@@ -327,7 +251,6 @@ a { text-decoration: none; color: inherit; }
     </div>
 </div>
 
-<!-- FOOTER -->
 <footer class="footer">
     <img class="footer-logo" src="../img/logo.png" alt="nuré">
     <p class="footer-sub">ITALIAN CLOTHING</p>
@@ -339,21 +262,15 @@ a { text-decoration: none; color: inherit; }
 
 <script src="../api-client.js"></script>
 <script>
-// ── Конфиг товара из URL ──
-// URL вида /product/?id=12345
-// или страницы /product/aria/ с PRODUCT_ID встроенным
-
-// Получить id из URL params или из встроенной переменной
 const urlParams = new URLSearchParams(window.location.search);
 const PRODUCT_ID = window.PRODUCT_ID || urlParams.get('id');
 
 let PRODUCT = null;
 let selectedSize = null;
-let currentVariantIdx = 0;
+let selectedColorIdx = 0;
 let currentImgIdx = 0;
 let allImages = [];
 
-// ── CART ──
 let cart = JSON.parse(localStorage.getItem('nure_cart') || '[]');
 function saveCart() { localStorage.setItem('nure_cart', JSON.stringify(cart)); }
 
@@ -363,16 +280,13 @@ function updateCartBadge() {
     cb.textContent=total; cb.style.display=total>0?'flex':'none';
 }
 
-// ── ЗАГРУЗКА ТОВАРА ──
+// ── ЗАГРУЗКА ──
 async function loadProduct() {
-    if (!PRODUCT_ID) {
-        document.getElementById('productName').textContent = 'Товар не найден';
-        return;
-    }
+    if (!PRODUCT_ID) { document.getElementById('productName').textContent = 'Товар не найден'; return; }
     try {
         const data = await API.getProduct(PRODUCT_ID);
         PRODUCT = data.product;
-        if (!PRODUCT || !PRODUCT.id) throw new Error('Не найден');
+        if (!PRODUCT || !PRODUCT.id) throw new Error();
         renderProduct();
     } catch(e) {
         document.getElementById('productName').textContent = 'Ошибка загрузки';
@@ -382,169 +296,173 @@ async function loadProduct() {
 function renderProduct() {
     const p = PRODUCT;
     document.title = `NURE — ${p.name}`;
-    document.getElementById('pageTitle').textContent = `NURE — ${p.name}`;
     document.getElementById('breadcrumbName').textContent = p.name;
     document.getElementById('productName').textContent = p.name;
 
-    const cat = p.category || '';
     const catMap = {dress:'Женское / Платья',outer:'Верхняя одежда',suit:'Костюмы',top:'Топы',acc:'Аксессуары'};
-    document.getElementById('productCat').textContent = catMap[cat] || 'NURE Collection';
+    document.getElementById('productCat').textContent = catMap[p.category] || 'NURE Collection';
 
     const price = parseFloat(p.price || p.price1 || 0);
     document.getElementById('productPrice').textContent = price > 0 ? formatPrice(price)+' ₸' : 'Цена по запросу';
 
-    // Stock
-    const stock = parseFloat(p.stock || p.quantity || 999);
-    const badge = document.getElementById('stockBadge');
-    if (stock <= 0) {
-        badge.style.display='inline-flex';
-        badge.innerHTML='<span class="stock-badge out">● НЕТ В НАЛИЧИИ</span>';
-        document.getElementById('addToCartBtn').disabled = true;
-        document.getElementById('addToCartBtn').textContent = 'НЕТ В НАЛИЧИИ';
-    } else if (stock <= 5) {
-        badge.style.display='inline-flex';
-        badge.innerHTML=`<span class="stock-badge low">● Осталось: ${stock} шт.</span>`;
-    } else {
-        badge.style.display='inline-flex';
-        badge.innerHTML='<span class="stock-badge in">● В НАЛИЧИИ</span>';
-    }
-
-    // Description
     if (p.description) {
-        document.getElementById('descSection').style.display='block';
-        document.getElementById('productDescription').textContent = p.description;
+        const desc = document.getElementById('productDescription');
+        desc.textContent = p.description;
+        desc.style.display = 'block';
     }
 
-    // Colors
+    // ── ЦВЕТА + МИНИАТЮРЫ ──
     const colors = p.colors || [];
-    if (colors.length > 0) {
-        document.getElementById('colorSection').style.display='block';
-        document.getElementById('colorName').textContent = colors[0].name || '';
-        const row = document.getElementById('colorRow');
-        colors.forEach((c, i) => {
-            const btn = document.createElement('button');
-            btn.className = 'color-btn' + (i===0?' active':'');
-            btn.innerHTML = `
-                <div class="color-thumb">
-                    <img src="${c.image || PLACEHOLDER_IMG}" alt="${c.name||''}" onerror="this.parentElement.style.background='${c.code||'#ccc'}';this.remove()">
-                </div>
-                <span class="color-name">${c.name||''}</span>`;
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.color-btn').forEach(b=>b.classList.remove('active'));
-                btn.classList.add('active');
-                currentVariantIdx = i;
-                document.getElementById('colorName').textContent = c.name||'';
-                const imgs = (p.images && p.images[c.key||i]) || (p.images && p.images.default) || [];
-                setGalleryImages(imgs);
-            });
-            row.appendChild(btn);
-        });
+    const colorRow = document.getElementById('colorThumbsRow');
+    if (colors.length > 1) {
+        colorRow.style.display = 'flex';
+        colorRow.innerHTML = colors.map((c, i) => {
+            const imgs = getColorImages(p, c, i);
+            const thumb = imgs[0] || PLACEHOLDER_IMG;
+            return `<div class="color-thumb-item ${i===0?'active':''}" onclick="selectColor(${i})">
+                <img class="color-thumb-img" src="${thumb}" alt="${c.name||''}" onerror="this.src='${PLACEHOLDER_IMG}'">
+                <span class="color-thumb-label">${c.name||''}</span>
+            </div>`;
+        }).join('');
     }
 
-    // Gallery
-    const imgs = (p.images && p.images.default) || (p.images && Object.values(p.images)[0]) || [];
-    setGalleryImages(imgs.length > 0 ? imgs : [PLACEHOLDER_IMG]);
+    // ── ГАЛЕРЕЯ ──
+    const firstColorImages = colors.length > 0 ? getColorImages(p, colors[0], 0) : getDefaultImages(p);
+    setGalleryImages(firstColorImages.length > 0 ? firstColorImages : [PLACEHOLDER_IMG]);
 
-    // Sizes
-    const sizes = p.sizes || (p.size ? p.size.split(',').map(s=>s.trim()).filter(Boolean) : ['XS','S','M','L']);
-    const sizeRow = document.getElementById('sizeRow');
-    sizes.forEach((s,i) => {
-        const btn = document.createElement('button');
-        btn.className = 'size-btn';
-        btn.textContent = s;
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active'));
-            btn.classList.add('active'); selectedSize=s;
-        });
-        sizeRow.appendChild(btn);
-        if (i===0) { btn.classList.add('active'); selectedSize=s; }
-    });
+    // ── РАЗМЕРЫ ──
+    renderSizes(getSizesForColor(p, 0));
 
-    // Wishlist state
-    const wishlist = JSON.parse(localStorage.getItem('nure_wish')||'[]');
-    const toggle = document.getElementById('wishToggle');
-    if (wishlist.includes(p.id)) { toggle.classList.add('active'); toggle.querySelector('svg path').setAttribute('fill','#1a1a1a'); }
-
-    // Related — load catalog products
     loadRelated();
 }
 
+function getColorImages(p, color, idx) {
+    const key = color.key || color.name || idx;
+    if (p.images) {
+        if (p.images[key] && p.images[key].length) return p.images[key];
+        if (p.images['color_' + idx] && p.images['color_' + idx].length) return p.images['color_' + idx];
+    }
+    return getDefaultImages(p);
+}
+
+function getDefaultImages(p) {
+    if (p.images && p.images.default && p.images.default.length) return p.images.default;
+    if (p.images) {
+        const first = Object.values(p.images)[0];
+        if (first && first.length) return first;
+    }
+    return [PLACEHOLDER_IMG];
+}
+
+function getSizesForColor(p, colorIdx) {
+    const colors = p.colors || [];
+    if (colors[colorIdx] && colors[colorIdx].sizes && colors[colorIdx].sizes.length) return colors[colorIdx].sizes;
+    if (p.sizes && p.sizes.length) return p.sizes;
+    if (p.size) return p.size.split(',').map(s=>s.trim()).filter(Boolean);
+    return ['XS','S','M','L'];
+}
+
+function selectColor(idx) {
+    selectedColorIdx = idx;
+    const p = PRODUCT;
+    const colors = p.colors || [];
+    selectedSize = null;
+
+    // Обновить активный цвет
+    document.querySelectorAll('.color-thumb-item').forEach((el,i) => el.classList.toggle('active', i===idx));
+
+    // Поменять большие фото
+    const imgs = getColorImages(p, colors[idx], idx);
+    setGalleryImages(imgs.length > 0 ? imgs : [PLACEHOLDER_IMG]);
+
+    // Поменять размеры
+    renderSizes(getSizesForColor(p, idx));
+}
+
+function renderSizes(sizes) {
+    selectedSize = null;
+    const row = document.getElementById('sizeRow');
+    row.innerHTML = sizes.map((s, i) => `
+        <button class="size-btn ${i===0?'active':''}" onclick="selectSizeBtn(this,'${s}')">${s}</button>`
+    ).join('');
+    if (sizes.length > 0) selectedSize = sizes[0];
+}
+
+function selectSizeBtn(btn, size) {
+    document.querySelectorAll('.size-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedSize = size;
+}
+
+// ── ГАЛЕРЕЯ ──
 function setGalleryImages(imgs) {
-    allImages = imgs.length > 0 ? imgs : [PLACEHOLDER_IMG];
+    allImages = imgs;
     currentImgIdx = 0;
     renderGallery();
 }
 
 function renderGallery() {
-    const main  = document.getElementById('mainImg');
-    const thumbs = document.getElementById('thumbs');
+    const main   = document.getElementById('mainImg');
     const dots   = document.getElementById('galleryDots');
-    const count  = document.getElementById('photoCount');
+    const count  = document.getElementById('galleryCount');
 
-    main.src = allImages[currentImgIdx];
-    count.textContent = `${currentImgIdx+1} / ${allImages.length}`;
+    main.src = allImages[currentImgIdx] || PLACEHOLDER_IMG;
+    count.textContent = allImages.length > 1 ? `${currentImgIdx+1} / ${allImages.length}` : '';
+    count.style.display = allImages.length > 1 ? 'block' : 'none';
 
-    // Thumbs
-    thumbs.innerHTML = allImages.map((img,i) => `
-        <img class="gallery__thumb ${i===currentImgIdx?'active':''}" src="${img}" alt="" onclick="selectImg(${i})" onerror="this.src='${PLACEHOLDER_IMG}'">`
-    ).join('');
+    // Стрелки — показывать только если > 1 фото
+    document.getElementById('galleryPrev').style.display = allImages.length > 1 ? 'flex' : 'none';
+    document.getElementById('galleryNext').style.display = allImages.length > 1 ? 'flex' : 'none';
 
-    // Dots
-    dots.innerHTML = allImages.map((_,i) => `<div class="gallery__dot ${i===currentImgIdx?'active':''}" onclick="selectImg(${i})"></div>`).join('');
+    dots.innerHTML = allImages.length > 1 ? allImages.map((_,i) =>
+        `<div class="gallery__dot ${i===currentImgIdx?'active':''}" onclick="selectImg(${i})"></div>`
+    ).join('') : '';
 }
 
 function selectImg(idx) {
-    currentImgIdx = idx;
+    currentImgIdx = (idx + allImages.length) % allImages.length;
     const main = document.getElementById('mainImg');
     main.style.opacity='0';
-    setTimeout(()=>{ main.src=allImages[idx]; main.style.opacity='1'; },200);
-    document.querySelectorAll('.gallery__thumb').forEach((t,i)=>t.classList.toggle('active',i===idx));
-    document.querySelectorAll('.gallery__dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
-    document.getElementById('photoCount').textContent=`${idx+1} / ${allImages.length}`;
+    setTimeout(()=>{ main.src=allImages[currentImgIdx]||PLACEHOLDER_IMG; main.style.opacity='1'; },200);
+    document.querySelectorAll('.gallery__dot').forEach((d,i)=>d.classList.toggle('active',i===currentImgIdx));
+    const count = document.getElementById('galleryCount');
+    count.textContent = `${currentImgIdx+1} / ${allImages.length}`;
 }
 
-document.getElementById('galleryPrev').addEventListener('click', ()=>{
-    selectImg((currentImgIdx-1+allImages.length)%allImages.length);
-});
-document.getElementById('galleryNext').addEventListener('click', ()=>{
-    selectImg((currentImgIdx+1)%allImages.length);
-});
+document.getElementById('galleryPrev').addEventListener('click', ()=>selectImg(currentImgIdx-1));
+document.getElementById('galleryNext').addEventListener('click', ()=>selectImg(currentImgIdx+1));
 
-// Swipe
 let touchStartX = 0;
 document.getElementById('gallery').addEventListener('touchstart', e=>{ touchStartX=e.touches[0].clientX; });
 document.getElementById('gallery').addEventListener('touchend', e=>{
     const dx=e.changedTouches[0].clientX-touchStartX;
-    if(Math.abs(dx)>50) { if(dx>0) selectImg((currentImgIdx-1+allImages.length)%allImages.length); else selectImg((currentImgIdx+1)%allImages.length); }
+    if(Math.abs(dx)>50){ if(dx>0) selectImg(currentImgIdx-1); else selectImg(currentImgIdx+1); }
 });
 
-// ── CART ──
+// ── ДОБАВИТЬ В КОРЗИНУ ──
 document.getElementById('addToCartBtn').addEventListener('click', () => {
     if (!PRODUCT) return;
     if (!selectedSize) { showToast('Выберите размер'); return; }
     const price = parseFloat(PRODUCT.price || PRODUCT.price1 || 0);
-    const existing = cart.find(i=>i.id===PRODUCT.id&&i.size===selectedSize);
-    if (existing) existing.qty++; else cart.push({id:PRODUCT.id, name:PRODUCT.name, price, size:selectedSize, qty:1});
+    const colors = PRODUCT.colors || [];
+    const colorName = colors[selectedColorIdx] ? (colors[selectedColorIdx].name || '') : '';
+    const img = allImages[0] || PLACEHOLDER_IMG;
+    const key = `${PRODUCT.id}_${selectedSize}_${selectedColorIdx}`;
+    const existing = cart.find(i=>i.cartKey===key);
+    if (existing) existing.qty++;
+    else cart.push({ id:PRODUCT.id, cartKey:key, name:PRODUCT.name, price, size:selectedSize, color:colorName, img, qty:1 });
     saveCart(); updateCartBadge(); showToast(PRODUCT.name+' добавлен в корзину');
 });
 
 document.getElementById('whatsappBtn').addEventListener('click', () => {
     if (!PRODUCT) return;
-    const msg = encodeURIComponent(`Здравствуйте! Интересует товар "${PRODUCT.name}"${selectedSize?' размер '+selectedSize:''}. Цена: ${formatPrice(parseFloat(PRODUCT.price||0))} ₸`);
+    const price = parseFloat(PRODUCT.price||0);
+    const msg = encodeURIComponent(`Здравствуйте! Интересует товар "${PRODUCT.name}"${selectedSize?' размер '+selectedSize:''}. Цена: ${formatPrice(price)} ₸`);
     window.open(`https://wa.me/+77000000000?text=${msg}`, '_blank');
 });
 
-document.getElementById('wishToggle').addEventListener('click', function() {
-    if (!PRODUCT) return;
-    const wishlist = JSON.parse(localStorage.getItem('nure_wish')||'[]');
-    const idx = wishlist.indexOf(PRODUCT.id);
-    if (idx===-1) { wishlist.push(PRODUCT.id); this.classList.add('active'); this.querySelector('svg path').setAttribute('fill','#1a1a1a'); showToast('Добавлено в избранное'); }
-    else { wishlist.splice(idx,1); this.classList.remove('active'); this.querySelector('svg path').setAttribute('fill','none'); }
-    localStorage.setItem('nure_wish', JSON.stringify(wishlist));
-});
-
-// Cart Drawer
-const cartDrawer=document.getElementById('cartDrawer'),cartBackdrop=document.getElementById('cartBackdrop');
+// ── КОРЗИНА ──
+const cartDrawer=document.getElementById('cartDrawer'), cartBackdrop=document.getElementById('cartBackdrop');
 document.getElementById('cartBtn').addEventListener('click',()=>{cartDrawer.classList.add('open');cartBackdrop.classList.add('active');document.body.style.overflow='hidden';renderCart();});
 document.getElementById('cartClose').addEventListener('click',()=>{cartDrawer.classList.remove('open');cartBackdrop.classList.remove('active');document.body.style.overflow='';});
 cartBackdrop.addEventListener('click',()=>{cartDrawer.classList.remove('open');cartBackdrop.classList.remove('active');document.body.style.overflow='';});
@@ -553,11 +471,32 @@ function renderCart() {
     const items=document.getElementById('cartItems'),empty=document.getElementById('cartEmpty'),footer=document.getElementById('cartFooter');
     if(!cart.length){empty.style.display='flex';items.innerHTML='';footer.style.display='none';return;}
     empty.style.display='none';footer.style.display='block';
-    items.innerHTML=cart.map(it=>`<div class="cart-item"><div class="cart-item__info"><p class="cart-item__name">${it.name}</p><p class="cart-item__size">Размер: ${it.size}</p><p class="cart-item__price">${formatPrice(it.price)} ₸</p></div><div class="cart-item__controls"><button class="qty-btn" onclick="cqty('${it.id}','${it.size}',-1)">−</button><span class="qty-val">${it.qty}</span><button class="qty-btn" onclick="cqty('${it.id}','${it.size}',1)">+</button><button class="remove-btn" onclick="crem('${it.id}','${it.size}')">✕</button></div></div>`).join('');
+    items.innerHTML=cart.map(it=>`
+        <div class="cart-item">
+            <img class="cart-item__img" src="${it.img||PLACEHOLDER_IMG}" alt="${it.name}" onerror="this.src='${PLACEHOLDER_IMG}'">
+            <div class="cart-item__body">
+                <div>
+                    <p class="cart-item__name">${it.name}</p>
+                    <p class="cart-item__meta">Размер: ${it.size}${it.color?' · '+it.color:''}</p>
+                    <p class="cart-item__price">${formatPrice(it.price)} ₸</p>
+                </div>
+                <div class="cart-item__bottom">
+                    <div class="qty-controls">
+                        <button class="qty-btn" onclick="cqty('${it.cartKey||it.id}','${it.size}',-1)">−</button>
+                        <span class="qty-val">${it.qty}</span>
+                        <button class="qty-btn" onclick="cqty('${it.cartKey||it.id}','${it.size}',1)">+</button>
+                    </div>
+                    <button class="remove-btn" onclick="crem('${it.cartKey||it.id}','${it.size}')">✕</button>
+                </div>
+            </div>
+        </div>`).join('');
     document.getElementById('cartTotal').textContent=formatPrice(cart.reduce((s,i)=>s+i.price*i.qty,0))+' ₸';
 }
-function cqty(id,size,d){const i=cart.findIndex(x=>x.id===id&&x.size===size);if(i<0)return;cart[i].qty+=d;if(cart[i].qty<=0)cart.splice(i,1);saveCart();renderCart();updateCartBadge();}
-function crem(id,size){cart=cart.filter(x=>!(x.id===id&&x.size===size));saveCart();renderCart();updateCartBadge();}
+function cqty(key,size,d){
+    const i=cart.findIndex(x=>(x.cartKey||x.id)===key&&x.size===size);
+    if(i<0)return;cart[i].qty+=d;if(cart[i].qty<=0)cart.splice(i,1);saveCart();renderCart();updateCartBadge();
+}
+function crem(key,size){cart=cart.filter(x=>!((x.cartKey||x.id)===key&&x.size===size));saveCart();renderCart();updateCartBadge();}
 
 // ── ACCORDION ──
 document.querySelectorAll('.accordion-head').forEach(h=>{
@@ -574,12 +513,12 @@ async function loadRelated() {
         const grid = document.getElementById('relatedGrid');
         section.style.display='block';
         grid.innerHTML = products.map(p => {
-            const img = (p.images && p.images.default && p.images.default[0]) || PLACEHOLDER_IMG;
+            const imgs = (p.images&&p.images.default&&p.images.default[0])||PLACEHOLDER_IMG;
             const price = parseFloat(p.price||0);
             return `<a href="../product/?id=${p.id}" class="related-card">
-                <img class="related-card__img" src="${img}" alt="${p.name}" onerror="this.src='${PLACEHOLDER_IMG}'">
+                <img class="related-card__img" src="${imgs}" alt="${p.name}" onerror="this.src='${PLACEHOLDER_IMG}'">
                 <p class="related-card__name">${p.name}</p>
-                <p class="related-card__price">${price>0?formatPrice(price)+' ₸':'Цена по запросу'}</p>
+                <p class="related-card__price">${price>0?formatPrice(price)+' ₸':'—'}</p>
             </a>`;
         }).join('');
     } catch {}
@@ -589,7 +528,6 @@ async function loadRelated() {
 let toastTimer;
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('visible'),2500);}
 
-// ── INIT ──
 updateCartBadge();
 loadProduct();
 </script>

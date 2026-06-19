@@ -36,24 +36,6 @@
     </div>
 </div>
 
-<!-- ═══ ИЗБРАННОЕ (DRAWER) ═══ -->
-<div class="wish-backdrop" id="wishBackdrop"></div>
-<div class="wish-drawer" id="wishDrawer">
-    <div class="cart-drawer__header">
-        <p class="cart-drawer__title">ИЗБРАННОЕ</p>
-        <button class="cart-drawer__close" id="wishClose">✕</button>
-    </div>
-    <div class="cart-drawer__body" id="wishBody">
-        <div class="cart-empty" id="wishEmpty">
-            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-            </svg>
-            <p>Список пуст</p>
-        </div>
-        <div class="wish-items" id="wishItems"></div>
-    </div>
-</div>
-
 <!-- ═══ КОРЗИНА (DRAWER) ═══ -->
 <div class="cart-backdrop" id="cartBackdrop"></div>
 <div class="cart-drawer" id="cartDrawer">
@@ -149,21 +131,14 @@
             </a>
             <div class="header-icons">
                 <button class="icon-btn" aria-label="Поиск" id="searchBtn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                    </svg>
-                </button>
-                <button class="icon-btn" aria-label="Избранное" id="wishBtn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                    </svg>
-                    <span class="badge" id="wishlistBadge" style="display:none">0</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                 </button>
                 <button class="icon-btn cart-icon-btn" id="cartBtn" aria-label="Корзина">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                     <span class="badge" id="cartBadge" style="display:none">0</span>
+                </button>
+                <button class="icon-btn" aria-label="Аккаунт" id="accountBtn" onclick="window.location.href='catalog/index.html'">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                 </button>
                 <button class="burger" id="burgerBtn">
                     <span></span><span></span><span></span>
@@ -462,17 +437,19 @@
 }
 .wish-items, .cart-items { padding: 0 24px 24px; }
 .cart-item {
-    display: flex; justify-content: space-between; align-items: center;
+    display: flex; gap: 14px;
     padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.07);
 }
-.cart-item__info { flex: 1; }
+.cart-item__img { width: 68px; height: 90px; object-fit: cover; border-radius: 7px; background: rgba(255,255,255,0.08); flex-shrink: 0; }
+.cart-item__body { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.cart-item__info { }
 .cart-item__name {
     font-family: 'Playfair Display', serif;
-    font-size: 14px; font-weight: 500; color: white; margin-bottom: 4px;
+    font-size: 13px; font-weight: 500; color: white; margin-bottom: 3px; line-height: 1.25;
 }
-.cart-item__size { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 6px; }
+.cart-item__size { font-size: 10px; color: rgba(255,255,255,0.4); margin-bottom: 4px; letter-spacing: 0.04em; }
 .cart-item__price { font-size: 13px; font-weight: 600; color: white; }
-.cart-item__controls { display: flex; align-items: center; gap: 8px; }
+.cart-item__controls { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
 .qty-btn {
     width: 28px; height: 28px; border: 1px solid rgba(255,255,255,0.2);
     background: none; color: white; border-radius: 50%; cursor: pointer; font-size: 16px;
@@ -511,6 +488,7 @@
 }
 </style>
 
+<script src="api-client.js"></script>
 <script>
 const PRODUCTS = [
     { id: 1, name: 'ПЛАТЬЕ ARIA',   cat: 'dress', price: 89900,  img: 'img/img 1.png', badge: 'NEW', slug: 'aria' },
@@ -524,17 +502,16 @@ const PRODUCTS = [
 ];
 
 let cart = JSON.parse(localStorage.getItem('nure_cart') || '[]');
-let wishlist = JSON.parse(localStorage.getItem('nure_wishlist') || '[]');
+
 function saveCart() { localStorage.setItem('nure_cart', JSON.stringify(cart)); }
-function saveWishlist() { localStorage.setItem('nure_wishlist', JSON.stringify(wishlist)); }
+
 function formatPrice(p) { return p.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
 
 function updateBadges() {
     const total = cart.reduce((s, i) => s + i.qty, 0);
     const cb = document.getElementById('cartBadge');
     cb.textContent = total; cb.style.display = total > 0 ? 'flex' : 'none';
-    const wb = document.getElementById('wishlistBadge');
-    wb.textContent = wishlist.length; wb.style.display = wishlist.length > 0 ? 'flex' : 'none';
+
 }
 
 // ── КОРЗИНА ──
@@ -546,16 +523,19 @@ function renderCart() {
     empty.style.display = 'none'; footer.style.display = 'block';
     body.innerHTML = cart.map(item => `
         <div class="cart-item">
-            <div class="cart-item__info">
-                <p class="cart-item__name">${item.name}</p>
-                <p class="cart-item__size">Размер: ${item.size}</p>
-                <p class="cart-item__price">${formatPrice(item.price)} ₸</p>
-            </div>
-            <div class="cart-item__controls">
-                <button class="qty-btn" onclick="changeQty(${item.id},'${item.size}',-1)">−</button>
-                <span class="qty-val">${item.qty}</span>
-                <button class="qty-btn" onclick="changeQty(${item.id},'${item.size}',1)">+</button>
-                <button class="remove-btn" onclick="removeItem(${item.id},'${item.size}')">✕</button>
+            <img class="cart-item__img" src="${item.img || PLACEHOLDER_IMG}" alt="${item.name}" onerror="this.src='${PLACEHOLDER_IMG}'">
+            <div class="cart-item__body">
+                <div class="cart-item__info">
+                    <p class="cart-item__name">${item.name}</p>
+                    <p class="cart-item__size">Размер: ${item.size}${item.color ? ' · ' + item.color : ''}</p>
+                    <p class="cart-item__price">${formatPrice(item.price)} ₸</p>
+                </div>
+                <div class="cart-item__controls">
+                    <button class="qty-btn" onclick="changeQty(${item.id},'${item.size}',-1)">−</button>
+                    <span class="qty-val">${item.qty}</span>
+                    <button class="qty-btn" onclick="changeQty(${item.id},'${item.size}',1)">+</button>
+                    <button class="remove-btn" onclick="removeItem(${item.id},'${item.size}')">✕</button>
+                </div>
             </div>
         </div>
     `).join('');
@@ -574,28 +554,7 @@ function removeItem(id, size) {
     saveCart(); renderCart(); updateBadges();
 }
 
-// ── ИЗБРАННОЕ ──
-function renderWishlist() {
-    const body = document.getElementById('wishItems');
-    const empty = document.getElementById('wishEmpty');
-    if (wishlist.length === 0) { empty.style.display = 'flex'; body.innerHTML = ''; return; }
-    empty.style.display = 'none';
-    const items = wishlist.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean);
-    body.innerHTML = items.map(p => `
-        <div class="wish-item">
-            <img class="wish-item__img" src="${p.img}" alt="${p.name}">
-            <div class="wish-item__info">
-                <p class="wish-item__name">${p.name}</p>
-                <p class="wish-item__price">${formatPrice(p.price)} ₸</p>
-            </div>
-            <button class="wish-item__remove" onclick="removeFromWish(${p.id})">✕</button>
-        </div>
-    `).join('');
-}
-function removeFromWish(id) {
-    wishlist = wishlist.filter(i => i !== id);
-    saveWishlist(); renderWishlist(); updateBadges();
-}
+
 
 // ── TOAST ──
 let toastTimer;
@@ -618,15 +577,15 @@ cartClose.addEventListener('click', closeCart);
 cartBackdrop.addEventListener('click', closeCart);
 
 // ── ДРАВЕР ИЗБРАННОЕ ──
-const wishBtn = document.getElementById('wishBtn');
-const wishDrawer = document.getElementById('wishDrawer');
-const wishBackdrop = document.getElementById('wishBackdrop');
-const wishClose = document.getElementById('wishClose');
-function openWish() { wishDrawer.classList.add('open'); wishBackdrop.classList.add('active'); document.body.style.overflow = 'hidden'; renderWishlist(); }
-function closeWish() { wishDrawer.classList.remove('open'); wishBackdrop.classList.remove('active'); document.body.style.overflow = ''; }
-wishBtn.addEventListener('click', openWish);
-wishClose.addEventListener('click', closeWish);
-wishBackdrop.addEventListener('click', closeWish);
+// wishlist removed
+// wishlist removed
+// wishlist removed
+// wishlist removed
+
+
+
+
+
 
 // ── БУРГЕР ──
 const burger = document.getElementById('burgerBtn');
