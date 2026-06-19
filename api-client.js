@@ -58,21 +58,15 @@ const API = {
     return this._post('/api/order', { items: cartItems, ...customer }, true);
   },
 
-  // ── ADMIN — PRODUCTS ──
+  // ── ADMIN — PRODUCTS (из Paloma365, только обогащение) ──
   async adminGetProducts() {
     return this._get('/api/admin/products', true);
-  },
-  async adminCreateProduct(data) {
-    return this._post('/api/admin/products', data, true);
   },
   async adminUpdateProduct(id, data) {
     return this._put(`/api/admin/products/${id}`, data, true);
   },
-  async adminDeactivateProduct(id) {
-    return this._post(`/api/admin/products/${id}/deactivate`, {}, true);
-  },
-  async adminActivateProduct(id) {
-    return this._post(`/api/admin/products/${id}/activate`, {}, true);
+  async adminForceSync() {
+    return this._post('/api/admin/sync', {}, true);
   },
   async adminUploadImages(id, files, colorKey = 'default') {
     const fd = new FormData();

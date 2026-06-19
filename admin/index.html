@@ -147,7 +147,7 @@ hr.divider { border: none; border-top: 1px solid rgba(0,0,0,0.08); margin: 20px 
   <div class="admin-layout">
     <div class="admin-tabs">
       <button class="admin-tab active" onclick="switchTab('products')">ТОВАРЫ</button>
-      <button class="admin-tab" onclick="switchTab('add')">+ ДОБАВИТЬ</button>
+      <button class="admin-tab" onclick="switchTab('sync')">PALOMA365</button>
       <button class="admin-tab" onclick="switchTab('users')">КЛИЕНТЫ</button>
     </div>
 
@@ -155,76 +155,28 @@ hr.divider { border: none; border-top: 1px solid rgba(0,0,0,0.08); margin: 20px 
     <div class="tab-content active" id="tab-products">
       <div class="section-card">
         <div class="section-title">Товары</div>
-        <div class="section-sub">Нажмите «Изм.» чтобы редактировать товар</div>
+        <div class="section-sub">Товары подтягиваются из Paloma365 автоматически. Нажмите «Изм.», чтобы добавить фото и описание.</div>
+        <div style="display:flex;gap:8px;margin-bottom:16px">
+          <input class="form-input" id="productSearch" placeholder="Поиск по названию или артикулу..." oninput="renderProducts()" style="flex:1">
+          <select class="form-select" id="productFilter" onchange="renderProducts()" style="max-width:160px">
+            <option value="all">Все товары</option>
+            <option value="noPhotos">Без фото</option>
+            <option value="hidden">Скрытые</option>
+          </select>
+        </div>
         <div class="product-list" id="productList">
           <div style="text-align:center;padding:40px;color:rgba(0,0,0,0.3);font-size:12px">Загрузка...</div>
         </div>
       </div>
     </div>
 
-    <!-- ДОБАВИТЬ ТОВАР -->
-    <div class="tab-content" id="tab-add">
+    <!-- PALOMA365 СИНХРОНИЗАЦИЯ -->
+    <div class="tab-content" id="tab-sync">
       <div class="section-card">
-        <div class="section-title">Новый товар</div>
-        <div class="section-sub">Заполните данные, загрузите фото и добавьте цвета</div>
-
-        <div class="form-grid">
-          <div class="form-group full">
-            <label class="form-label">Название *</label>
-            <input class="form-input" id="newName" placeholder="Платье из шёлка">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Цена (₸)</label>
-            <input class="form-input" id="newPrice" type="number" placeholder="45000">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Категория</label>
-            <select class="form-select" id="newCategory">
-              <option value="">— выбрать —</option>
-              <option value="dress">Платья</option>
-              <option value="outer">Верхняя одежда</option>
-              <option value="suit">Костюмы</option>
-              <option value="top">Топы</option>
-              <option value="acc">Аксессуары</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Бейдж</label>
-            <input class="form-input" id="newBadge" placeholder="NEW / SALE / HIT">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Размеры (через запятую)</label>
-            <input class="form-input" id="newSizes" placeholder="XS, S, M, L, XL">
-          </div>
-          <div class="form-group full">
-            <label class="form-label">Описание</label>
-            <textarea class="form-textarea" id="newDesc" placeholder="Описание товара..."></textarea>
-          </div>
-        </div>
-
-        <!-- ОСНОВНЫЕ ФОТО -->
-        <hr class="divider">
-        <div class="form-label" style="margin-bottom:12px">ОСНОВНЫЕ ФОТО (1 или более)</div>
-        <div class="images-grid" id="newImagesPreview"></div>
-        <label class="upload-zone" id="newImagesZone">
-          <input type="file" multiple accept="image/*" id="newImagesInput" onchange="previewNewImages(this)">
-          <div class="upload-zone__text">Нажмите чтобы загрузить фото (jpg, png, webp)</div>
-        </label>
-
-        <!-- ЦВЕТА -->
-        <div class="colors-section">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-            <div>
-              <div class="form-label">ВАРИАНТЫ ЦВЕТОВ</div>
-              <div style="font-size:10px;color:rgba(0,0,0,0.4);margin-top:4px">Если товар имеет несколько цветов — добавьте каждый цвет отдельно</div>
-            </div>
-          </div>
-          <div id="newColorsContainer"></div>
-          <button class="add-color-btn" onclick="addNewColorVariant()">+ ДОБАВИТЬ ЕЩЁ ЦВЕТ</button>
-        </div>
-
-        <hr class="divider">
-        <button class="btn-primary" id="btnCreate" onclick="createProduct()" style="width:100%">СОЗДАТЬ ТОВАР</button>
+        <div class="section-title">Синхронизация с Paloma365</div>
+        <div class="section-sub">Название, цена и категория товаров приходят из Paloma365 автоматически — раз в несколько минут, либо по кнопке ниже. Остатки (наличие на складе) Paloma365 не передаёт без отдельной настройки от их поддержки — поэтому видимостью товара на сайте управляйте вручную в карточке товара («Скрыть из каталога»).</div>
+        <div id="syncStatus" style="font-size:12px;color:rgba(0,0,0,0.6);margin-bottom:16px;line-height:1.6"></div>
+        <button class="btn-primary" id="btnSync" onclick="forceSync()">ОБНОВИТЬ СЕЙЧАС</button>
       </div>
     </div>
 
@@ -247,20 +199,13 @@ hr.divider { border: none; border-top: 1px solid rgba(0,0,0,0.08); margin: 20px 
   <div class="modal">
     <button class="modal__close" onclick="closeEdit()">✕</button>
     <div class="modal__title" id="editTitle">Редактировать</div>
+    <div id="editPalomaInfo" style="background:#f8f7f4;border-radius:10px;padding:12px 14px;margin-bottom:20px;font-size:11px;color:rgba(0,0,0,0.5);line-height:1.7"></div>
 
     <div class="form-grid" style="margin-bottom:20px">
-      <div class="form-group full">
-        <label class="form-label">Название</label>
-        <input class="form-input" id="eName">
-      </div>
       <div class="form-group">
-        <label class="form-label">Цена (₸)</label>
-        <input class="form-input" id="ePrice" type="number">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Категория</label>
+        <label class="form-label">Категория (если нужно — переопределить)</label>
         <select class="form-select" id="eCategory">
-          <option value="">— выбрать —</option>
+          <option value="">— как в Paloma365 —</option>
           <option value="dress">Платья</option>
           <option value="outer">Верхняя одежда</option>
           <option value="suit">Костюмы</option>
@@ -272,12 +217,12 @@ hr.divider { border: none; border-top: 1px solid rgba(0,0,0,0.08); margin: 20px 
         <label class="form-label">Бейдж</label>
         <input class="form-input" id="eBadge" placeholder="NEW / SALE">
       </div>
-      <div class="form-group">
-        <label class="form-label">Размеры (через запятую)</label>
+      <div class="form-group full">
+        <label class="form-label">Размеры (через запятую, если без цветов)</label>
         <input class="form-input" id="eSizes">
       </div>
       <div class="form-group full">
-        <label class="form-label">Описание</label>
+        <label class="form-label">Описание (если нужно — переопределить описание из Paloma365)</label>
         <textarea class="form-textarea" id="eDesc"></textarea>
       </div>
     </div>
@@ -307,11 +252,11 @@ hr.divider { border: none; border-top: 1px solid rgba(0,0,0,0.08); margin: 20px 
 
     <hr class="divider">
 
-    <!-- СТАТУС -->
+    <!-- ВИДИМОСТЬ -->
     <div>
-      <div class="form-label" style="margin-bottom:8px">СТАТУС ТОВАРА</div>
-      <div id="deactivateInfo" style="font-size:11px;color:rgba(0,0,0,0.5);margin-bottom:12px"></div>
-      <button id="btnDeactivate" class="btn-deactivate" onclick="toggleActivation()"></button>
+      <div class="form-label" style="margin-bottom:8px">ВИДИМОСТЬ НА САЙТЕ</div>
+      <div id="hiddenInfo" style="font-size:11px;color:rgba(0,0,0,0.5);margin-bottom:12px"></div>
+      <button id="btnHide" class="btn-deactivate" onclick="toggleHidden()"></button>
     </div>
   </div>
 </div>
@@ -374,42 +319,93 @@ function showAdmin() {
 // ── TABS ──
 function switchTab(name) {
   document.querySelectorAll('.admin-tab').forEach((t, i) => {
-    t.classList.toggle('active', ['products','add','users'][i] === name);
+    t.classList.toggle('active', ['products','sync','users'][i] === name);
   });
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
   document.getElementById('tab-' + name).classList.add('active');
+  if (name === 'sync') renderSyncStatus();
 }
 
 // ── PRODUCTS ──
+let lastSyncedAt = null, lastSyncError = null;
+
 async function loadProducts() {
   const res = await API.adminGetProducts();
-  allProducts = res.products || [];
+  if (res && res.success === false) {
+    document.getElementById('productList').innerHTML =
+      `<div style="text-align:center;padding:40px;color:#c0392b;font-size:12px">${res.error || 'Не удалось загрузить товары из Paloma365'}</div>`;
+    lastSyncedAt = null; lastSyncError = res.error;
+    renderSyncStatus();
+    return;
+  }
+  allProducts  = res.products || [];
+  lastSyncedAt = res.syncedAt || null;
+  lastSyncError = res.lastError || null;
   renderProducts();
+  renderSyncStatus();
+}
+
+function renderSyncStatus() {
+  const el = document.getElementById('syncStatus');
+  if (!el) return;
+  const parts = [];
+  parts.push(`Товаров загружено: <strong>${allProducts.length}</strong>`);
+  parts.push(lastSyncedAt ? `Последняя синхронизация: <strong>${new Date(lastSyncedAt).toLocaleString('ru')}</strong>` : 'Синхронизация ещё не выполнялась');
+  if (lastSyncError) parts.push(`<span style="color:#c0392b">⚠️ Paloma365 недоступна, показаны последние сохранённые данные: ${lastSyncError}</span>`);
+  el.innerHTML = parts.join('<br>');
+}
+
+async function forceSync() {
+  const btn = document.getElementById('btnSync');
+  btn.disabled = true; btn.textContent = 'ОБНОВЛЕНИЕ...';
+  try {
+    const res = await API.adminForceSync();
+    if (res && res.success) {
+      showToast(`Обновлено: ${res.count} товаров`);
+      await loadProducts();
+    } else {
+      showToast((res && res.error) || 'Не удалось синхронизировать с Paloma365');
+    }
+  } catch (e) {
+    showToast('Ошибка: ' + (e.message || 'не удалось синхронизировать'));
+  } finally {
+    btn.disabled = false; btn.textContent = 'ОБНОВИТЬ СЕЙЧАС';
+  }
 }
 
 function renderProducts() {
-  const list = document.getElementById('productList');
-  if (!allProducts.length) {
-    list.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(0,0,0,0.3);font-size:12px">Товаров пока нет.</div>';
+  const list   = document.getElementById('productList');
+  const qEl    = document.getElementById('productSearch');
+  const fEl    = document.getElementById('productFilter');
+  const q      = (qEl && qEl.value.trim().toLowerCase()) || '';
+  const filter = (fEl && fEl.value) || 'all';
+
+  let items = allProducts;
+  if (q) items = items.filter(p =>
+    (p.name || '').toLowerCase().includes(q) || (p.articul || '').toLowerCase().includes(q)
+  );
+  if (filter === 'noPhotos') items = items.filter(p => !p.hasPhotos);
+  if (filter === 'hidden')   items = items.filter(p => p.hidden);
+
+  if (!items.length) {
+    list.innerHTML = '<div style="text-align:center;padding:40px;color:rgba(0,0,0,0.3);font-size:12px">Ничего не найдено.</div>';
     return;
   }
-  list.innerHTML = allProducts.map(p => {
+  list.innerHTML = items.map(p => {
     const img = (p.images && p.images.default && p.images.default[0]) || PLACEHOLDER_IMG;
-    const isDeactivated = !!p.deactivatedAt;
-    const countdown = isDeactivated ? getDaysLeft(p.deactivatedAt) : null;
     const colors = p.colors || [];
     return `
-      <div class="product-row ${isDeactivated ? 'inactive' : ''}">
+      <div class="product-row ${p.hidden ? 'inactive' : ''}">
         <img class="product-row__img" src="${img}" onerror="this.src='${PLACEHOLDER_IMG}'">
         <div class="product-row__info">
           <div class="product-row__name">
             ${p.name}
-            ${isDeactivated ? '<span class="badge-out">НЕТ</span>' : ''}
+            ${p.hidden ? '<span class="badge-out">СКРЫТ</span>' : ''}
+            ${!p.hasPhotos ? '<span class="badge-out" style="background:#f5ecd9;color:#8B6914">НЕТ ФОТО</span>' : ''}
           </div>
           <div class="product-row__meta">
-            ${p.category || '—'}
+            ${p.category || '—'}${p.articul ? ` · арт. ${p.articul}` : ''}
             ${colors.length > 1 ? ` · ${colors.length} цвета` : ''}
-            ${isDeactivated ? `<span class="countdown"> · удалится через ${countdown}</span>` : ''}
           </div>
         </div>
         <div class="product-row__price">${p.price ? formatPrice(p.price) + ' ₸' : '—'}</div>
@@ -420,188 +416,6 @@ function renderProducts() {
   }).join('');
 }
 
-function getDaysLeft(deactivatedAt) {
-  const ms = 7*24*60*60*1000 - (Date.now() - new Date(deactivatedAt).getTime());
-  const days = Math.ceil(ms / (24*60*60*1000));
-  return days <= 0 ? 'менее дня' : days + ' д.';
-}
-
-// ── CREATE: NEW IMAGE PREVIEW ──
-let newImageFiles = [];
-function previewNewImages(input) {
-  const files = [...input.files];
-  newImageFiles.push(...files);
-  const grid = document.getElementById('newImagesPreview');
-  grid.innerHTML = '';
-  newImageFiles.forEach((file, i) => {
-    const reader = new FileReader();
-    reader.onload = e => {
-      const div = document.createElement('div');
-      div.className = 'img-thumb';
-      div.innerHTML = `<img src="${e.target.result}"><button class="img-thumb__del" onclick="removeNewImg(${i})">✕</button>`;
-      grid.appendChild(div);
-    };
-    reader.readAsDataURL(file);
-  });
-}
-function removeNewImg(idx) {
-  newImageFiles.splice(idx, 1);
-  // Rebuild preview
-  const grid = document.getElementById('newImagesPreview');
-  grid.innerHTML = '';
-  newImageFiles.forEach((file, i) => {
-    const reader = new FileReader();
-    reader.onload = e => {
-      const div = document.createElement('div');
-      div.className = 'img-thumb';
-      div.innerHTML = `<img src="${e.target.result}"><button class="img-thumb__del" onclick="removeNewImg(${i})">✕</button>`;
-      grid.appendChild(div);
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
-// ── COLOR VARIANTS (ADD FORM) ──
-let newColorVariants = []; // [{name, sizes, files}]
-
-function addNewColorVariant() {
-  const idx = newColorVariants.length;
-  newColorVariants.push({ name: '', sizes: '', files: [] });
-  renderNewColors();
-}
-
-function renderNewColors() {
-  const container = document.getElementById('newColorsContainer');
-  container.innerHTML = newColorVariants.map((c, i) => `
-    <div class="color-variant">
-      <div class="color-variant__header">
-        <span class="color-variant__title">ЦВЕТ ${i+1}</span>
-        <button class="btn-remove-color" onclick="removeNewColor(${i})">✕</button>
-      </div>
-      <div class="form-grid">
-        <div class="form-group">
-          <label class="form-label">Название цвета</label>
-          <input class="form-input color-name-input" value="${c.name}" onchange="newColorVariants[${i}].name=this.value" placeholder="Чёрный, Белый...">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Размеры (через запятую)</label>
-          <input class="form-input color-sizes-input" value="${c.sizes}" onchange="newColorVariants[${i}].sizes=this.value" placeholder="XS, S, M, L">
-        </div>
-      </div>
-      <div style="margin-top:12px">
-        <label class="form-label" style="margin-bottom:8px;display:block">ФОТО ЭТОГО ЦВЕТА</label>
-        <div class="preview-thumbs" id="colorPreviews${i}"></div>
-        <label class="upload-zone">
-          <input type="file" multiple accept="image/*" onchange="addColorImages(${i}, this)">
-          <div class="upload-zone__text">Загрузить фото цвета</div>
-        </label>
-      </div>
-    </div>`).join('');
-}
-
-function removeNewColor(idx) {
-  newColorVariants.splice(idx, 1);
-  renderNewColors();
-}
-
-function addColorImages(idx, input) {
-  const files = [...input.files];
-  newColorVariants[idx].files.push(...files);
-  const previewEl = document.getElementById('colorPreviews' + idx);
-  if (!previewEl) return;
-  previewEl.innerHTML = '';
-  newColorVariants[idx].files.forEach(file => {
-    const reader = new FileReader();
-    reader.onload = e => {
-      const img = document.createElement('img');
-      img.src = e.target.result;
-      img.className = 'preview-thumb';
-      previewEl.appendChild(img);
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
-// ── CREATE PRODUCT ──
-async function createProduct() {
-  const name = document.getElementById('newName').value.trim();
-  if (!name) { showToast('Введите название'); return; }
-  const btn = document.getElementById('btnCreate');
-  btn.disabled = true; btn.textContent = 'СОЗДАНИЕ...';
-
-  try {
-    // Собрать данные цветов из DOM (т.к. onchange может не сработать)
-    const colorInputs = document.querySelectorAll('#newColorsContainer .color-variant');
-    colorInputs.forEach((el, i) => {
-      if (newColorVariants[i]) {
-        const nameEl = el.querySelector('.color-name-input');
-        const sizesEl = el.querySelector('.color-sizes-input');
-        newColorVariants[i].name = nameEl ? nameEl.value : newColorVariants[i].name;
-        newColorVariants[i].sizes = sizesEl ? sizesEl.value : newColorVariants[i].sizes;
-      }
-    });
-
-    const sizesRaw = document.getElementById('newSizes').value;
-    const sizes = sizesRaw.split(',').map(s=>s.trim()).filter(Boolean);
-
-    const colors = newColorVariants.map((c, i) => ({
-      name: c.name || ('Цвет ' + (i+1)),
-      key: 'color_' + i,
-      sizes: c.sizes.split(',').map(s=>s.trim()).filter(Boolean)
-    }));
-
-    const res = await API.adminCreateProduct({
-      name,
-      price:       parseFloat(document.getElementById('newPrice').value) || 0,
-      category:    document.getElementById('newCategory').value,
-      badge:       document.getElementById('newBadge').value.trim(),
-      sizes,
-      colors,
-      description: document.getElementById('newDesc').value.trim(),
-    });
-
-    if (!res || !res.success) {
-      showToast((res && res.error) || 'Не удалось создать товар. Попробуйте ещё раз.');
-      return;
-    }
-
-    const productId = res.product.id;
-
-    // Загрузить основные фото
-    if (newImageFiles.length > 0) {
-      btn.textContent = 'ЗАГРУЗКА ФОТО...';
-      const upRes = await API.adminUploadImages(productId, newImageFiles, 'default');
-      if (!upRes || !upRes.success) showToast('Товар создан, но фото не загрузились: ' + ((upRes && upRes.error) || 'ошибка сети'));
-    }
-
-    // Загрузить фото цветов
-    for (let i=0; i<newColorVariants.length; i++) {
-      const c = newColorVariants[i];
-      if (c.files && c.files.length > 0) {
-        btn.textContent = `ЗАГРУЗКА ФОТО ЦВЕТА ${i+1}...`;
-        const upRes = await API.adminUploadImages(productId, c.files, 'color_' + i);
-        if (!upRes || !upRes.success) showToast(`Товар создан, но фото цвета ${i+1} не загрузились`);
-      }
-    }
-
-    showToast('Товар создан!');
-    // Reset form
-    ['newName','newPrice','newBadge','newSizes','newDesc'].forEach(id => document.getElementById(id).value='');
-    document.getElementById('newCategory').value='';
-    document.getElementById('newImagesPreview').innerHTML='';
-    newImageFiles = [];
-    newColorVariants = [];
-    document.getElementById('newColorsContainer').innerHTML='';
-
-    await loadProducts();
-    switchTab('products');
-  } catch (e) {
-    showToast('Ошибка: ' + (e.message || 'не удалось создать товар'));
-  } finally {
-    btn.disabled=false; btn.textContent='СОЗДАТЬ ТОВАР';
-  }
-}
-
 // ── EDIT MODAL ──
 function openEdit(id) {
   const p = allProducts.find(x => x.id === id);
@@ -609,9 +423,13 @@ function openEdit(id) {
   currentEditId = id;
 
   document.getElementById('editTitle').textContent = p.name;
-  document.getElementById('eName').value     = p.name || '';
-  document.getElementById('ePrice').value    = p.price || '';
-  document.getElementById('eCategory').value = p.category || '';
+  document.getElementById('editPalomaInfo').innerHTML = `
+    <strong>${p.name}</strong><br>
+    Цена: ${p.price ? formatPrice(p.price) + ' ₸' : '—'} · Артикул: ${p.articul || '—'}<br>
+    Категория в Paloma365: ${p.palomaCategory || '—'}<br>
+    <span style="color:rgba(0,0,0,0.35)">Название, цена и базовая категория приходят из Paloma365 и не редактируются здесь — изменяйте их в самой Paloma365.</span>
+  `;
+  document.getElementById('eCategory').value = p.category && p.category !== p.palomaCategory ? p.category : '';
   document.getElementById('eBadge').value    = p.badge || '';
   document.getElementById('eSizes').value    = (p.sizes || []).join(', ');
   document.getElementById('eDesc').value     = p.description || '';
@@ -619,13 +437,12 @@ function openEdit(id) {
   renderEditImages(p);
   renderEditColors(p);
 
-  const isDeactivated = !!p.deactivatedAt;
-  document.getElementById('deactivateInfo').textContent = isDeactivated
-    ? `Деактивирован ${new Date(p.deactivatedAt).toLocaleDateString('ru')} · удалится через ${getDaysLeft(p.deactivatedAt)}`
-    : 'Товар активен и отображается в каталоге';
-  const btnD = document.getElementById('btnDeactivate');
-  btnD.textContent = isDeactivated ? 'РЕАКТИВИРОВАТЬ' : 'ДЕАКТИВИРОВАТЬ';
-  btnD.className = isDeactivated ? 'btn-activate' : 'btn-deactivate';
+  document.getElementById('hiddenInfo').textContent = p.hidden
+    ? 'Товар скрыт — не отображается в каталоге на сайте'
+    : 'Товар виден и отображается в каталоге';
+  const btnH = document.getElementById('btnHide');
+  btnH.textContent = p.hidden ? 'ПОКАЗАТЬ В КАТАЛОГЕ' : 'СКРЫТЬ ИЗ КАТАЛОГА';
+  btnH.className = p.hidden ? 'btn-activate' : 'btn-deactivate';
 
   document.getElementById('editModal').classList.add('open');
 }
@@ -723,8 +540,6 @@ async function saveEdit() {
     });
 
     const res = await API.adminUpdateProduct(currentEditId, {
-      name:        document.getElementById('eName').value.trim(),
-      price:       parseFloat(document.getElementById('ePrice').value) || 0,
       category:    document.getElementById('eCategory').value,
       badge:       document.getElementById('eBadge').value.trim(),
       sizes:       document.getElementById('eSizes').value.split(',').map(s=>s.trim()).filter(Boolean),
@@ -807,18 +622,17 @@ async function deleteImage(url, colorKey) {
   }
 }
 
-async function toggleActivation() {
+async function toggleHidden() {
   if (!currentEditId) return;
   const p = allProducts.find(x => x.id === currentEditId);
   if (!p) return;
-  const isDeactivated = !!p.deactivatedAt;
   try {
-    const res = isDeactivated ? await API.adminActivateProduct(currentEditId) : await API.adminDeactivateProduct(currentEditId);
+    const res = await API.adminUpdateProduct(currentEditId, { hidden: !p.hidden });
     if (res && res.success) {
       const idx = allProducts.findIndex(x => x.id === currentEditId);
       if (idx !== -1) allProducts[idx] = { ...allProducts[idx], ...res.product };
       renderProducts(); closeEdit();
-      showToast(isDeactivated ? 'Товар реактивирован' : 'Товар деактивирован — удалится через 7 дней');
+      showToast(!p.hidden ? 'Товар скрыт из каталога' : 'Товар снова виден в каталоге');
     } else {
       showToast((res && res.error) || 'Ошибка');
     }
