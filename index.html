@@ -36,6 +36,24 @@
     </div>
 </div>
 
+<!-- ═══ ИЗБРАННОЕ (DRAWER) ═══ -->
+<div class="wish-backdrop" id="wishBackdrop"></div>
+<div class="wish-drawer" id="wishDrawer">
+    <div class="cart-drawer__header">
+        <p class="cart-drawer__title">ИЗБРАННОЕ</p>
+        <button class="cart-drawer__close" id="wishClose">✕</button>
+    </div>
+    <div class="cart-drawer__body" id="wishBody">
+        <div class="cart-empty" id="wishEmpty">
+            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+            <p>Список пуст</p>
+        </div>
+        <div class="wish-items" id="wishItems"></div>
+    </div>
+</div>
+
 <!-- ═══ КОРЗИНА (DRAWER) ═══ -->
 <div class="cart-backdrop" id="cartBackdrop"></div>
 <div class="cart-drawer" id="cartDrawer">
@@ -135,16 +153,17 @@
                         <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
                     </svg>
                 </button>
+                <button class="icon-btn" aria-label="Избранное" id="wishBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                    <span class="badge" id="wishlistBadge" style="display:none">0</span>
+                </button>
                 <button class="icon-btn cart-icon-btn" id="cartBtn" aria-label="Корзина">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
                     </svg>
                     <span class="badge" id="cartBadge" style="display:none">0</span>
-                </button>
-                <button class="icon-btn" aria-label="Аккаунт" id="accountBtn">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-                    </svg>
                 </button>
                 <button class="burger" id="burgerBtn">
                     <span></span><span></span><span></span>
@@ -209,9 +228,8 @@
         <p class="s-products__sub">НОВИНКИ СЕЗОНА</p>
     </div>
     <div class="products-scroll-wrapper">
-        <div class="products-track" id="productsTrack">
-            <!-- Карточки товаров — рендерятся динамически -->
-            <a href="product/?id=static-1" class="product-card">
+        <div class="products-track">
+            <a href="product/aria/index.html" class="product-card">
                 <div class="product-card__img">
                     <img src="img/img 1.png" alt="Платье Aria">
                     <div class="product-card__badge">NEW</div>
@@ -222,7 +240,7 @@
                     <p class="product-card__price">89 900 ₸</p>
                 </div>
             </a>
-            <a href="product/?id=static-2" class="product-card">
+            <a href="product/milano/index.html" class="product-card">
                 <div class="product-card__img">
                     <img src="img/img 2.png" alt="Пальто Milano">
                     <div class="product-card__badge">HIT</div>
@@ -233,7 +251,7 @@
                     <p class="product-card__price">145 000 ₸</p>
                 </div>
             </a>
-            <a href="product/?id=static-3" class="product-card">
+            <a href="catalog/index.html" class="product-card">
                 <div class="product-card__img">
                     <img src="img/img 1.png" alt="Блуза Venezia">
                 </div>
@@ -243,7 +261,7 @@
                     <p class="product-card__price">54 500 ₸</p>
                 </div>
             </a>
-            <a href="product/?id=static-4" class="product-card">
+            <a href="product/soft/index.html" class="product-card">
                 <div class="product-card__img">
                     <img src="img/img 2.png" alt="Брюки Roma">
                     <div class="product-card__badge">NEW</div>
@@ -254,7 +272,7 @@
                     <p class="product-card__price">67 000 ₸</p>
                 </div>
             </a>
-            <a href="product/?id=static-5" class="product-card">
+            <a href="catalog/index.html" class="product-card">
                 <div class="product-card__img">
                     <img src="img/img 1.png" alt="Жакет Firenze">
                 </div>
@@ -312,32 +330,6 @@
         <a href="#">✈</a>
     </div>
 </footer>
-
-<!-- AUTH MODAL -->
-<div class="auth-modal-backdrop" id="authModal">
-    <div class="auth-modal">
-        <div class="auth-modal__bar"></div>
-        <p class="auth-modal__title">Войти</p>
-        <p class="auth-modal__sub">Войдите, чтобы отслеживать заказы</p>
-        <div class="auth-tabs">
-            <button class="auth-tab active" id="tabLogin" onclick="switchAuth('login')">ВОЙТИ</button>
-            <button class="auth-tab" id="tabReg" onclick="switchAuth('reg')">РЕГИСТРАЦИЯ</button>
-        </div>
-        <div id="authLoginForm">
-            <div class="auth-field"><label class="auth-field__label">Email</label><input class="auth-field__input" type="email" id="authEmail" placeholder="email@mail.com"></div>
-            <div class="auth-field"><label class="auth-field__label">Пароль</label><input class="auth-field__input" type="password" id="authPass" placeholder="••••••"></div>
-            <button class="auth-submit" onclick="doLogin()">ВОЙТИ</button>
-        </div>
-        <div id="authRegForm" style="display:none">
-            <div class="auth-field"><label class="auth-field__label">Имя</label><input class="auth-field__input" type="text" id="authName" placeholder="Ваше имя"></div>
-            <div class="auth-field"><label class="auth-field__label">Email</label><input class="auth-field__input" type="email" id="authEmailReg" placeholder="email@mail.com"></div>
-            <div class="auth-field"><label class="auth-field__label">Пароль</label><input class="auth-field__input" type="password" id="authPassReg" placeholder="••••••"></div>
-            <button class="auth-submit" onclick="doRegister()">ЗАРЕГИСТРИРОВАТЬСЯ</button>
-        </div>
-        <p class="auth-error" id="authError"></p>
-        <button onclick="closeAuth()" style="display:block;margin:16px auto 0;background:none;border:none;font-size:12px;color:rgba(0,0,0,0.4);cursor:pointer;font-family:'Montserrat',sans-serif;letter-spacing:0.06em">ОТМЕНА</button>
-    </div>
-</div>
 
 <style>
 /* ─── ПОИСК ОВЕРЛЕЙ (тёмный для главной) ─── */
@@ -410,15 +402,15 @@
 }
 .search-pcard__price { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.8); }
 
-/* ─── КОРЗИНА ДРАВЕР (тёмный) ─── */
-.cart-backdrop {
+/* ─── КОРЗИНА / ИЗБРАННОЕ ДРАВЕР (тёмный) ─── */
+.wish-backdrop, .cart-backdrop {
     position: fixed; inset: 0;
     background: rgba(0,0,0,0);
     z-index: 190; pointer-events: none;
     transition: background 0.3s;
 }
-.cart-backdrop.active { background: rgba(0,0,0,0.6); pointer-events: auto; }
-.cart-drawer {
+.wish-backdrop.active, .cart-backdrop.active { background: rgba(0,0,0,0.6); pointer-events: auto; }
+.wish-drawer, .cart-drawer {
     position: fixed; bottom: 0; left: 0; right: 0;
     background: #1a1a1a;
     z-index: 200; border-radius: 18px 18px 0 0;
@@ -427,12 +419,12 @@
     max-height: 85vh; display: flex; flex-direction: column;
     box-shadow: 0 -4px 40px rgba(0,0,0,0.4);
 }
-.cart-drawer::before {
+.wish-drawer::before, .cart-drawer::before {
     content: ''; display: block; width: 40px; height: 4px;
     background: rgba(255,255,255,0.15); border-radius: 2px;
     margin: 12px auto 0; flex-shrink: 0;
 }
-.cart-drawer.open { transform: translateY(0); }
+.wish-drawer.open, .cart-drawer.open { transform: translateY(0); }
 .cart-drawer__header {
     display: flex; justify-content: space-between; align-items: center;
     padding: 20px 24px 16px; border-bottom: 1px solid rgba(255,255,255,0.08);
@@ -468,28 +460,35 @@
     min-height: 200px; color: rgba(255,255,255,0.3);
     font-size: 13px; letter-spacing: 0.05em;
 }
-.cart-items { padding: 0 24px 24px; }
+.wish-items, .cart-items { padding: 0 24px 24px; }
 .cart-item {
-    display: flex; gap: 14px; align-items: center;
+    display: flex; justify-content: space-between; align-items: center;
     padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.07);
 }
-.cart-item__img { width: 56px; height: 70px; object-fit: cover; border-radius: 6px; background: #2a2a2a; flex-shrink: 0; }
 .cart-item__info { flex: 1; }
 .cart-item__name {
     font-family: 'Playfair Display', serif;
     font-size: 14px; font-weight: 500; color: white; margin-bottom: 4px;
 }
-.cart-item__size { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 2px; }
-.cart-item__color { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 6px; }
+.cart-item__size { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 6px; }
 .cart-item__price { font-size: 13px; font-weight: 600; color: white; }
-.cart-item__controls { display: flex; align-items: center; gap: 8px; flex-direction: column; }
+.cart-item__controls { display: flex; align-items: center; gap: 8px; }
 .qty-btn {
     width: 28px; height: 28px; border: 1px solid rgba(255,255,255,0.2);
     background: none; color: white; border-radius: 50%; cursor: pointer; font-size: 16px;
-    display: flex; align-items: center; justify-content: center; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
 }
 .qty-val { font-size: 14px; font-weight: 500; color: white; min-width: 20px; text-align: center; }
-.remove-btn { background: none; border: none; color: rgba(255,255,255,0.3); font-size: 14px; cursor: pointer; margin-top: 4px; }
+.remove-btn { background: none; border: none; color: rgba(255,255,255,0.3); font-size: 14px; cursor: pointer; margin-left: 4px; }
+.wish-item {
+    display: flex; gap: 14px; align-items: center;
+    padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.wish-item__img { width: 56px; height: 70px; object-fit: cover; border-radius: 6px; background: #2a2a2a; flex-shrink: 0; }
+.wish-item__info { flex: 1; }
+.wish-item__name { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 500; color: white; margin-bottom: 3px; }
+.wish-item__price { font-size: 13px; font-weight: 600; color: white; }
+.wish-item__remove { background: none; border: none; color: rgba(255,255,255,0.25); font-size: 16px; cursor: pointer; }
 
 /* ─── TOAST ─── */
 .toast {
@@ -510,47 +509,32 @@
     border-radius: 50%; font-size: 8px; font-weight: 600;
     display: flex; align-items: center; justify-content: center; line-height: 1;
 }
-
-/* ─── AUTH MODAL ─── */
-.auth-modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 400; display: none; align-items: flex-end; }
-.auth-modal-backdrop.open { display: flex; }
-.auth-modal { background: #faf9f7; border-radius: 20px 20px 0 0; width: 100%; padding: 28px 24px 48px; }
-.auth-modal__bar { width: 40px; height: 4px; background: rgba(0,0,0,0.14); border-radius: 2px; margin: 0 auto 24px; }
-.auth-modal__title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 500; margin-bottom: 4px; color: #1a1a1a; }
-.auth-modal__sub { font-size: 12px; color: rgba(0,0,0,0.45); margin-bottom: 24px; }
-.auth-tabs { display: flex; border-bottom: 1px solid rgba(0,0,0,0.1); margin-bottom: 20px; }
-.auth-tab { background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; padding: 10px 20px 12px; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; color: rgba(0,0,0,0.35); cursor: pointer; }
-.auth-tab.active { color: #1a1a1a; border-bottom-color: #1a1a1a; }
-.auth-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
-.auth-field__label { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; color: rgba(0,0,0,0.4); }
-.auth-field__input { height: 48px; background: rgba(0,0,0,0.04); border: none; border-radius: 10px; padding: 0 16px; font-family: 'Montserrat', sans-serif; font-size: 14px; color: #1a1a1a; outline: none; }
-.auth-field__input:focus { box-shadow: inset 0 0 0 1.5px #1a1a1a; }
-.auth-submit { width: 100%; height: 52px; background: #1a1a1a; color: white; border: none; border-radius: 12px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.2em; cursor: pointer; margin-top: 8px; }
-.auth-error { color: #c0392b; font-size: 11px; text-align: center; margin-top: 8px; display: none; }
-.auth-error.show { display: block; }
 </style>
 
-<script src="api-client.js"></script>
 <script>
 const PRODUCTS = [
-    { id: 1, name: 'ПЛАТЬЕ ARIA',   cat: 'dress', price: 89900,  img: 'img/img 1.png', badge: 'NEW' },
-    { id: 2, name: 'ПАЛЬТО MILANO', cat: 'outer', price: 145000, img: 'img/img 2.png', badge: 'HIT' },
-    { id: 3, name: 'ПЛАТЬЕ LUNA',   cat: 'dress', price: 79900,  img: 'img/img 1.png', badge: ''    },
-    { id: 4, name: 'КОСТЮМ SOFT',   cat: 'suit',  price: 129900, img: 'img/img 2.png', badge: ''    },
-    { id: 5, name: 'ТОП SETA',      cat: 'top',   price: 34900,  img: 'img/img 1.png', badge: 'NEW' },
-    { id: 6, name: 'ПЛАЩ AQUA',     cat: 'outer', price: 189000, img: 'img/img 2.png', badge: ''    },
-    { id: 7, name: 'ПЛАТЬЕ SERA',   cat: 'dress', price: 94900,  img: 'img/img 1.png', badge: 'HIT' },
-    { id: 8, name: 'СУМКА ROMA',    cat: 'acc',   price: 28900,  img: 'img/img 2.png', badge: 'NEW' },
+    { id: 1, name: 'ПЛАТЬЕ ARIA',   cat: 'dress', price: 89900,  img: 'img/img 1.png', badge: 'NEW', slug: 'aria' },
+    { id: 2, name: 'ПАЛЬТО MILANO', cat: 'outer', price: 145000, img: 'img/img 2.png', badge: 'HIT', slug: 'milano' },
+    { id: 3, name: 'ПЛАТЬЕ LUNA',   cat: 'dress', price: 79900,  img: 'img/img 1.png', badge: '',    slug: 'luna' },
+    { id: 4, name: 'КОСТЮМ SOFT',   cat: 'suit',  price: 129900, img: 'img/img 2.png', badge: '',    slug: 'soft' },
+    { id: 5, name: 'ТОП SETA',      cat: 'top',   price: 34900,  img: 'img/img 1.png', badge: 'NEW', slug: '' },
+    { id: 6, name: 'ПЛАЩ AQUA',     cat: 'outer', price: 189000, img: 'img/img 2.png', badge: '',    slug: '' },
+    { id: 7, name: 'ПЛАТЬЕ SERA',   cat: 'dress', price: 94900,  img: 'img/img 1.png', badge: 'HIT', slug: '' },
+    { id: 8, name: 'СУМКА ROMA',    cat: 'acc',   price: 28900,  img: 'img/img 2.png', badge: 'NEW', slug: '' },
 ];
 
 let cart = JSON.parse(localStorage.getItem('nure_cart') || '[]');
+let wishlist = JSON.parse(localStorage.getItem('nure_wishlist') || '[]');
 function saveCart() { localStorage.setItem('nure_cart', JSON.stringify(cart)); }
-function fmtP(p) { return p.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
+function saveWishlist() { localStorage.setItem('nure_wishlist', JSON.stringify(wishlist)); }
+function formatPrice(p) { return p.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
 
 function updateBadges() {
     const total = cart.reduce((s, i) => s + i.qty, 0);
     const cb = document.getElementById('cartBadge');
     cb.textContent = total; cb.style.display = total > 0 ? 'flex' : 'none';
+    const wb = document.getElementById('wishlistBadge');
+    wb.textContent = wishlist.length; wb.style.display = wishlist.length > 0 ? 'flex' : 'none';
 }
 
 // ── КОРЗИНА ──
@@ -562,12 +546,10 @@ function renderCart() {
     empty.style.display = 'none'; footer.style.display = 'block';
     body.innerHTML = cart.map(item => `
         <div class="cart-item">
-            <img class="cart-item__img" src="${item.img || 'img/img 1.png'}" alt="${item.name}" onerror="this.src='img/img 1.png'">
             <div class="cart-item__info">
                 <p class="cart-item__name">${item.name}</p>
                 <p class="cart-item__size">Размер: ${item.size}</p>
-                ${item.color ? `<p class="cart-item__color">Цвет: ${item.color}</p>` : ''}
-                <p class="cart-item__price">${fmtP(item.price)} ₸</p>
+                <p class="cart-item__price">${formatPrice(item.price)} ₸</p>
             </div>
             <div class="cart-item__controls">
                 <button class="qty-btn" onclick="changeQty(${item.id},'${item.size}',-1)">−</button>
@@ -578,7 +560,7 @@ function renderCart() {
         </div>
     `).join('');
     const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-    document.getElementById('cartTotal').textContent = fmtP(total) + ' ₸';
+    document.getElementById('cartTotal').textContent = formatPrice(total) + ' ₸';
 }
 function changeQty(id, size, delta) {
     const idx = cart.findIndex(i => i.id === id && i.size === size);
@@ -590,6 +572,29 @@ function changeQty(id, size, delta) {
 function removeItem(id, size) {
     cart = cart.filter(i => !(i.id === id && i.size === size));
     saveCart(); renderCart(); updateBadges();
+}
+
+// ── ИЗБРАННОЕ ──
+function renderWishlist() {
+    const body = document.getElementById('wishItems');
+    const empty = document.getElementById('wishEmpty');
+    if (wishlist.length === 0) { empty.style.display = 'flex'; body.innerHTML = ''; return; }
+    empty.style.display = 'none';
+    const items = wishlist.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean);
+    body.innerHTML = items.map(p => `
+        <div class="wish-item">
+            <img class="wish-item__img" src="${p.img}" alt="${p.name}">
+            <div class="wish-item__info">
+                <p class="wish-item__name">${p.name}</p>
+                <p class="wish-item__price">${formatPrice(p.price)} ₸</p>
+            </div>
+            <button class="wish-item__remove" onclick="removeFromWish(${p.id})">✕</button>
+        </div>
+    `).join('');
+}
+function removeFromWish(id) {
+    wishlist = wishlist.filter(i => i !== id);
+    saveWishlist(); renderWishlist(); updateBadges();
 }
 
 // ── TOAST ──
@@ -612,6 +617,17 @@ cartBtn.addEventListener('click', openCart);
 cartClose.addEventListener('click', closeCart);
 cartBackdrop.addEventListener('click', closeCart);
 
+// ── ДРАВЕР ИЗБРАННОЕ ──
+const wishBtn = document.getElementById('wishBtn');
+const wishDrawer = document.getElementById('wishDrawer');
+const wishBackdrop = document.getElementById('wishBackdrop');
+const wishClose = document.getElementById('wishClose');
+function openWish() { wishDrawer.classList.add('open'); wishBackdrop.classList.add('active'); document.body.style.overflow = 'hidden'; renderWishlist(); }
+function closeWish() { wishDrawer.classList.remove('open'); wishBackdrop.classList.remove('active'); document.body.style.overflow = ''; }
+wishBtn.addEventListener('click', openWish);
+wishClose.addEventListener('click', closeWish);
+wishBackdrop.addEventListener('click', closeWish);
+
 // ── БУРГЕР ──
 const burger = document.getElementById('burgerBtn');
 const overlay = document.getElementById('navOverlay');
@@ -622,44 +638,6 @@ function closeMenu() { overlay.classList.remove('active'); backdrop.classList.re
 burger.addEventListener('click', openMenu);
 navClose.addEventListener('click', closeMenu);
 backdrop.addEventListener('click', closeMenu);
-
-// ── АККАУНТ ──
-function openAuth() { document.getElementById('authModal').classList.add('open'); }
-function closeAuth() { document.getElementById('authModal').classList.remove('open'); }
-function switchAuth(tab) {
-    document.getElementById('authLoginForm').style.display = tab === 'login' ? '' : 'none';
-    document.getElementById('authRegForm').style.display = tab === 'reg' ? '' : 'none';
-    document.getElementById('tabLogin').classList.toggle('active', tab === 'login');
-    document.getElementById('tabReg').classList.toggle('active', tab === 'reg');
-}
-document.getElementById('accountBtn').addEventListener('click', () => {
-    const user = API.getUser();
-    if (user) { if (user.role === 'admin') window.location.href = 'admin/index.html'; else showToast('Вы вошли как ' + user.name); }
-    else openAuth();
-});
-async function doLogin() {
-    const email = document.getElementById('authEmail').value.trim();
-    const pass = document.getElementById('authPass').value;
-    const errEl = document.getElementById('authError');
-    errEl.classList.remove('show');
-    try {
-        const res = await API.login(email, pass);
-        if (res.token) { closeAuth(); showToast('Добро пожаловать, ' + res.user.name); updateBadges(); }
-        else { errEl.textContent = res.error || 'Ошибка входа'; errEl.classList.add('show'); }
-    } catch { errEl.textContent = 'Ошибка соединения'; errEl.classList.add('show'); }
-}
-async function doRegister() {
-    const name = document.getElementById('authName').value.trim();
-    const email = document.getElementById('authEmailReg').value.trim();
-    const pass = document.getElementById('authPassReg').value;
-    const errEl = document.getElementById('authError');
-    errEl.classList.remove('show');
-    try {
-        const res = await API.register(name, email, pass);
-        if (res.token) { closeAuth(); showToast('Регистрация успешна!'); }
-        else { errEl.textContent = res.error || 'Ошибка регистрации'; errEl.classList.add('show'); }
-    } catch { errEl.textContent = 'Ошибка соединения'; errEl.classList.add('show'); }
-}
 
 // ── ПОИСК ──
 const searchBtn = document.getElementById('searchBtn');
@@ -692,13 +670,20 @@ searchInput.addEventListener('input', () => {
     searchClear.classList.toggle('visible', q.length > 0);
     if (q.length === 0) { searchSuggestions.style.display = ''; searchResults.style.display = 'none'; return; }
     searchSuggestions.style.display = 'none'; searchResults.style.display = '';
-    const found = PRODUCTS.filter(p => p.name.toLowerCase().includes(q));
+    const found = PRODUCTS.filter(p =>
+        p.name.toLowerCase().includes(q) ||
+        (p.cat === 'dress' && 'платье'.includes(q)) ||
+        (p.cat === 'outer' && ('пальто'.includes(q) || 'плащ'.includes(q))) ||
+        (p.cat === 'suit' && 'костюм'.includes(q)) ||
+        (p.cat === 'top' && 'топ'.includes(q)) ||
+        (p.cat === 'acc' && ('аксессуар'.includes(q) || 'сумка'.includes(q)))
+    );
     searchResultsTitle.textContent = found.length > 0 ? `НАЙДЕНО ${found.length} ТОВАРА` : 'НИЧЕГО НЕ НАЙДЕНО';
     searchResultsGrid.innerHTML = found.map(p => `
-        <div class="search-pcard" onclick="location.href='catalog/index.html'">
+        <div class="search-pcard" onclick="if('${p.slug}') location.href='product/${p.slug}/index.html'; else location.href='catalog/index.html';">
             <img class="search-pcard__img" src="${p.img}" alt="${p.name}">
             <p class="search-pcard__name">${p.name}</p>
-            <p class="search-pcard__price">${fmtP(p.price)} ₸</p>
+            <p class="search-pcard__price">${formatPrice(p.price)} ₸</p>
         </div>
     `).join('');
 });

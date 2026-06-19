@@ -15,6 +15,7 @@ a { text-decoration: none; color: inherit; }
 /* ─── HEADER ─── */
 .header { position: sticky; top: 0; width: 100%; height: 56px; background: #f8f7f4; border-bottom: 1px solid rgba(0,0,0,0.07); z-index: 100; display: flex; justify-content: center; }
 .header-inner { width: 92%; height: 100%; display: flex; justify-content: space-between; align-items: center; }
+.header-logo { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; }
 .header-logo img { height: 22px; width: auto; }
 .header-icons { display: flex; align-items: center; gap: 18px; }
 .icon-btn { background: none; border: none; cursor: pointer; color: #1a1a1a; padding: 4px; position: relative; display: flex; align-items: center; }
@@ -23,7 +24,31 @@ a { text-decoration: none; color: inherit; }
 .burger { background: none; border: none; cursor: pointer; display: flex; flex-direction: column; gap: 4.5px; padding: 4px; }
 .burger span { display: block; width: 22px; height: 1.5px; background: #1a1a1a; border-radius: 2px; }
 .user-avatar { width: 28px; height: 28px; background: #1a1a1a; color: white; border-radius: 50%; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; letter-spacing: 0.03em; }
-.admin-badge-btn { background: none; border: 1px solid #1a1a1a; color: #1a1a1a; font-family: 'Montserrat', sans-serif; font-size: 9px; font-weight: 600; letter-spacing: 0.12em; padding: 4px 8px; border-radius: 6px; cursor: pointer; }
+.user-menu { position: absolute; top: 110%; right: 0; background: white; border: 1px solid rgba(0,0,0,0.1); border-radius: 10px; min-width: 180px; box-shadow: 0 6px 24px rgba(0,0,0,0.1); z-index: 300; overflow: hidden; display: none; }
+.user-menu.open { display: block; }
+.user-menu-item { width: 100%; background: none; border: none; padding: 12px 16px; text-align: left; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; cursor: pointer; color: #1a1a1a; }
+.user-menu-item.danger { color: #9E3B3B; }
+
+/* ─── SEARCH OVERLAY ─── */
+.search-overlay { position: fixed; inset: 0; background: #f8f7f4; z-index: 400; transform: translateY(-100%); transition: transform 0.38s cubic-bezier(0.77,0,0.175,1); overflow-y: auto; }
+.search-overlay.active { transform: translateY(0); }
+.search-overlay__top { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid rgba(0,0,0,0.07); }
+.search-input-wrap { flex: 1; display: flex; align-items: center; background: rgba(0,0,0,0.05); border-radius: 12px; padding: 0 12px; gap: 8px; }
+.search-icon-inp { width: 16px; height: 16px; color: rgba(0,0,0,0.4); flex-shrink: 0; }
+.search-input { flex: 1; background: none; border: none; outline: none; font-family: 'Montserrat', sans-serif; font-size: 14px; padding: 10px 0; color: #1a1a1a; }
+.search-clear { background: none; border: none; font-size: 14px; color: rgba(0,0,0,0.3); cursor: pointer; padding: 4px; display: none; }
+.search-cancel { background: none; border: none; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; color: rgba(0,0,0,0.5); cursor: pointer; white-space: nowrap; }
+.search-hint { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; color: rgba(0,0,0,0.35); padding: 18px 16px 10px; }
+.search-tags { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px; }
+.search-tag { background: rgba(0,0,0,0.05); border-radius: 20px; padding: 7px 14px; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; cursor: pointer; }
+.search-results { padding: 16px; }
+.search-results__title { font-size: 10px; font-weight: 500; letter-spacing: 0.14em; color: rgba(0,0,0,0.4); margin-bottom: 14px; }
+.search-results__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.search-result-card { background: #ede9e3; border-radius: 8px; overflow: hidden; }
+.search-result-card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; }
+.search-result-card__info { padding: 8px 10px 10px; }
+.search-result-card__name { font-family: 'Playfair Display', serif; font-size: 12px; margin-bottom: 3px; }
+.search-result-card__price { font-size: 11px; font-weight: 600; }
 
 /* ─── NAV ─── */
 .nav-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0); z-index: 190; pointer-events: none; transition: background 0.4s; }
@@ -188,19 +213,72 @@ a { text-decoration: none; color: inherit; }
 .user-menu-item:hover { background: rgba(0,0,0,0.04); }
 .user-menu-item.danger { color: #9E3B3B; }
 .user-menu__email { padding: 8px 16px 12px; font-size: 10px; color: rgba(0,0,0,0.4); border-bottom: 1px solid rgba(0,0,0,0.07); margin-bottom: 4px; letter-spacing: 0.04em; }
-
-.search-overlay-cat { position:fixed;inset:0;background:#f8f7f4;z-index:300;display:flex;flex-direction:column;transform:translateY(-100%);transition:transform 0.38s cubic-bezier(0.77,0,0.175,1); }
-.search-overlay-cat.active { transform:translateY(0); }
-.search-overlay-top { display:flex;align-items:center;gap:10px;padding:60px 16px 12px;border-bottom:1px solid rgba(0,0,0,0.09);flex-shrink:0; }
-.search-input-wrap-cat { flex:1;display:flex;align-items:center;background:rgba(0,0,0,0.05);border-radius:12px;padding:0 12px;gap:10px;height:44px; }
-.search-input-cat { flex:1;background:none;border:none;outline:none;font-family:'Montserrat',sans-serif;font-size:15px;color:#1a1a1a; }
-.search-input-cat::placeholder { color:rgba(0,0,0,0.3); }
     </style>
 </head>
 <body>
 
+<!-- ═══ ПОИСКОВЫЙ ОВЕРЛЕЙ ═══ -->
+<div class="search-overlay" id="searchOverlay">
+    <div class="search-overlay__top">
+        <div class="search-input-wrap">
+            <svg class="search-icon-inp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="search-input" id="searchInput" type="text" placeholder="Поиск по коллекции..." autocomplete="off">
+            <button class="search-clear" id="searchClear" aria-label="Очистить">✕</button>
+        </div>
+        <button class="search-cancel" id="searchCancel">Отмена</button>
+    </div>
+    <div class="search-suggestions" id="searchSuggestions">
+        <p class="search-hint">Популярные запросы</p>
+        <div class="search-tags">
+            <span class="search-tag">Платья</span>
+            <span class="search-tag">Пальто</span>
+            <span class="search-tag">Костюмы</span>
+            <span class="search-tag">Новинки</span>
+        </div>
+    </div>
+    <div class="search-results" id="searchResults" style="display:none">
+        <p class="search-results__title" id="searchResultsTitle"></p>
+        <div class="search-results__grid" id="searchResultsGrid"></div>
+    </div>
+</div>
+
+<!-- WISHLIST DRAWER -->
+<div class="wish-backdrop" id="wishBackdrop"></div>
+<div class="wish-drawer" id="wishDrawer">
+    <div class="cart-drawer__header">
+        <p class="cart-drawer__title">ИЗБРАННОЕ</p>
+        <button class="cart-drawer__close" id="wishClose">✕</button>
+    </div>
+    <div class="cart-drawer__body" id="wishBody">
+        <div class="cart-empty" id="wishEmpty">
+            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <p>Список пуст</p>
+        </div>
+        <div class="wish-items" id="wishItems"></div>
+    </div>
+</div>
+
+<!-- CART DRAWER -->
+<div class="cart-backdrop" id="cartBackdrop"></div>
+<div class="cart-drawer" id="cartDrawer">
+    <div class="cart-drawer__header"><p class="cart-drawer__title">КОРЗИНА</p><button class="cart-drawer__close" id="cartClose">✕</button></div>
+    <div class="cart-drawer__body" id="cartBody">
+        <div class="cart-empty" id="cartEmpty"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><p>Корзина пуста</p></div>
+        <div class="cart-items" id="cartItems"></div>
+    </div>
+    <div class="cart-drawer__footer" id="cartFooter" style="display:none">
+        <div class="cart-total"><span>ИТОГО</span><span id="cartTotal">0 ₸</span></div>
+        <button class="cart-checkout-btn" id="checkoutBtn">ОФОРМИТЬ ЗАКАЗ →</button>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
 <!-- NAV BACKDROP -->
 <div class="nav-backdrop" id="navBackdrop"></div>
+
+<!-- NAV OVERLAY -->
 <div class="nav-overlay" id="navOverlay">
     <div class="nav-header">
         <img class="nav-logo" src="../img/logo.png" alt="nuré">
@@ -215,37 +293,32 @@ a { text-decoration: none; color: inherit; }
     </nav>
     <div class="nav-benefits">
         <p class="nav-benefits__title">НАШИ ПРЕИМУЩЕСТВА</p>
-        <div class="nav-benefit-item"><div class="nav-benefit-icon">◈</div><div><p class="nav-benefit-name">ПРЕМИУМ КАЧЕСТВО</p><p class="nav-benefit-desc">Лучшие материалы и фурнитура</p></div></div>
+        <div class="nav-benefit-item"><div class="nav-benefit-icon">◈</div><div><p class="nav-benefit-name">ПРЕМИУМ КАЧЕСТВО</p><p class="nav-benefit-desc">Используем лучшие материалы и фурнитуру</p></div></div>
         <div class="nav-benefit-item"><div class="nav-benefit-icon">⊞</div><div><p class="nav-benefit-name">ИТАЛЬЯНСКИЕ ТКАНИ</p><p class="nav-benefit-desc">Только проверенные поставщики из Италии</p></div></div>
-        <div class="nav-benefit-item"><div class="nav-benefit-icon">⊡</div><div><p class="nav-benefit-name">БЫСТРАЯ ДОСТАВКА</p><p class="nav-benefit-desc">По всему Казахстану от 1 до 3 дней</p></div></div>
+        <div class="nav-benefit-item"><div class="nav-benefit-icon">⊡</div><div><p class="nav-benefit-name">БЫСТРАЯ ДОСТАВКА</p><p class="nav-benefit-desc">Доставка по Казахстану от 1 до 3 дней</p></div></div>
+        <div class="nav-benefit-item"><div class="nav-benefit-icon">◇</div><div><p class="nav-benefit-name">ЛЕГКИЙ ВОЗВРАТ</p><p class="nav-benefit-desc">Возврат в течение 14 дней без лишних вопросов</p></div></div>
     </div>
-    <div class="nav-socials"><a href="#">◎ Instagram</a><a href="#">✈ Telegram</a></div>
-</div>
-
-
-<!-- ПОИСК ОВЕРЛЕЙ -->
-<div class="search-overlay-cat" id="searchOverlayCat">
-    <div class="search-overlay-top">
-        <div class="search-input-wrap-cat">
-            <svg style="width:18px;height:18px;flex-shrink:0;color:rgba(0,0,0,0.4)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input class="search-input-cat" id="searchInputCat" type="text" placeholder="Поиск по каталогу..." autocomplete="off">
-            <button style="background:none;border:none;font-size:14px;color:rgba(0,0,0,0.35);cursor:pointer;display:none;padding:4px" id="searchClearCat">✕</button>
-        </div>
-        <button style="background:none;border:none;font-family:'Montserrat',sans-serif;font-size:13px;color:#1a1a1a;cursor:pointer;padding:4px 0" id="searchCancelCat">Отмена</button>
+    <div class="nav-socials">
+        <a href="#"><span class="social-icon">◎</span> Instagram</a>
+        <a href="#"><span class="social-icon">✈</span> Telegram</a>
     </div>
 </div>
 
 <!-- HEADER -->
-<header class="header">
+<header class="header" id="mainHeader">
     <div class="header-inner">
+        <button class="burger" id="burgerBtn"><span></span><span></span><span></span></button>
         <a href="../index.html" class="header-logo"><img src="../img/logo.png" alt="nuré"></a>
         <div class="header-icons">
-            <button class="icon-btn" id="wishBtn" aria-label="Избранное">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            <button class="icon-btn" aria-label="Поиск" id="searchBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </button>
+            <button class="icon-btn" aria-label="Избранное" id="wishBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                 <span class="badge" id="wishlistBadge" style="display:none">0</span>
             </button>
-            <button class="icon-btn" id="cartBtn" aria-label="Корзина">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <button class="icon-btn cart-icon-btn" id="cartBtn" aria-label="Корзина">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                 <span class="badge" id="cartBadge" style="display:none">0</span>
             </button>
             <div id="userBtnWrap" style="position:relative">
@@ -255,11 +328,10 @@ a { text-decoration: none; color: inherit; }
                 </button>
                 <div class="user-menu" id="userMenu">
                     <p class="user-menu__email" id="userMenuEmail"></p>
-                    <button class="user-menu-item" id="adminPanelBtn" style="display:none" onclick="window.location.href='../admin/index.html'">⚙ Админ панель</button>
+                    <button class="user-menu-item" id="adminPanelBtn" style="display:none" onclick="window.location='../admin/index.html'">⚙ Админ панель</button>
                     <button class="user-menu-item danger" onclick="API.logout()">Выйти</button>
                 </div>
             </div>
-            <button class="burger" id="burgerBtn"><span></span><span></span><span></span></button>
         </div>
     </div>
 </header>
@@ -323,23 +395,6 @@ a { text-decoration: none; color: inherit; }
     <button class="add-sheet__btn" id="sheetAddBtn">ДОБАВИТЬ В КОРЗИНУ</button>
 </div>
 
-<!-- CART DRAWER -->
-<div class="cart-backdrop" id="cartBackdrop"></div>
-<div class="cart-drawer" id="cartDrawer">
-    <div class="cart-drawer__header"><p class="cart-drawer__title">КОРЗИНА</p><button class="cart-drawer__close" id="cartClose">✕</button></div>
-    <div class="cart-drawer__body" id="cartBody">
-        <div class="cart-empty" id="cartEmpty"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><p>Корзина пуста</p></div>
-        <div class="cart-items" id="cartItems"></div>
-    </div>
-    <div class="cart-drawer__footer" id="cartFooter" style="display:none">
-        <div class="cart-total"><span>ИТОГО</span><span id="cartTotal">0 ₸</span></div>
-        <button class="cart-checkout-btn" id="checkoutBtn">ОФОРМИТЬ ЗАКАЗ →</button>
-    </div>
-</div>
-
-<!-- WISHLIST DRAWER -->
-</div>
-
 <!-- AUTH MODAL -->
 <div class="auth-modal-backdrop" id="authBackdrop">
     <div class="auth-modal">
@@ -365,9 +420,6 @@ a { text-decoration: none; color: inherit; }
         </div>
     </div>
 </div>
-
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
 
 <!-- FOOTER -->
 <footer class="footer">
@@ -509,9 +561,12 @@ function selectColor(el) {
 let currentCardData = null, selectedSheetSize = null;
 
 function handleCardClick(event, card) {
-    if (event.target.closest('.size-dot') || event.target.closest('.color-swatch')) return;
-    const id = card.dataset.id;
-    window.location.href = `../product/?id=${id}`;
+    if (event.target.closest('.pcard__wish') || event.target.closest('.size-dot') || event.target.closest('.color-swatch')) return;
+    // Если есть отдельная страница товара — перейти
+    const slug = card.dataset.slug;
+    const hasPage = allProducts.find(p => (p.slug || p.id) == slug && p.hasPage);
+    if (hasPage) { window.location.href = `../product/${slug}/index.html`; return; }
+    openAddSheet(card);
 }
 
 function openAddSheet(card) {
@@ -583,11 +638,9 @@ function renderCart() {
     empty.style.display='none'; footer.style.display='block';
     items.innerHTML = cart.map(item => `
         <div class="cart-item">
-            <img class="cart-item__img" src="${item.img || '../img/img 1.png'}" alt="${item.name}" onerror="this.src='../img/img 1.png'">
             <div class="cart-item__info">
                 <p class="cart-item__name">${item.name}</p>
                 <p class="cart-item__size">Размер: ${item.size}</p>
-                ${item.color ? `<p class="cart-item__size">Цвет: ${item.color}</p>` : ''}
                 <p class="cart-item__price">${formatPrice(item.price)} ₸</p>
             </div>
             <div class="cart-item__controls">
@@ -679,6 +732,62 @@ document.getElementById('catFilter').addEventListener('click', e => {
     btn.classList.add('active'); currentCat = btn.dataset.cat; renderProducts();
 });
 document.getElementById('sortSelect').addEventListener('change', e => { currentSort = e.target.value; renderProducts(); });
+
+// ════════════════════════════════
+// SEARCH OVERLAY
+// ════════════════════════════════
+const searchOverlay = document.getElementById('searchOverlay');
+document.getElementById('searchBtn').addEventListener('click', () => {
+    searchOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => document.getElementById('searchInput').focus(), 300);
+});
+document.getElementById('searchCancel').addEventListener('click', () => {
+    searchOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+    document.getElementById('searchInput').value = '';
+    document.getElementById('searchResults').style.display = 'none';
+    document.getElementById('searchSuggestions').style.display = 'block';
+    document.getElementById('searchClear').style.display = 'none';
+});
+document.getElementById('searchInput').addEventListener('input', function() {
+    const q = this.value.trim().toLowerCase();
+    document.getElementById('searchClear').style.display = q ? 'block' : 'none';
+    if (!q) {
+        document.getElementById('searchResults').style.display = 'none';
+        document.getElementById('searchSuggestions').style.display = 'block';
+        return;
+    }
+    document.getElementById('searchSuggestions').style.display = 'none';
+    document.getElementById('searchResults').style.display = 'block';
+    const found = allProducts.filter(p => (p.name||'').toLowerCase().includes(q));
+    document.getElementById('searchResultsTitle').textContent = found.length + ' товаров найдено';
+    document.getElementById('searchResultsGrid').innerHTML = found.map(p => {
+        const img = getProductImage(p);
+        const price = getProductPrice(p);
+        return `<a class="search-result-card" href="#" onclick="searchOverlay.classList.remove('active');document.body.style.overflow='';return false;" >
+            <img src="${img}" alt="${p.name}" onerror="this.src='${PLACEHOLDER_IMG}'">
+            <div class="search-result-card__info">
+                <p class="search-result-card__name">${p.name}</p>
+                <p class="search-result-card__price">${price > 0 ? formatPrice(price) + ' ₸' : '—'}</p>
+            </div>
+        </a>`;
+    }).join('') || '<p style="grid-column:1/-1;text-align:center;padding:40px 20px;font-size:12px;color:rgba(0,0,0,0.35)">Ничего не найдено</p>';
+});
+document.getElementById('searchClear').addEventListener('click', () => {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('searchClear').style.display = 'none';
+    document.getElementById('searchResults').style.display = 'none';
+    document.getElementById('searchSuggestions').style.display = 'block';
+    document.getElementById('searchInput').focus();
+});
+document.querySelectorAll('.search-tag').forEach(tag => {
+    tag.addEventListener('click', () => {
+        const input = document.getElementById('searchInput');
+        input.value = tag.textContent;
+        input.dispatchEvent(new Event('input'));
+    });
+});
 
 // ════════════════════════════════
 // NAV BURGER

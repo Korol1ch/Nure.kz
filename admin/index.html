@@ -97,13 +97,6 @@ a { text-decoration: none; color: inherit; }
 
 .tab-content { display: none; }
 .tab-content.active { display: block; }
-.color-variant-card { border: 1px solid rgba(0,0,0,0.1); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
-.color-variant-card__header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-.color-variant-card__title { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; color: rgba(0,0,0,0.6); }
-.btn-remove-variant { background: none; border: none; color: rgba(200,0,0,0.6); font-size: 14px; cursor: pointer; }
-.new-img-preview { position: relative; aspect-ratio: 3/4; border-radius: 8px; overflow: hidden; background: #ede9e3; }
-.new-img-preview img { width: 100%; height: 100%; object-fit: cover; }
-.new-img-preview__del { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.6); color: white; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
   </style>
 </head>
 <body>
@@ -194,20 +187,6 @@ a { text-decoration: none; color: inherit; }
             <textarea class="form-textarea" id="newDesc" placeholder="Описание товара..."></textarea>
           </div>
           <div class="form-group full">
-            <label class="form-label">Фотографии товара (основной цвет)</label>
-            <div class="images-grid" id="newImages"></div>
-            <label class="upload-zone" id="newUploadZone">
-                <input type="file" id="newImgInput" multiple accept="image/*" onchange="previewNewImages(this)">
-                <div class="upload-zone__text">Нажмите чтобы добавить фото (jpg, png, webp)</div>
-            </label>
-          </div>
-          <!-- COLOR VARIANTS -->
-          <div class="form-group full" id="colorVariantsWrap">
-            <label class="form-label">Варианты цвета</label>
-            <div id="colorVariantsList"></div>
-            <button type="button" class="btn-primary" style="background:none;border:1px solid #1a1a1a;color:#1a1a1a;margin-top:8px;font-size:10px;padding:10px 18px" onclick="addColorVariant()">+ ДОБАВИТЬ ЦВЕТ</button>
-          </div>
-          <div class="form-group full">
             <button class="btn-primary" id="btnCreate" onclick="createProduct()">СОЗДАТЬ ТОВАР</button>
           </div>
         </div>
@@ -270,20 +249,12 @@ a { text-decoration: none; color: inherit; }
     <button class="btn-primary" style="width:100%;margin-bottom:20px" onclick="saveEdit()">СОХРАНИТЬ</button>
 
     <div style="border-top:1px solid rgba(0,0,0,0.08);padding-top:20px;margin-bottom:20px">
-      <div class="form-label" style="margin-bottom:12px">ФОТОГРАФИИ (основной цвет)</div>
+      <div class="form-label" style="margin-bottom:12px">ФОТОГРАФИИ</div>
       <div class="images-grid" id="editImages"></div>
       <label class="upload-zone">
-        <input type="file" multiple accept="image/*" onchange="uploadImages(this,'default')">
+        <input type="file" multiple accept="image/*" onchange="uploadImages(this)">
         <div class="upload-zone__text">Нажмите чтобы загрузить фото (jpg, png, webp)</div>
       </label>
-    </div>
-    <!-- COLOR VARIANTS EDIT -->
-    <div style="border-top:1px solid rgba(0,0,0,0.08);padding-top:20px;margin-bottom:20px">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-        <div class="form-label">ВАРИАНТЫ ЦВЕТА</div>
-        <button type="button" onclick="addEditColorVariant()" style="background:none;border:1px solid #1a1a1a;color:#1a1a1a;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:600;letter-spacing:0.1em;padding:6px 12px;border-radius:6px;cursor:pointer">+ ДОБАВИТЬ ЦВЕТ</button>
-      </div>
-      <div id="editColorVariants"></div>
     </div>
 
     <div style="border-top:1px solid rgba(0,0,0,0.08);padding-top:20px" id="deactivateSection">
@@ -300,96 +271,6 @@ a { text-decoration: none; color: inherit; }
 <script>
 let currentEditId = null;
 let allProducts   = [];
-
-// ── IMAGE PREVIEW ──
-let newImgFiles = []; // files for new product main color
-let colorVariants = []; // [{name, color, sizes, files}]
-let variantIdCounter = 0;
-
-function previewNewImages(input) {
-    const files = [...input.files];
-    newImgFiles.push(...files);
-    renderNewImgPreviews('newImages', newImgFiles, (idx) => {
-        newImgFiles.splice(idx, 1);
-        renderNewImgPreviews('newImages', newImgFiles, null);
-    });
-    input.value = '';
-}
-
-function renderNewImgPreviews(containerId, files, onRemove) {
-    const grid = document.getElementById(containerId);
-    if (!grid) return;
-    grid.innerHTML = files.map((f, i) => {
-        const url = URL.createObjectURL(f);
-        return `<div class="new-img-preview">
-            <img src="${url}" alt="">
-            ${onRemove ? `<button class="new-img-preview__del" onclick="(${onRemove.toString()})(${i})">✕</button>` : ''}
-        </div>`;
-    }).join('');
-}
-
-function addColorVariant() {
-    const id = ++variantIdCounter;
-    colorVariants.push({ id, name: '', files: [], sizes: '' });
-    renderColorVariants();
-}
-
-function removeColorVariant(id) {
-    colorVariants = colorVariants.filter(v => v.id !== id);
-    renderColorVariants();
-}
-
-function renderColorVariants() {
-    const list = document.getElementById('colorVariantsList');
-    list.innerHTML = colorVariants.map((v, vi) => `
-        <div class="color-variant-card">
-            <div class="color-variant-card__header">
-                <span class="color-variant-card__title">ЦВЕТ ${vi + 1}</span>
-                <button class="btn-remove-variant" onclick="removeColorVariant(${v.id})">✕</button>
-            </div>
-            <div class="create-form" style="gap:10px">
-                <div class="form-group">
-                    <label class="form-label">Название цвета</label>
-                    <input class="form-input" placeholder="Чёрный" oninput="colorVariants[${vi}].name=this.value" value="${v.name}">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Цвет HEX</label>
-                    <input class="form-input" placeholder="#000000" oninput="colorVariants[${vi}].code=this.value">
-                </div>
-                <div class="form-group full">
-                    <label class="form-label">Остатки по размерам (напр: XS:2,S:5,M:3)</label>
-                    <input class="form-input" placeholder="XS:2, S:5, M:3" oninput="colorVariants[${vi}].sizes=this.value">
-                </div>
-                <div class="form-group full">
-                    <label class="form-label">Фото этого цвета</label>
-                    <div class="images-grid" id="variantImages_${v.id}"></div>
-                    <label class="upload-zone">
-                        <input type="file" multiple accept="image/*" onchange="previewVariantImages(this, ${vi}, ${v.id})">
-                        <div class="upload-zone__text">Добавить фото</div>
-                    </label>
-                </div>
-            </div>
-        </div>
-    `).join('');
-}
-
-function previewVariantImages(input, variantIdx, variantId) {
-    const files = [...input.files];
-    if (!colorVariants[variantIdx]) return;
-    colorVariants[variantIdx].files = (colorVariants[variantIdx].files || []).concat(files);
-    const grid = document.getElementById('variantImages_' + variantId);
-    if (grid) {
-        colorVariants[variantIdx].files.forEach(f => {
-            const div = document.createElement('div');
-            div.className = 'new-img-preview';
-            const img = document.createElement('img');
-            img.src = URL.createObjectURL(f);
-            div.appendChild(img);
-            grid.appendChild(div);
-        });
-    }
-    input.value = '';
-}
 
 // ── AUTH ──
 async function doLogin() {
@@ -473,14 +354,6 @@ async function createProduct() {
   if (!name) { showToast('Введите название'); return; }
   const btn = document.getElementById('btnCreate');
   btn.disabled = true; btn.textContent = 'СОЗДАНИЕ...';
-
-  // Build color variants data
-  const colorsData = colorVariants.map(v => ({
-    name: v.name,
-    code: v.code || '',
-    sizes: v.sizes
-  }));
-
   const res = await API.adminCreateProduct({
     name,
     price:       parseFloat(document.getElementById('newPrice').value) || 0,
@@ -488,41 +361,18 @@ async function createProduct() {
     badge:       document.getElementById('newBadge').value.trim(),
     sizes:       document.getElementById('newSizes').value.split(',').map(s => s.trim()).filter(Boolean),
     description: document.getElementById('newDesc').value.trim(),
-    colors:      colorsData,
   });
-
-  if (!res.success) {
-    btn.disabled = false; btn.textContent = 'СОЗДАТЬ ТОВАР';
-    showToast(res.error || 'Ошибка'); return;
-  }
-
-  const productId = res.product.id;
-
-  // Upload main images
-  if (newImgFiles.length > 0) {
-    btn.textContent = 'ЗАГРУЗКА ФОТО...';
-    await API.adminUploadImages(productId, newImgFiles, 'default');
-  }
-
-  // Upload variant images
-  for (let i = 0; i < colorVariants.length; i++) {
-    const v = colorVariants[i];
-    if (v.files && v.files.length > 0) {
-      await API.adminUploadImages(productId, v.files, v.name || ('color_' + i));
-    }
-  }
-
   btn.disabled = false; btn.textContent = 'СОЗДАТЬ ТОВАР';
-  showToast('Товар создан!');
-  ['newName','newPrice','newBadge','newSizes','newDesc'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('newCategory').value = '';
-  newImgFiles = []; colorVariants = []; variantIdCounter = 0;
-  document.getElementById('newImages').innerHTML = '';
-  document.getElementById('colorVariantsList').innerHTML = '';
-  const updatedRes = await API.adminGetProducts();
-  allProducts = updatedRes.products || [];
-  renderProducts();
-  switchTab('products');
+  if (res.success) {
+    showToast('Товар создан!');
+    ['newName','newPrice','newBadge','newSizes','newDesc'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('newCategory').value = '';
+    allProducts.unshift(res.product);
+    renderProducts();
+    switchTab('products');
+  } else {
+    showToast(res.error || 'Ошибка');
+  }
 }
 
 // ── EDIT MODAL ──
@@ -541,7 +391,6 @@ function openEdit(id) {
 
   // Фото
   renderEditImages(p);
-  renderEditColorVariants(p);
 
   // Статус
   const isDeactivated = !!p.deactivatedAt;
@@ -598,10 +447,10 @@ async function saveEdit() {
   }
 }
 
-async function uploadImages(input, colorKey = 'default') {
+async function uploadImages(input) {
   if (!currentEditId || !input.files.length) return;
   showToast('Загрузка...');
-  const res = await API.adminUploadImages(currentEditId, [...input.files], colorKey);
+  const res = await API.adminUploadImages(currentEditId, [...input.files]);
   if (res.success) {
     const idx = allProducts.findIndex(p => p.id === currentEditId);
     if (idx !== -1) {
@@ -618,9 +467,9 @@ async function uploadImages(input, colorKey = 'default') {
   input.value = '';
 }
 
-async function deleteImage(url, colorKey = 'default') {
+async function deleteImage(url) {
   if (!currentEditId) return;
-  const res = await API.adminDeleteImage(currentEditId, url, colorKey);
+  const res = await API.adminDeleteImage(currentEditId, url);
   if (res.success) {
     const idx = allProducts.findIndex(p => p.id === currentEditId);
     if (idx !== -1 && allProducts[idx].images && allProducts[idx].images.default) {
@@ -649,46 +498,6 @@ async function toggleActivation() {
   } else {
     showToast(res.error || 'Ошибка');
   }
-}
-
-// ── EDIT COLOR VARIANTS ──
-function renderEditColorVariants(p) {
-    const container = document.getElementById('editColorVariants');
-    const colors = p.colors || [];
-    container.innerHTML = '';
-    colors.forEach((c, i) => {
-        const key = c.key || c.name || ('color_' + i);
-        const imgs = (p.images && p.images[key]) || [];
-        const div = document.createElement('div');
-        div.className = 'color-variant-card';
-        div.innerHTML = `
-            <div class="color-variant-card__header">
-                <span class="color-variant-card__title">${c.name || 'Цвет ' + (i+1)}</span>
-            </div>
-            <div class="create-form" style="gap:10px">
-                <div class="form-group"><label class="form-label">Название</label><input class="form-input" value="${c.name||''}" oninput=""></div>
-                <div class="form-group"><label class="form-label">Цвет HEX</label><input class="form-input" value="${c.code||''}"></div>
-                <div class="form-group full">
-                    <label class="form-label">Фото</label>
-                    <div class="images-grid">${imgs.map(url => `<div class="img-thumb"><img src="${url}"><button class="img-thumb__del" onclick="deleteImage('${url}','${key}')">✕</button></div>`).join('')}</div>
-                    <label class="upload-zone">
-                        <input type="file" multiple accept="image/*" onchange="uploadImages(this,'${key}')">
-                        <div class="upload-zone__text">Добавить фото цвета</div>
-                    </label>
-                </div>
-            </div>`;
-        container.appendChild(div);
-    });
-}
-
-function addEditColorVariant() {
-    const p = allProducts.find(x => x.id === currentEditId);
-    if (!p) return;
-    if (!p.colors) p.colors = [];
-    const colorName = prompt('Название цвета (напр: Чёрный):');
-    if (!colorName) return;
-    p.colors.push({ name: colorName, key: colorName.toLowerCase().replace(/\s/g,'_') });
-    renderEditColorVariants(p);
 }
 
 // ── USERS ──
