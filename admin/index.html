@@ -481,11 +481,11 @@ function renderNewColors() {
       <div class="form-grid">
         <div class="form-group">
           <label class="form-label">Название цвета</label>
-          <input class="form-input" value="${c.name}" onchange="newColorVariants[${i}].name=this.value" placeholder="Чёрный, Белый...">
+          <input class="form-input color-name-input" value="${c.name}" onchange="newColorVariants[${i}].name=this.value" placeholder="Чёрный, Белый...">
         </div>
         <div class="form-group">
           <label class="form-label">Размеры (через запятую)</label>
-          <input class="form-input" value="${c.sizes}" onchange="newColorVariants[${i}].sizes=this.value" placeholder="XS, S, M, L">
+          <input class="form-input color-sizes-input" value="${c.sizes}" onchange="newColorVariants[${i}].sizes=this.value" placeholder="XS, S, M, L">
         </div>
       </div>
       <div style="margin-top:12px">
@@ -534,8 +534,10 @@ async function createProduct() {
     const colorInputs = document.querySelectorAll('#newColorsContainer .color-variant');
     colorInputs.forEach((el, i) => {
       if (newColorVariants[i]) {
-        newColorVariants[i].name = el.querySelector('input:nth-of-type(1)').value;
-        newColorVariants[i].sizes = el.querySelector('input:nth-of-type(2)').value;
+        const nameEl = el.querySelector('.color-name-input');
+        const sizesEl = el.querySelector('.color-sizes-input');
+        newColorVariants[i].name = nameEl ? nameEl.value : newColorVariants[i].name;
+        newColorVariants[i].sizes = sizesEl ? sizesEl.value : newColorVariants[i].sizes;
       }
     });
 
@@ -658,11 +660,11 @@ function renderEditColors(p) {
       <div class="form-grid">
         <div class="form-group">
           <label class="form-label">Название цвета</label>
-          <input class="form-input" value="${c.name||''}" onchange="updateEditColorName('${key}', this.value)" placeholder="Чёрный...">
+          <input class="form-input color-name-input" value="${c.name||''}" onchange="updateEditColorName('${key}', this.value)" placeholder="Чёрный...">
         </div>
         <div class="form-group">
           <label class="form-label">Размеры</label>
-          <input class="form-input" value="${(c.sizes||[]).join(', ')}" onchange="updateEditColorSizes('${key}', this.value)" placeholder="XS, S, M, L">
+          <input class="form-input color-sizes-input" value="${(c.sizes||[]).join(', ')}" onchange="updateEditColorSizes('${key}', this.value)" placeholder="XS, S, M, L">
         </div>
       </div>
       <div style="margin-top:12px">
@@ -713,8 +715,10 @@ async function saveEdit() {
     const colorEls = document.querySelectorAll('#editColorsContainer .color-variant');
     const colors = [...colorEls].map(el => {
       const key = el.dataset.key;
-      const name = el.querySelector('input:nth-of-type(1)').value.trim();
-      const sizesVal = el.querySelector('input:nth-of-type(2)').value;
+      const nameEl = el.querySelector('.color-name-input');
+      const sizesEl = el.querySelector('.color-sizes-input');
+      const name = nameEl ? nameEl.value.trim() : '';
+      const sizesVal = sizesEl ? sizesEl.value : '';
       return { key, name, sizes: sizesVal.split(',').map(s=>s.trim()).filter(Boolean) };
     });
 
