@@ -188,6 +188,13 @@ a { text-decoration: none; color: inherit; }
 .user-menu-item:hover { background: rgba(0,0,0,0.04); }
 .user-menu-item.danger { color: #9E3B3B; }
 .user-menu__email { padding: 8px 16px 12px; font-size: 10px; color: rgba(0,0,0,0.4); border-bottom: 1px solid rgba(0,0,0,0.07); margin-bottom: 4px; letter-spacing: 0.04em; }
+
+.search-overlay-cat { position:fixed;inset:0;background:#f8f7f4;z-index:300;display:flex;flex-direction:column;transform:translateY(-100%);transition:transform 0.38s cubic-bezier(0.77,0,0.175,1); }
+.search-overlay-cat.active { transform:translateY(0); }
+.search-overlay-top { display:flex;align-items:center;gap:10px;padding:60px 16px 12px;border-bottom:1px solid rgba(0,0,0,0.09);flex-shrink:0; }
+.search-input-wrap-cat { flex:1;display:flex;align-items:center;background:rgba(0,0,0,0.05);border-radius:12px;padding:0 12px;gap:10px;height:44px; }
+.search-input-cat { flex:1;background:none;border:none;outline:none;font-family:'Montserrat',sans-serif;font-size:15px;color:#1a1a1a; }
+.search-input-cat::placeholder { color:rgba(0,0,0,0.3); }
     </style>
 </head>
 <body>
@@ -215,6 +222,19 @@ a { text-decoration: none; color: inherit; }
     <div class="nav-socials"><a href="#">◎ Instagram</a><a href="#">✈ Telegram</a></div>
 </div>
 
+
+<!-- ПОИСК ОВЕРЛЕЙ -->
+<div class="search-overlay-cat" id="searchOverlayCat">
+    <div class="search-overlay-top">
+        <div class="search-input-wrap-cat">
+            <svg style="width:18px;height:18px;flex-shrink:0;color:rgba(0,0,0,0.4)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="search-input-cat" id="searchInputCat" type="text" placeholder="Поиск по каталогу..." autocomplete="off">
+            <button style="background:none;border:none;font-size:14px;color:rgba(0,0,0,0.35);cursor:pointer;display:none;padding:4px" id="searchClearCat">✕</button>
+        </div>
+        <button style="background:none;border:none;font-family:'Montserrat',sans-serif;font-size:13px;color:#1a1a1a;cursor:pointer;padding:4px 0" id="searchCancelCat">Отмена</button>
+    </div>
+</div>
+
 <!-- HEADER -->
 <header class="header">
     <div class="header-inner">
@@ -235,7 +255,7 @@ a { text-decoration: none; color: inherit; }
                 </button>
                 <div class="user-menu" id="userMenu">
                     <p class="user-menu__email" id="userMenuEmail"></p>
-                    <button class="user-menu-item" id="adminPanelBtn" style="display:none" onclick="window.location='/admin/index.html'">⚙ Админ панель</button>
+                    <button class="user-menu-item" id="adminPanelBtn" style="display:none" onclick="window.location.href='../admin/index.html'">⚙ Админ панель</button>
                     <button class="user-menu-item danger" onclick="API.logout()">Выйти</button>
                 </div>
             </div>
@@ -318,12 +338,6 @@ a { text-decoration: none; color: inherit; }
 </div>
 
 <!-- WISHLIST DRAWER -->
-<div class="wish-backdrop" id="wishBackdrop"></div>
-<div class="wish-drawer" id="wishDrawer">
-    <div class="cart-drawer__header"><p class="cart-drawer__title">ИЗБРАННОЕ</p><button class="cart-drawer__close" id="wishClose">✕</button></div>
-    <div class="wish-items" id="wishItems">
-        <div class="cart-empty" id="wishEmpty"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><p>Список пуст</p></div>
-    </div>
 </div>
 
 <!-- AUTH MODAL -->
@@ -495,12 +509,9 @@ function selectColor(el) {
 let currentCardData = null, selectedSheetSize = null;
 
 function handleCardClick(event, card) {
-    if (event.target.closest('.pcard__wish') || event.target.closest('.size-dot') || event.target.closest('.color-swatch')) return;
-    // Если есть отдельная страница товара — перейти
-    const slug = card.dataset.slug;
-    const hasPage = allProducts.find(p => (p.slug || p.id) == slug && p.hasPage);
-    if (hasPage) { window.location.href = `../product/${slug}/index.html`; return; }
-    openAddSheet(card);
+    if (event.target.closest('.size-dot') || event.target.closest('.color-swatch')) return;
+    const id = card.dataset.id;
+    window.location.href = `../product/?id=${id}`;
 }
 
 function openAddSheet(card) {
@@ -572,9 +583,11 @@ function renderCart() {
     empty.style.display='none'; footer.style.display='block';
     items.innerHTML = cart.map(item => `
         <div class="cart-item">
+            <img class="cart-item__img" src="${item.img || '../img/img 1.png'}" alt="${item.name}" onerror="this.src='../img/img 1.png'">
             <div class="cart-item__info">
                 <p class="cart-item__name">${item.name}</p>
                 <p class="cart-item__size">Размер: ${item.size}</p>
+                ${item.color ? `<p class="cart-item__size">Цвет: ${item.color}</p>` : ''}
                 <p class="cart-item__price">${formatPrice(item.price)} ₸</p>
             </div>
             <div class="cart-item__controls">
