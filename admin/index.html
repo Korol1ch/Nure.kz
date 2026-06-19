@@ -96,6 +96,8 @@ a { text-decoration: none; color: inherit; }
 .login-box { background: white; border-radius: 20px; padding: 40px 32px; width: 100%; max-width: 380px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
 .login-logo { font-family: 'Playfair Display', serif; font-size: 28px; text-align: center; margin-bottom: 32px; letter-spacing: 0.06em; }
 .login-err { color: #c0392b; font-size: 11px; text-align: center; margin-top: 12px; }
+.wake-banner { background: #fdf6e3; border: 1px solid #e8d9a0; color: #8B6914; font-size: 11px; text-align: center; padding: 10px 14px; border-radius: 10px; margin-bottom: 18px; display: none; line-height: 1.5; }
+.wake-banner.show { display: block; }
 
 .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: white; padding: 12px 24px; border-radius: 12px; font-size: 12px; letter-spacing: 0.04em; z-index: 999; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
 .toast.show { opacity: 1; }
@@ -115,6 +117,7 @@ hr.divider { border: none; border-top: 1px solid rgba(0,0,0,0.08); margin: 20px 
 <div class="login-wrap" id="loginWrap">
   <div class="login-box">
     <div class="login-logo">NURÉ</div>
+    <div class="wake-banner" id="wakeBanner"></div>
     <div class="form-group" style="margin-bottom:14px">
       <label class="form-label">Email</label>
       <input class="form-input" type="email" id="loginEmail" placeholder="admin@example.com">
@@ -325,14 +328,41 @@ async function doLogin() {
   const email = document.getElementById('loginEmail').value.trim();
   const pass  = document.getElementById('loginPass').value;
   const err   = document.getElementById('loginErr');
+  const btn   = document.querySelector('.login-box .btn-primary');
   err.textContent = '';
+  btn.disabled = true; btn.textContent = 'ВХОД...';
   try {
     const res = await API.login(email, pass);
-    if (!res.token) { err.textContent = res.error || 'Ошибка входа'; return; }
+    if (!res || res.success === false || !res.token) { err.textContent = (res && res.error) || 'Ошибка входа'; return; }
     if (res.user.role !== 'admin') { err.textContent = 'Нет доступа'; API.logout(); return; }
     showAdmin();
-  } catch { err.textContent = 'Ошибка соединения'; }
+  } catch {
+    err.textContent = 'Ошибка соединения';
+  } finally {
+    btn.disabled = false; btn.textContent = 'ВОЙТИ';
+  }
 }
+
+// Бэкенд на Render бесплатном плане "засыпает" после простоя — первый запрос
+// после паузы может занять до минуты. Пингуем заранее и показываем статус,
+// чтобы вход/создание товара не выглядело как зависание.
+function setWakeStatus(state, attempt) {
+  const el = document.getElementById('wakeBanner');
+  const btn = document.querySelector('.login-box .btn-primary');
+  if (state === 'waking') {
+    el.classList.add('show');
+    el.textContent = '⏳ Подключаемся к серверу (он "спал" — это может занять до минуты)...';
+    btn.disabled = true;
+  } else if (state === 'ready') {
+    el.classList.remove('show');
+    btn.disabled = false;
+  } else if (state === 'timeout') {
+    el.classList.add('show');
+    el.textContent = '⚠️ Сервер не отвечает. Обновите страницу через минуту и попробуйте снова.';
+    btn.disabled = false;
+  }
+}
+API.wake(setWakeStatus);
 
 function showAdmin() {
   document.getElementById('loginWrap').style.display = 'none';
@@ -499,65 +529,75 @@ async function createProduct() {
   const btn = document.getElementById('btnCreate');
   btn.disabled = true; btn.textContent = 'СОЗДАНИЕ...';
 
-  // Собрать данные цветов из DOM (т.к. onchange может не сработать)
-  const colorInputs = document.querySelectorAll('#newColorsContainer .color-variant');
-  colorInputs.forEach((el, i) => {
-    if (newColorVariants[i]) {
-      newColorVariants[i].name = el.querySelector('input:nth-of-type(1)').value;
-      newColorVariants[i].sizes = el.querySelector('input:nth-of-type(2)').value;
+  try {
+    // Собрать данные цветов из DOM (т.к. onchange может не сработать)
+    const colorInputs = document.querySelectorAll('#newColorsContainer .color-variant');
+    colorInputs.forEach((el, i) => {
+      if (newColorVariants[i]) {
+        newColorVariants[i].name = el.querySelector('input:nth-of-type(1)').value;
+        newColorVariants[i].sizes = el.querySelector('input:nth-of-type(2)').value;
+      }
+    });
+
+    const sizesRaw = document.getElementById('newSizes').value;
+    const sizes = sizesRaw.split(',').map(s=>s.trim()).filter(Boolean);
+
+    const colors = newColorVariants.map((c, i) => ({
+      name: c.name || ('Цвет ' + (i+1)),
+      key: 'color_' + i,
+      sizes: c.sizes.split(',').map(s=>s.trim()).filter(Boolean)
+    }));
+
+    const res = await API.adminCreateProduct({
+      name,
+      price:       parseFloat(document.getElementById('newPrice').value) || 0,
+      category:    document.getElementById('newCategory').value,
+      badge:       document.getElementById('newBadge').value.trim(),
+      sizes,
+      colors,
+      description: document.getElementById('newDesc').value.trim(),
+    });
+
+    if (!res || !res.success) {
+      showToast((res && res.error) || 'Не удалось создать товар. Попробуйте ещё раз.');
+      return;
     }
-  });
 
-  const sizesRaw = document.getElementById('newSizes').value;
-  const sizes = sizesRaw.split(',').map(s=>s.trim()).filter(Boolean);
+    const productId = res.product.id;
 
-  const colors = newColorVariants.map((c, i) => ({
-    name: c.name || ('Цвет ' + (i+1)),
-    key: 'color_' + i,
-    sizes: c.sizes.split(',').map(s=>s.trim()).filter(Boolean)
-  }));
-
-  const res = await API.adminCreateProduct({
-    name,
-    price:       parseFloat(document.getElementById('newPrice').value) || 0,
-    category:    document.getElementById('newCategory').value,
-    badge:       document.getElementById('newBadge').value.trim(),
-    sizes,
-    colors,
-    description: document.getElementById('newDesc').value.trim(),
-  });
-
-  if (!res.success) { showToast(res.error || 'Ошибка'); btn.disabled=false; btn.textContent='СОЗДАТЬ ТОВАР'; return; }
-
-  const productId = res.product.id;
-
-  // Загрузить основные фото
-  if (newImageFiles.length > 0) {
-    btn.textContent = 'ЗАГРУЗКА ФОТО...';
-    await API.adminUploadImages(productId, newImageFiles, 'default').catch(()=>{});
-  }
-
-  // Загрузить фото цветов
-  for (let i=0; i<newColorVariants.length; i++) {
-    const c = newColorVariants[i];
-    if (c.files && c.files.length > 0) {
-      btn.textContent = `ЗАГРУЗКА ФОТО ЦВЕТА ${i+1}...`;
-      await API.adminUploadImages(productId, c.files, 'color_' + i).catch(()=>{});
+    // Загрузить основные фото
+    if (newImageFiles.length > 0) {
+      btn.textContent = 'ЗАГРУЗКА ФОТО...';
+      const upRes = await API.adminUploadImages(productId, newImageFiles, 'default');
+      if (!upRes || !upRes.success) showToast('Товар создан, но фото не загрузились: ' + ((upRes && upRes.error) || 'ошибка сети'));
     }
+
+    // Загрузить фото цветов
+    for (let i=0; i<newColorVariants.length; i++) {
+      const c = newColorVariants[i];
+      if (c.files && c.files.length > 0) {
+        btn.textContent = `ЗАГРУЗКА ФОТО ЦВЕТА ${i+1}...`;
+        const upRes = await API.adminUploadImages(productId, c.files, 'color_' + i);
+        if (!upRes || !upRes.success) showToast(`Товар создан, но фото цвета ${i+1} не загрузились`);
+      }
+    }
+
+    showToast('Товар создан!');
+    // Reset form
+    ['newName','newPrice','newBadge','newSizes','newDesc'].forEach(id => document.getElementById(id).value='');
+    document.getElementById('newCategory').value='';
+    document.getElementById('newImagesPreview').innerHTML='';
+    newImageFiles = [];
+    newColorVariants = [];
+    document.getElementById('newColorsContainer').innerHTML='';
+
+    await loadProducts();
+    switchTab('products');
+  } catch (e) {
+    showToast('Ошибка: ' + (e.message || 'не удалось создать товар'));
+  } finally {
+    btn.disabled=false; btn.textContent='СОЗДАТЬ ТОВАР';
   }
-
-  showToast('Товар создан!');
-  // Reset form
-  ['newName','newPrice','newBadge','newSizes','newDesc'].forEach(id => document.getElementById(id).value='');
-  document.getElementById('newCategory').value='';
-  document.getElementById('newImagesPreview').innerHTML='';
-  newImageFiles = [];
-  newColorVariants = [];
-  document.getElementById('newColorsContainer').innerHTML='';
-
-  await loadProducts();
-  btn.disabled=false; btn.textContent='СОЗДАТЬ ТОВАР';
-  switchTab('products');
 }
 
 // ── EDIT MODAL ──
@@ -665,80 +705,101 @@ function addEditColorVariant() {
 async function saveEdit() {
   if (!currentEditId) return;
   const p = allProducts.find(x => x.id === currentEditId);
+  const btn = document.querySelector('#editModal .btn-primary');
+  if (btn) { btn.disabled = true; btn.textContent = 'СОХРАНЕНИЕ...'; }
 
-  // Collect color updates from DOM
-  const colorEls = document.querySelectorAll('#editColorsContainer .color-variant');
-  const colors = [...colorEls].map(el => {
-    const key = el.dataset.key;
-    const name = el.querySelector('input:nth-of-type(1)').value.trim();
-    const sizesVal = el.querySelector('input:nth-of-type(2)').value;
-    return { key, name, sizes: sizesVal.split(',').map(s=>s.trim()).filter(Boolean) };
-  });
+  try {
+    // Collect color updates from DOM
+    const colorEls = document.querySelectorAll('#editColorsContainer .color-variant');
+    const colors = [...colorEls].map(el => {
+      const key = el.dataset.key;
+      const name = el.querySelector('input:nth-of-type(1)').value.trim();
+      const sizesVal = el.querySelector('input:nth-of-type(2)').value;
+      return { key, name, sizes: sizesVal.split(',').map(s=>s.trim()).filter(Boolean) };
+    });
 
-  const res = await API.adminUpdateProduct(currentEditId, {
-    name:        document.getElementById('eName').value.trim(),
-    price:       parseFloat(document.getElementById('ePrice').value) || 0,
-    category:    document.getElementById('eCategory').value,
-    badge:       document.getElementById('eBadge').value.trim(),
-    sizes:       document.getElementById('eSizes').value.split(',').map(s=>s.trim()).filter(Boolean),
-    description: document.getElementById('eDesc').value.trim(),
-    colors,
-  });
-  if (res.success) {
-    const idx = allProducts.findIndex(x => x.id === currentEditId);
-    if (idx !== -1) allProducts[idx] = { ...allProducts[idx], ...res.product };
-    renderProducts(); showToast('Сохранено'); closeEdit();
-  } else {
-    showToast(res.error || 'Ошибка');
+    const res = await API.adminUpdateProduct(currentEditId, {
+      name:        document.getElementById('eName').value.trim(),
+      price:       parseFloat(document.getElementById('ePrice').value) || 0,
+      category:    document.getElementById('eCategory').value,
+      badge:       document.getElementById('eBadge').value.trim(),
+      sizes:       document.getElementById('eSizes').value.split(',').map(s=>s.trim()).filter(Boolean),
+      description: document.getElementById('eDesc').value.trim(),
+      colors,
+    });
+    if (res && res.success) {
+      const idx = allProducts.findIndex(x => x.id === currentEditId);
+      if (idx !== -1) allProducts[idx] = { ...allProducts[idx], ...res.product };
+      renderProducts(); showToast('Сохранено'); closeEdit();
+    } else {
+      showToast((res && res.error) || 'Ошибка сохранения');
+    }
+  } catch (e) {
+    showToast('Ошибка: ' + (e.message || 'не удалось сохранить'));
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'СОХРАНИТЬ'; }
   }
 }
 
 async function uploadImages(input, colorKey) {
   if (!currentEditId || !input.files.length) return;
   showToast('Загрузка...');
-  const res = await API.adminUploadImages(currentEditId, [...input.files], colorKey);
-  if (res.success) {
-    const idx = allProducts.findIndex(x => x.id === currentEditId);
-    if (idx !== -1) {
-      if (!allProducts[idx].images) allProducts[idx].images = {};
-      if (!allProducts[idx].images[colorKey]) allProducts[idx].images[colorKey] = [];
-      allProducts[idx].images[colorKey].push(...res.urls);
-      if (colorKey === 'default') renderEditImages(allProducts[idx]);
-      else {
-        const grid = document.getElementById('colorImgs_' + colorKey);
-        if (grid) {
-          res.urls.forEach(url => {
-            const div = document.createElement('div'); div.className='img-thumb';
-            div.innerHTML=`<img src="${url}" onerror="this.src='${PLACEHOLDER_IMG}'"><button class="img-thumb__del" onclick="deleteImage('${url}','${colorKey}')">✕</button>`;
-            grid.appendChild(div);
-          });
+  try {
+    const res = await API.adminUploadImages(currentEditId, [...input.files], colorKey);
+    if (res && res.success) {
+      const idx = allProducts.findIndex(x => x.id === currentEditId);
+      if (idx !== -1) {
+        if (!allProducts[idx].images) allProducts[idx].images = {};
+        if (!allProducts[idx].images[colorKey]) allProducts[idx].images[colorKey] = [];
+        allProducts[idx].images[colorKey].push(...res.urls);
+        if (colorKey === 'default') renderEditImages(allProducts[idx]);
+        else {
+          const grid = document.getElementById('colorImgs_' + colorKey);
+          if (grid) {
+            res.urls.forEach(url => {
+              const div = document.createElement('div'); div.className='img-thumb';
+              div.innerHTML=`<img src="${url}" onerror="this.src='${PLACEHOLDER_IMG}'"><button class="img-thumb__del" onclick="deleteImage('${url}','${colorKey}')">✕</button>`;
+              grid.appendChild(div);
+            });
+          }
         }
+        renderProducts();
       }
-      renderProducts();
+      showToast('Фото загружены!');
+    } else {
+      showToast((res && res.error) || 'Ошибка загрузки');
     }
-    showToast('Фото загружены!');
-  } else { showToast(res.error || 'Ошибка загрузки'); }
-  input.value='';
+  } catch (e) {
+    showToast('Ошибка загрузки: ' + (e.message || 'попробуйте снова'));
+  } finally {
+    input.value='';
+  }
 }
 
 async function deleteImage(url, colorKey) {
   if (!currentEditId) return;
-  const res = await API.adminDeleteImage(currentEditId, url, colorKey);
-  if (res.success) {
-    const idx = allProducts.findIndex(x => x.id === currentEditId);
-    if (idx !== -1 && allProducts[idx].images && allProducts[idx].images[colorKey]) {
-      allProducts[idx].images[colorKey] = allProducts[idx].images[colorKey].filter(u => u !== url);
-      if (colorKey === 'default') renderEditImages(allProducts[idx]);
-      else {
-        const grid = document.getElementById('colorImgs_' + colorKey);
-        if (grid) {
-          const found = [...grid.querySelectorAll('.img-thumb')].find(el => el.querySelector('img').src === url);
-          if (found) found.remove();
+  try {
+    const res = await API.adminDeleteImage(currentEditId, url, colorKey);
+    if (res && res.success) {
+      const idx = allProducts.findIndex(x => x.id === currentEditId);
+      if (idx !== -1 && allProducts[idx].images && allProducts[idx].images[colorKey]) {
+        allProducts[idx].images[colorKey] = allProducts[idx].images[colorKey].filter(u => u !== url);
+        if (colorKey === 'default') renderEditImages(allProducts[idx]);
+        else {
+          const grid = document.getElementById('colorImgs_' + colorKey);
+          if (grid) {
+            const found = [...grid.querySelectorAll('.img-thumb')].find(el => el.querySelector('img').src === url);
+            if (found) found.remove();
+          }
         }
+        renderProducts();
       }
-      renderProducts();
+      showToast('Фото удалено');
+    } else {
+      showToast((res && res.error) || 'Не удалось удалить фото');
     }
-    showToast('Фото удалено');
+  } catch (e) {
+    showToast('Ошибка: ' + (e.message || 'не удалось удалить фото'));
   }
 }
 
@@ -747,13 +808,19 @@ async function toggleActivation() {
   const p = allProducts.find(x => x.id === currentEditId);
   if (!p) return;
   const isDeactivated = !!p.deactivatedAt;
-  const res = isDeactivated ? await API.adminActivateProduct(currentEditId) : await API.adminDeactivateProduct(currentEditId);
-  if (res.success) {
-    const idx = allProducts.findIndex(x => x.id === currentEditId);
-    if (idx !== -1) allProducts[idx] = { ...allProducts[idx], ...res.product };
-    renderProducts(); closeEdit();
-    showToast(isDeactivated ? 'Товар реактивирован' : 'Товар деактивирован — удалится через 7 дней');
-  } else { showToast(res.error || 'Ошибка'); }
+  try {
+    const res = isDeactivated ? await API.adminActivateProduct(currentEditId) : await API.adminDeactivateProduct(currentEditId);
+    if (res && res.success) {
+      const idx = allProducts.findIndex(x => x.id === currentEditId);
+      if (idx !== -1) allProducts[idx] = { ...allProducts[idx], ...res.product };
+      renderProducts(); closeEdit();
+      showToast(isDeactivated ? 'Товар реактивирован' : 'Товар деактивирован — удалится через 7 дней');
+    } else {
+      showToast((res && res.error) || 'Ошибка');
+    }
+  } catch (e) {
+    showToast('Ошибка: ' + (e.message || 'попробуйте снова'));
+  }
 }
 
 // ── USERS ──

@@ -5,6 +5,31 @@
 const BACKEND_URL = window.BACKEND_URL || 'https://nure-backend-06sj.onrender.com';
 
 const API = {
+  // ── BACKEND WAKE-UP (Render free tier "спит" после простоя) ──
+  // Пингуем сервер заранее, чтобы реальные действия (вход, создание товара)
+  // не натыкались на 30-60 сек. "холодного старта" без объяснений и не зависали.
+  _awake: false,
+  async wake(onStatus) {
+    if (this._awake) return true;
+    const start = Date.now();
+    const maxWaitMs = 60000;
+    let attempt = 0;
+    while (Date.now() - start < maxWaitMs) {
+      attempt++;
+      try {
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), 8000);
+        const res = await fetch(`${BACKEND_URL}/api`, { signal: ctrl.signal });
+        clearTimeout(t);
+        if (res.ok) { this._awake = true; if (onStatus) onStatus('ready'); return true; }
+      } catch { /* сервер ещё не отвечает — пробуем снова */ }
+      if (onStatus) onStatus('waking', attempt);
+      await new Promise(r => setTimeout(r, 2500));
+    }
+    if (onStatus) onStatus('timeout');
+    return false;
+  },
+
   // ── AUTH ──
   async register(name, email, password) {
     return this._post('/api/auth/register', { name, email, password });
@@ -53,12 +78,11 @@ const API = {
     const fd = new FormData();
     files.forEach(f => fd.append('images', f));
     fd.append('colorKey', colorKey);
-    const res = await fetch(`${BACKEND_URL}/api/admin/products/${id}/images`, {
+    return this._fetchJSON(`/api/admin/products/${id}/images`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${this.getToken()}` },
       body: fd
-    });
-    return res.json();
+    }, 40000); // фото грузятся дольше — даём больше времени
   },
   async adminDeleteImage(id, url, colorKey = 'default') {
     return this._delete(`/api/admin/products/${id}/images`, { url, colorKey }, true);
@@ -67,35 +91,64 @@ const API = {
   async adminGetOrders() { return this._get('/api/admin/orders', true); },
 
   // ── HELPERS ──
+  // Единая обёртка над fetch: таймаут, один повтор (на случай "холодного старта"
+  // Render — первый запрос будит сервер, но может не успеть/упасть с 502),
+  // и НИКОГДА не выбрасывает необработанное исключение — всегда возвращает
+  // { success:false, error: '...' } чтобы UI мог корректно показать ошибку
+  // и разблокировать кнопки вместо вечного "зависания".
+  async _fetchJSON(path, options, timeoutMs = 20000) {
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+        const res = await fetch(`${BACKEND_URL}${path}`, { ...options, signal: ctrl.signal });
+        clearTimeout(timer);
+        let data = null;
+        try { data = await res.json(); } catch { /* пустой/не-JSON ответ */ }
+        if (!res.ok) {
+          return { success: false, error: (data && data.error) || `Ошибка сервера (${res.status})` };
+        }
+        return data || { success: true };
+      } catch (err) {
+        if (attempt === 0) {
+          // Скорее всего сервер ещё "просыпается" — ждём и пробуем ещё раз
+          await new Promise(r => setTimeout(r, 4000));
+          continue;
+        }
+        return {
+          success: false,
+          error: err.name === 'AbortError'
+            ? 'Сервер не отвечает (возможно, ещё запускается). Подождите и попробуйте снова.'
+            : 'Нет соединения с сервером. Проверьте интернет и попробуйте снова.'
+        };
+      }
+    }
+  },
   async _get(path, auth = false) {
-    const res = await fetch(`${BACKEND_URL}${path}`, {
+    return this._fetchJSON(path, {
       headers: auth ? { Authorization: `Bearer ${this.getToken()}` } : {}
     });
-    return res.json();
   },
   async _post(path, body, auth = false) {
-    const res = await fetch(`${BACKEND_URL}${path}`, {
+    return this._fetchJSON(path, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', ...(auth ? { Authorization: `Bearer ${this.getToken()}` } : {}) },
       body: JSON.stringify(body)
     });
-    return res.json();
   },
   async _put(path, body, auth = false) {
-    const res = await fetch(`${BACKEND_URL}${path}`, {
+    return this._fetchJSON(path, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', ...(auth ? { Authorization: `Bearer ${this.getToken()}` } : {}) },
       body: JSON.stringify(body)
     });
-    return res.json();
   },
   async _delete(path, body, auth = false) {
-    const res = await fetch(`${BACKEND_URL}${path}`, {
+    return this._fetchJSON(path, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json', ...(auth ? { Authorization: `Bearer ${this.getToken()}` } : {}) },
       body: JSON.stringify(body)
     });
-    return res.json();
   }
 };
 
