@@ -490,6 +490,7 @@
 
 <script src="api-client.js"></script>
 <script>
+// Статичный список оставлен как мгновенный fallback, пока подгружается реальный каталог
 const PRODUCTS = [
     { id: 1, name: 'ПЛАТЬЕ ARIA',   cat: 'dress', price: 89900,  img: 'img/img 1.png', badge: 'NEW', slug: 'aria' },
     { id: 2, name: 'ПАЛЬТО MILANO', cat: 'outer', price: 145000, img: 'img/img 2.png', badge: 'HIT', slug: 'milano' },
@@ -500,6 +501,23 @@ const PRODUCTS = [
     { id: 7, name: 'ПЛАТЬЕ SERA',   cat: 'dress', price: 94900,  img: 'img/img 1.png', badge: 'HIT', slug: '' },
     { id: 8, name: 'СУМКА ROMA',    cat: 'acc',   price: 28900,  img: 'img/img 2.png', badge: 'NEW', slug: '' },
 ];
+
+// ── РЕАЛЬНЫЙ КАТАЛОГ (для поиска) ──
+let CATALOG_PRODUCTS = [];
+let catalogLoaded = false, catalogLoading = false;
+async function ensureCatalogLoaded() {
+    if (catalogLoaded || catalogLoading) return;
+    catalogLoading = true;
+    try {
+        const res = await API.getProducts();
+        if (res && res.success !== false && Array.isArray(res.products)) {
+            CATALOG_PRODUCTS = res.products;
+            catalogLoaded = true;
+        }
+    } catch {}
+    catalogLoading = false;
+}
+ensureCatalogLoaded(); // подгружаем заранее в фоне, чтобы поиск не ждал
 
 let cart = JSON.parse(localStorage.getItem('nure_cart') || '[]');
 
@@ -612,6 +630,7 @@ const searchResultsTitle = document.getElementById('searchResultsTitle');
 function openSearch() {
     searchOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
+    ensureCatalogLoaded();
     setTimeout(() => searchInput.focus(), 350);
 }
 function closeSearch() {
@@ -624,27 +643,42 @@ searchBtn.addEventListener('click', openSearch);
 searchCancel.addEventListener('click', closeSearch);
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSearch(); });
 
-searchInput.addEventListener('input', () => {
-    const q = searchInput.value.trim().toLowerCase();
+const SEARCH_CAT_LABELS = { dress: 'Платья', outer: 'Верхняя одежда', suit: 'Костюмы', top: 'Топы', acc: 'Аксессуары' };
+
+searchInput.addEventListener('input', async () => {
+    const rawQuery = searchInput.value.trim();
+    const q = rawQuery.toLowerCase();
     searchClear.classList.toggle('visible', q.length > 0);
     if (q.length === 0) { searchSuggestions.style.display = ''; searchResults.style.display = 'none'; return; }
     searchSuggestions.style.display = 'none'; searchResults.style.display = '';
-    const found = PRODUCTS.filter(p =>
-        p.name.toLowerCase().includes(q) ||
-        (p.cat === 'dress' && 'платье'.includes(q)) ||
-        (p.cat === 'outer' && ('пальто'.includes(q) || 'плащ'.includes(q))) ||
-        (p.cat === 'suit' && 'костюм'.includes(q)) ||
-        (p.cat === 'top' && 'топ'.includes(q)) ||
-        (p.cat === 'acc' && ('аксессуар'.includes(q) || 'сумка'.includes(q)))
-    );
+
+    await ensureCatalogLoaded();
+    // Пока реальный каталог не подгрузился (или недоступен) — ищем по статичному фолбэку
+    const source = catalogLoaded ? CATALOG_PRODUCTS : PRODUCTS.map(p => ({
+        id: p.id, name: p.name, category: p.cat, price: p.price,
+        images: { default: [p.img] }, badge: p.badge
+    }));
+
+    const found = source.filter(p => {
+        const name = (p.name || '').toLowerCase();
+        const cat  = (p.category || '').toLowerCase();
+        const catLabel = (SEARCH_CAT_LABELS[p.category] || '').toLowerCase();
+        return name.includes(q) || cat.includes(q) || catLabel.includes(q);
+    }).slice(0, 12);
+
     searchResultsTitle.textContent = found.length > 0 ? `НАЙДЕНО ${found.length} ТОВАРА` : 'НИЧЕГО НЕ НАЙДЕНО';
-    searchResultsGrid.innerHTML = found.map(p => `
-        <div class="search-pcard" onclick="if('${p.slug}') location.href='product/${p.slug}/index.html'; else location.href='catalog/index.html';">
-            <img class="search-pcard__img" src="${p.img}" alt="${p.name}">
+    const catalogLink = `<a href="catalog/index.html?q=${encodeURIComponent(rawQuery)}" style="grid-column:1/-1;display:block;text-align:center;padding:14px 0;font-size:10px;letter-spacing:0.12em;color:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.15);border-radius:10px;margin-top:4px;">ВСЕ РЕЗУЛЬТАТЫ В КАТАЛОГЕ →</a>`;
+    searchResultsGrid.innerHTML = found.map(p => {
+        const img = (p.images && p.images.default && p.images.default[0]) || PLACEHOLDER_IMG;
+        const price = parseFloat(p.price || 0);
+        return `
+        <div class="search-pcard" onclick="location.href='product/?id=${p.id}'">
+            <img class="search-pcard__img" src="${img}" alt="${p.name}" onerror="this.src='${PLACEHOLDER_IMG}'">
             <p class="search-pcard__name">${p.name}</p>
-            <p class="search-pcard__price">${formatPrice(p.price)} ₸</p>
+            <p class="search-pcard__price">${price > 0 ? formatPrice(price) + ' ₸' : '—'}</p>
         </div>
-    `).join('');
+    `;
+    }).join('') + catalogLink;
 });
 searchClear.addEventListener('click', () => {
     searchInput.value = ''; searchClear.classList.remove('visible');

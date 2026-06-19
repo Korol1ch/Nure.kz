@@ -209,9 +209,9 @@ a { text-decoration: none; color: inherit; }
         </div>
         <button onclick="closeSearch()" style="background:none;border:none;font-family:'Montserrat',sans-serif;font-size:13px;color:#1a1a1a;cursor:pointer;padding:4px 0;">Отмена</button>
     </div>
-    <div style="flex:1;overflow-y:auto;padding:0 16px 20px;" id="searchResultsWrap">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding-top:16px;" id="searchResultsGrid"></div>
-        <p style="font-size:11px;color:rgba(0,0,0,0.35);text-align:center;padding:40px 0;" id="searchEmpty" style="display:none">Ничего не найдено</p>
+    <div style="flex:1;overflow-y:auto;padding:0 0 20px;" id="searchResultsWrap">
+        <div class="products-grid" id="searchResultsGrid"></div>
+        <p style="display:none;font-size:11px;color:rgba(0,0,0,0.35);text-align:center;padding:40px 0;" id="searchEmpty">Ничего не найдено</p>
     </div>
 </div>
 
@@ -331,6 +331,16 @@ async function loadProducts() {
         showToast('Не удалось загрузить данные');
     }
     renderProducts();
+
+    // Поддержка перехода из поиска на главной: catalog/index.html?q=запрос
+    const presetQuery = new URLSearchParams(location.search).get('q');
+    if (presetQuery) {
+        searchOverlay.style.transform = 'translateY(0)';
+        document.body.style.overflow = 'hidden';
+        const input = document.getElementById('searchInput');
+        input.value = presetQuery;
+        input.dispatchEvent(new Event('input'));
+    }
 }
 
 function getImg(p) {
@@ -357,6 +367,25 @@ function catName(cat) {
     return m[cat] || '';
 }
 
+function productCardHTML(p) {
+    const img   = getImg(p);
+    const cat   = getCat(p);
+    const price = getPrice(p);
+    const badge = p.badge || (p.is_new ? 'NEW' : '');
+    return `
+    <div class="pcard" onclick="goToProduct('${p.id}')">
+        <div class="pcard__img-wrap">
+            ${badge ? `<span class="pcard__badge ${badge==='HIT'?'pcard__badge--hit':badge==='SALE'?'pcard__badge--sale':''}">${badge}</span>` : ''}
+            <img class="pcard__img" src="${img}" alt="${p.name}" onerror="this.src='${PLACEHOLDER_IMG}'">
+        </div>
+        <div class="pcard__info">
+            <p class="pcard__name">${p.name}</p>
+            <p class="pcard__cat">${catName(cat)}</p>
+            <p class="pcard__price">${price > 0 ? formatPrice(price) + ' ₸' : 'Цена по запросу'}</p>
+        </div>
+    </div>`;
+}
+
 function renderProducts() {
     const grid = document.getElementById('productsGrid');
     let products = [...allProducts];
@@ -371,24 +400,7 @@ function renderProducts() {
         return;
     }
 
-    grid.innerHTML = products.map(p => {
-        const img   = getImg(p);
-        const cat   = getCat(p);
-        const price = getPrice(p);
-        const badge = p.badge || (p.is_new ? 'NEW' : '');
-        return `
-        <div class="pcard" onclick="goToProduct('${p.id}')">
-            <div class="pcard__img-wrap">
-                ${badge ? `<span class="pcard__badge ${badge==='HIT'?'pcard__badge--hit':badge==='SALE'?'pcard__badge--sale':''}">${badge}</span>` : ''}
-                <img class="pcard__img" src="${img}" alt="${p.name}" onerror="this.src='${PLACEHOLDER_IMG}'">
-            </div>
-            <div class="pcard__info">
-                <p class="pcard__name">${p.name}</p>
-                <p class="pcard__cat">${catName(cat)}</p>
-                <p class="pcard__price">${price > 0 ? formatPrice(price) + ' ₸' : 'Цена по запросу'}</p>
-            </div>
-        </div>`;
-    }).join('');
+    grid.innerHTML = products.map(productCardHTML).join('');
 }
 
 function goToProduct(id) {
@@ -411,17 +423,15 @@ function closeSearch() {
 document.getElementById('searchInput').addEventListener('input', function() {
     const q = this.value.trim().toLowerCase();
     const grid = document.getElementById('searchResultsGrid');
-    if (!q) { grid.innerHTML = ''; return; }
-    const found = allProducts.filter(p => p.name.toLowerCase().includes(q));
-    grid.innerHTML = found.map(p => {
-        const img = getImg(p);
-        const price = getPrice(p);
-        return `<div onclick="goToProduct('${p.id}');closeSearch();" style="cursor:pointer">
-            <img src="${img}" alt="${p.name}" style="width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:8px;background:#ede9e3;display:block;margin-bottom:8px;" onerror="this.src='${PLACEHOLDER_IMG}'">
-            <p style="font-family:'Playfair Display',serif;font-size:12px;font-weight:500;margin-bottom:3px;">${p.name}</p>
-            <p style="font-size:11px;font-weight:600;">${price > 0 ? formatPrice(price)+' ₸' : '—'}</p>
-        </div>`;
-    }).join('');
+    const empty = document.getElementById('searchEmpty');
+    if (!q) { grid.innerHTML = ''; empty.style.display = 'none'; return; }
+    const found = allProducts.filter(p =>
+        (p.name || '').toLowerCase().includes(q) ||
+        catName(getCat(p)).toLowerCase().includes(q)
+    );
+    if (!found.length) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+    grid.innerHTML = found.map(productCardHTML).join('');
 });
 
 // ── CART ──

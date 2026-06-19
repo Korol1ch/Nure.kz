@@ -88,13 +88,17 @@ a { text-decoration: none; color: inherit; }
 .size-table th, .size-table td { padding: 8px; text-align: center; border-bottom: 1px solid rgba(0,0,0,0.07); }
 .size-table th { font-weight: 600; font-size: 10px; letter-spacing: 0.1em; color: rgba(0,0,0,0.4); }
 
-/* ─── RELATED ─── */
-.related-section { padding: 32px 16px 48px; max-width: 600px; margin: 0 auto; }
-.related-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 400; letter-spacing: 0.06em; margin-bottom: 20px; }
-.related-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.related-card { display: block; cursor: pointer; }
-.related-card__img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 8px; background: #ede9e3; display: block; margin-bottom: 8px; }
-.related-card__name { font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+/* ─── RELATED CAROUSEL ─── */
+.related-section { padding: 32px 0 48px; max-width: 600px; margin: 0 auto; }
+.related-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 400; letter-spacing: 0.06em; margin-bottom: 18px; padding: 0 20px; }
+.related-carousel { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding: 0 20px 6px; }
+.related-carousel::-webkit-scrollbar { display: none; }
+.related-card { flex: 0 0 42%; min-width: 130px; max-width: 180px; scroll-snap-align: start; display: block; cursor: pointer; }
+.related-card__img-wrap { position: relative; background: #ede9e3; border-radius: 8px; overflow: hidden; }
+.related-card__img-wrap::after { content: ''; display: block; padding-bottom: 133.33%; }
+.related-card__badge { position: absolute; top: 8px; left: 8px; background: #1a1a1a; color: #fff; font-size: 7px; font-weight: 600; letter-spacing: 0.12em; padding: 3px 7px; border-radius: 3px; z-index: 2; }
+.related-card__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.related-card__name { font-family: 'Playfair Display', serif; font-size: 12px; font-weight: 500; margin: 8px 0 2px; line-height: 1.3; }
 .related-card__price { font-size: 12px; font-weight: 600; }
 
 /* ─── CART DRAWER ─── */
@@ -234,7 +238,7 @@ a { text-decoration: none; color: inherit; }
 <!-- RELATED -->
 <section class="related-section" id="relatedSection" style="display:none">
     <p class="related-title">Вам может понравиться</p>
-    <div class="related-grid" id="relatedGrid"></div>
+    <div class="related-carousel" id="relatedGrid"></div>
 </section>
 
 <!-- CART DRAWER -->
@@ -507,16 +511,28 @@ document.querySelectorAll('.accordion-head').forEach(h=>{
 async function loadRelated() {
     try {
         const data = await API.getProducts();
-        const products = (data.products||[]).filter(p=>p.id!=PRODUCT_ID).slice(0,4);
+        let products = (data.products || []).filter(p => p.id != PRODUCT_ID);
+
+        // Сначала товары той же категории, если их хватает — иначе весь каталог
+        if (PRODUCT && PRODUCT.category) {
+            const sameCat = products.filter(p => p.category === PRODUCT.category);
+            if (sameCat.length >= 3) products = sameCat;
+        }
+        products = products.slice(0, 10);
         if (!products.length) return;
+
         const section = document.getElementById('relatedSection');
         const grid = document.getElementById('relatedGrid');
-        section.style.display='block';
+        section.style.display = 'block';
         grid.innerHTML = products.map(p => {
-            const imgs = (p.images&&p.images.default&&p.images.default[0])||PLACEHOLDER_IMG;
-            const price = parseFloat(p.price||0);
+            const imgs  = (p.images && p.images.default && p.images.default[0]) || PLACEHOLDER_IMG;
+            const price = parseFloat(p.price || 0);
+            const badge = p.badge || '';
             return `<a href="../product/?id=${p.id}" class="related-card">
-                <img class="related-card__img" src="${imgs}" alt="${p.name}" onerror="this.src='${PLACEHOLDER_IMG}'">
+                <div class="related-card__img-wrap">
+                    ${badge ? `<span class="related-card__badge">${badge}</span>` : ''}
+                    <img class="related-card__img" src="${imgs}" alt="${p.name}" onerror="this.src='${PLACEHOLDER_IMG}'">
+                </div>
                 <p class="related-card__name">${p.name}</p>
                 <p class="related-card__price">${price>0?formatPrice(price)+' ₸':'—'}</p>
             </a>`;
