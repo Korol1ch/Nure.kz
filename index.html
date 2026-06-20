@@ -732,7 +732,7 @@ updateBadges();
             stagger: opts.stagger ?? 0,
             scrollTrigger: {
                 trigger,
-                start: opts.start ?? 'top 85%',
+                start: opts.start ?? 'top 62%', // секция должна заметно войти в кадр, прежде чем сыграет анимация
                 toggleActions: 'play none none none', // проигрывается один раз
             },
         });
@@ -742,11 +742,11 @@ updateBadges();
     reveal('.s-photo img', '.s-photo', { y: 0, duration: 1.1 });
     reveal('.s-categories .section-title, .cat-item', '.s-categories', { y: 34, stagger: 0.14 });
     reveal('.s-products__header > *', '.s-products', { y: 18, stagger: 0.1 });
-    reveal('.product-card', '.products-track', { y: 30, stagger: 0.1, start: 'top 90%' });
+    reveal('.product-card', '.products-track', { y: 30, stagger: 0.1, start: 'top 70%' });
     reveal('.s-about .section-title, .s-about__text, .s-about .btn-outline, .s-about__photo', '.s-about', { y: 28, stagger: 0.12 });
     reveal('.s-instagram .section-title, .s-instagram__handle, .s-instagram .btn-outline', '.s-instagram', { y: 20, stagger: 0.1 });
-    reveal('.insta-grid img', '.insta-grid', { y: 22, stagger: 0.07, start: 'top 88%' });
-    reveal('.footer > *', '.footer', { y: 20, stagger: 0.08, start: 'top 92%' });
+    reveal('.insta-grid img', '.insta-grid', { y: 22, stagger: 0.07, start: 'top 68%' });
+    reveal('.footer > *', '.footer', { y: 20, stagger: 0.08, start: 'top 78%' });
 
     // пересчёт позиций после полной подгрузки изображений/видео, чтобы триггеры срабатывали в нужных местах
     window.addEventListener('load', () => ScrollTrigger.refresh());
