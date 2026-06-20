@@ -341,6 +341,9 @@ function renderProduct() {
 }
 
 function getColorImages(p, color, idx) {
+    // Новый формат: color.images уже содержит массив фото для этого цвета
+    if (color.images && color.images.length) return color.images;
+    // Фолбек: смотрим в p.images по ключу цвета
     const key = color.key || color.name || idx;
     if (p.images) {
         if (p.images[key] && p.images[key].length) return p.images[key];
@@ -363,7 +366,7 @@ function getSizesForColor(p, colorIdx) {
     if (colors[colorIdx] && colors[colorIdx].sizes && colors[colorIdx].sizes.length) return colors[colorIdx].sizes;
     if (p.sizes && p.sizes.length) return p.sizes;
     if (p.size) return p.size.split(',').map(s=>s.trim()).filter(Boolean);
-    return ['XS','S','M','L'];
+    return []; // нет вариантов — не показываем размеры
 }
 
 function selectColor(idx) {
@@ -374,6 +377,10 @@ function selectColor(idx) {
 
     // Обновить активный цвет
     document.querySelectorAll('.color-thumb-item').forEach((el,i) => el.classList.toggle('active', i===idx));
+
+    // Обновить цену из варианта (если у цвета своя цена)
+    const colorPrice = colors[idx] && colors[idx].price ? parseFloat(colors[idx].price) : parseFloat(p.price || 0);
+    document.getElementById('productPrice').textContent = colorPrice > 0 ? formatPrice(colorPrice)+' ₸' : 'Цена по запросу';
 
     // Поменять большие фото
     const imgs = getColorImages(p, colors[idx], idx);
@@ -386,10 +393,13 @@ function selectColor(idx) {
 function renderSizes(sizes) {
     selectedSize = null;
     const row = document.getElementById('sizeRow');
+    const sizeSection = row.closest('.size-section') || row.parentElement;
     row.innerHTML = sizes.map((s, i) => `
         <button class="size-btn ${i===0?'active':''}" onclick="selectSizeBtn(this,'${s}')">${s}</button>`
     ).join('');
     if (sizes.length > 0) selectedSize = sizes[0];
+    // Скрываем секцию размеров если нет вариантов
+    if (sizeSection) sizeSection.style.display = sizes.length ? '' : 'none';
 }
 
 function selectSizeBtn(btn, size) {
@@ -446,15 +456,18 @@ document.getElementById('gallery').addEventListener('touchend', e=>{
 // ── ДОБАВИТЬ В КОРЗИНУ ──
 document.getElementById('addToCartBtn').addEventListener('click', () => {
     if (!PRODUCT) return;
-    if (!selectedSize) { showToast('Выберите размер'); return; }
-    const price = parseFloat(PRODUCT.price || PRODUCT.price1 || 0);
     const colors = PRODUCT.colors || [];
-    const colorName = colors[selectedColorIdx] ? (colors[selectedColorIdx].name || '') : '';
+    const hasVariants = colors.some(c => c.sizes && c.sizes.length > 0);
+    if (hasVariants && !selectedSize) { showToast('Выберите размер'); return; }
+    const colors_ = PRODUCT.colors || [];
+    const activeColor = colors_[selectedColorIdx];
+    const price = activeColor && activeColor.price ? parseFloat(activeColor.price) : parseFloat(PRODUCT.price || 0);
+    const colorName = activeColor ? (activeColor.name || '') : '';
     const img = allImages[0] || PLACEHOLDER_IMG;
-    const key = `${PRODUCT.id}_${selectedSize}_${selectedColorIdx}`;
+    const key = `${PRODUCT.id}_${selectedSize||'one'}_${selectedColorIdx}`;
     const existing = cart.find(i=>i.cartKey===key);
     if (existing) existing.qty++;
-    else cart.push({ id:PRODUCT.id, cartKey:key, name:PRODUCT.name, price, size:selectedSize, color:colorName, img, qty:1 });
+    else cart.push({ id:PRODUCT.id, cartKey:key, name:PRODUCT.name, price, size:selectedSize||'', color:colorName, img, qty:1 });
     saveCart(); updateCartBadge(); showToast(PRODUCT.name+' добавлен в корзину');
 });
 

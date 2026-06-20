@@ -344,13 +344,14 @@ async function loadProducts() {
 }
 
 function getImg(p) {
+    // Сначала default, потом первый цвет с фото, потом placeholder
     if (p.images && p.images.default && p.images.default.length > 0) return p.images.default[0];
+    if (p.colors && p.colors.length) {
+        for (const c of p.colors) {
+            if (c.images && c.images.length) return c.images[0];
+        }
+    }
     return PLACEHOLDER_IMG;
-}
-function getSizes(p) {
-    if (p.sizes && p.sizes.length) return p.sizes;
-    if (p.size) return p.size.split(',').map(s => s.trim()).filter(Boolean);
-    return ['XS','S','M','L'];
 }
 function getCat(p) {
     if (p.category) return p.category;
@@ -367,11 +368,29 @@ function catName(cat) {
     return m[cat] || '';
 }
 
+// Цветовые точки для карточки каталога
+const COLOR_MAP = {
+    'Розовый':'#f4a7c3','Белый':'#f5f5f5','Черный':'#2a2a2a','Чёрный':'#2a2a2a',
+    'Голубой':'#a0c8e8','Синий':'#3d6fa8','Красный':'#d94040','Серый':'#9e9e9e',
+    'Бежевый':'#d4b896','Коричневый':'#8b5e3c','Хаки':'#7a8c4a','Лимонный':'#f0e060',
+    'Зеленый':'#5a9b5a','Зелёный':'#5a9b5a','Пудровый':'#e8c8c0','Айвори':'#f5f0e8',
+    'Оливковый':'#8c8c3a','Бордовый':'#8b1a1a','Тауп':'#b0a090',
+};
+function colorDot(colorName) {
+    const bg = COLOR_MAP[colorName] || '#cccccc';
+    return `<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${bg};border:1px solid rgba(0,0,0,0.12);" title="${colorName}"></span>`;
+}
+
 function productCardHTML(p) {
-    const img   = getImg(p);
-    const cat   = getCat(p);
-    const price = getPrice(p);
-    const badge = p.badge || (p.is_new ? 'NEW' : '');
+    const img    = getImg(p);
+    const cat    = getCat(p);
+    const price  = getPrice(p);
+    const badge  = p.badge || (p.is_new ? 'NEW' : '');
+    const colors = p.colors || [];
+    // Показываем до 5 цветовых точек
+    const dotsHTML = colors.length > 1
+        ? `<div style="display:flex;gap:4px;align-items:center;margin-top:5px;">${colors.slice(0,5).map(c=>colorDot(c.name)).join('')}${colors.length > 5 ? `<span style="font-size:9px;color:rgba(0,0,0,0.35);margin-left:2px;">+${colors.length-5}</span>` : ''}</div>`
+        : '';
     return `
     <div class="pcard" onclick="goToProduct('${p.id}')">
         <div class="pcard__img-wrap">
@@ -382,6 +401,7 @@ function productCardHTML(p) {
             <p class="pcard__name">${p.name}</p>
             <p class="pcard__cat">${catName(cat)}</p>
             <p class="pcard__price">${price > 0 ? formatPrice(price) + ' ₸' : 'Цена по запросу'}</p>
+            ${dotsHTML}
         </div>
     </div>`;
 }
