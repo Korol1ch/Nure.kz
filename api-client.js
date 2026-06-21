@@ -32,7 +32,12 @@ const API = {
 
   // ── AUTH ──
   async register(name, email, password) {
-    return this._post('/api/auth/register', { name, email, password });
+    const data = await this._post('/api/auth/register', { name, email, password });
+    if (data.token) {
+      localStorage.setItem('nure_token', data.token);
+      localStorage.setItem('nure_user', JSON.stringify(data.user));
+    }
+    return data;
   },
   async login(email, password) {
     const data = await this._post('/api/auth/login', { email, password });

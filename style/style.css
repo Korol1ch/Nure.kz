@@ -252,7 +252,7 @@ a { text-decoration: none; color: inherit; }
 /* ─── КАТЕГОРИИ ─── */
 .s-categories {
     padding: 7vh 6.5vw;
-    display: flex; flex-direction: column; gap: 2.5vh;
+    display: flex; flex-direction: column; gap: 1.5vh;
 }
 .cat-item {
     position: relative; width: 100%;
@@ -370,6 +370,23 @@ a { text-decoration: none; color: inherit; }
     opacity: 0.85;
     transition: opacity 0.3s, transform 0.4s;
 }
+.product-card-skeleton {
+    width: 55vw; flex-shrink: 0;
+    display: flex; flex-direction: column; gap: 2vw;
+}
+.product-card-skeleton .skel-img {
+    width: 100%; height: 70vw; border-radius: 0.5vw;
+    background: linear-gradient(90deg, #1a1a1a 25%, #242424 50%, #1a1a1a 75%);
+    background-size: 200% 100%; animation: homeSkelShimmer 1.4s infinite;
+}
+.product-card-skeleton .skel-line {
+    height: 1.6vh; border-radius: 4px; width: 80%;
+    background: linear-gradient(90deg, #1a1a1a 25%, #242424 50%, #1a1a1a 75%);
+    background-size: 200% 100%; animation: homeSkelShimmer 1.4s infinite;
+}
+.product-card-skeleton .skel-line.short { width: 45%; }
+@keyframes homeSkelShimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
 .product-card__img:active img {
     opacity: 1; transform: scale(1.03);
 }
@@ -504,6 +521,32 @@ a { text-decoration: none; color: inherit; }
     color: white; font-size: 4.5vw;
     cursor: pointer;
 }
+
+/* ─── ГДЕ НАС НАЙТИ ─── */
+.s-location {
+    padding: 7vh 6.5vw;
+    background: #141414;
+}
+.s-location .section-title { margin-bottom: 3.5vh; }
+.location-card {
+    display: flex; flex-direction: column; gap: 2.8vh;
+}
+.location-row {
+    display: flex; gap: 4vw; align-items: flex-start;
+}
+.location-icon {
+    width: 6vw; height: 6vw; min-width: 22px; min-height: 22px;
+    color: rgba(255,255,255,0.55); flex-shrink: 0; margin-top: 0.5vw;
+}
+.location-card__title {
+    font-size: 3.2vw; font-weight: 500; letter-spacing: 0.06em;
+    margin-bottom: 0.8vh; color: rgba(255,255,255,0.9);
+}
+.location-card__text {
+    font-size: 3.5vw; font-weight: 300;
+    color: rgba(255,255,255,0.55); line-height: 1.5;
+}
+.location-card__btn { margin-top: 1vh; }
 
 /* ─── ФУТЕР ─── */
 .footer {

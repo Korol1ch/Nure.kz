@@ -76,9 +76,8 @@
     <nav class="nav-links">
         <a href="index.html" class="active">ГЛАВНАЯ</a>
         <a href="catalog/index.html">КАТАЛОГ</a>
-        <a href="#">НОВИНКИ</a>
         <a href="#">О НАС</a>
-        <a href="#">КОНТАКТЫ</a>
+        <a href="#location">КОНТАКТЫ</a>
     </nav>
 
     <div class="nav-benefits">
@@ -203,60 +202,11 @@
         <p class="s-products__sub">НОВИНКИ СЕЗОНА</p>
     </div>
     <div class="products-scroll-wrapper">
-        <div class="products-track">
-            <a href="product/aria/index.html" class="product-card">
-                <div class="product-card__img">
-                    <img src="img/img 1.png" alt="Платье Aria">
-                    <div class="product-card__badge">NEW</div>
-                </div>
-                <div class="product-card__info">
-                    <p class="product-card__name">ПЛАТЬЕ ARIA</p>
-                    <p class="product-card__cat">Женское</p>
-                    <p class="product-card__price">89 900 ₸</p>
-                </div>
-            </a>
-            <a href="product/milano/index.html" class="product-card">
-                <div class="product-card__img">
-                    <img src="img/img 2.png" alt="Пальто Milano">
-                    <div class="product-card__badge">HIT</div>
-                </div>
-                <div class="product-card__info">
-                    <p class="product-card__name">ПАЛЬТО MILANO</p>
-                    <p class="product-card__cat">Верхняя одежда</p>
-                    <p class="product-card__price">145 000 ₸</p>
-                </div>
-            </a>
-            <a href="catalog/index.html" class="product-card">
-                <div class="product-card__img">
-                    <img src="img/img 1.png" alt="Блуза Venezia">
-                </div>
-                <div class="product-card__info">
-                    <p class="product-card__name">БЛУЗА VENEZIA</p>
-                    <p class="product-card__cat">Женское</p>
-                    <p class="product-card__price">54 500 ₸</p>
-                </div>
-            </a>
-            <a href="product/soft/index.html" class="product-card">
-                <div class="product-card__img">
-                    <img src="img/img 2.png" alt="Брюки Roma">
-                    <div class="product-card__badge">NEW</div>
-                </div>
-                <div class="product-card__info">
-                    <p class="product-card__name">БРЮКИ ROMA</p>
-                    <p class="product-card__cat">Женское</p>
-                    <p class="product-card__price">67 000 ₸</p>
-                </div>
-            </a>
-            <a href="catalog/index.html" class="product-card">
-                <div class="product-card__img">
-                    <img src="img/img 1.png" alt="Жакет Firenze">
-                </div>
-                <div class="product-card__info">
-                    <p class="product-card__name">ЖАКЕТ FIRENZE</p>
-                    <p class="product-card__cat">Верхняя одежда</p>
-                    <p class="product-card__price">112 000 ₸</p>
-                </div>
-            </a>
+        <div class="products-track" id="homeProductsTrack">
+            <div class="product-card-skeleton"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+            <div class="product-card-skeleton"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+            <div class="product-card-skeleton"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+            <div class="product-card-skeleton"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
         </div>
     </div>
     <div class="s-products__footer">
@@ -289,6 +239,28 @@
     <button class="btn-outline">ПОДПИСАТЬСЯ</button>
 </section>
 
+<!-- ═══ СЕКЦИЯ — ГДЕ НАС НАЙТИ ═══ -->
+<section class="s-location" id="location">
+    <p class="section-title">ГДЕ НАС НАЙТИ</p>
+    <div class="location-card">
+        <div class="location-row">
+            <svg class="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <div>
+                <p class="location-card__title">Шоурум NURÉ</p>
+                <p class="location-card__text">г. Актау, ул. Нурсат 12</p>
+            </div>
+        </div>
+        <div class="location-row">
+            <svg class="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>
+            <div>
+                <p class="location-card__title">Часы работы</p>
+                <p class="location-card__text">Ежедневно · 10:00 – 20:00</p>
+            </div>
+        </div>
+        <a class="btn-outline location-card__btn" href="https://2gis.kz/aktau/search/%D1%83%D0%BB.%20%D0%9D%D1%83%D1%80%D1%81%D0%B0%D1%82%2012" target="_blank" rel="noopener noreferrer">ОТКРЫТЬ В 2GIS →</a>
+    </div>
+</section>
+
 <!-- ═══ ФУТЕР ═══ -->
 <footer class="footer">
     <img class="footer-logo" src="img/logo.png" alt="nuré">
@@ -298,7 +270,7 @@
         <a href="catalog/index.html">КАТАЛОГ</a>
         <a href="#">ПОКУПАТЕЛЮ</a>
         <a href="#">О НАС</a>
-        <a href="#">КОНТАКТЫ</a>
+        <a href="#location">КОНТАКТЫ</a>
     </nav>
     <div class="footer-socials">
         <a href="#">◎</a>
@@ -502,20 +474,24 @@ const PRODUCTS = [
     { id: 8, name: 'СУМКА ROMA',    cat: 'acc',   price: 28900,  img: 'img/img 2.png', badge: 'NEW', slug: '' },
 ];
 
-// ── РЕАЛЬНЫЙ КАТАЛОГ (для поиска) ──
+// ── РЕАЛЬНЫЙ КАТАЛОГ (для поиска и секции «Наши товары») ──
 let CATALOG_PRODUCTS = [];
-let catalogLoaded = false, catalogLoading = false;
-async function ensureCatalogLoaded() {
-    if (catalogLoaded || catalogLoading) return;
-    catalogLoading = true;
-    try {
-        const res = await API.getProducts();
-        if (res && res.success !== false && Array.isArray(res.products)) {
-            CATALOG_PRODUCTS = res.products;
-            catalogLoaded = true;
-        }
-    } catch {}
-    catalogLoading = false;
+let catalogLoaded = false;
+let catalogLoadPromise = null;
+function ensureCatalogLoaded() {
+    if (catalogLoaded) return Promise.resolve();
+    if (catalogLoadPromise) return catalogLoadPromise; // уже в процессе — отдаём тот же промис, чтобы не было гонки
+    catalogLoadPromise = (async () => {
+        try {
+            const res = await API.getProducts();
+            if (res && res.success !== false && Array.isArray(res.products)) {
+                CATALOG_PRODUCTS = res.products;
+                catalogLoaded = true;
+            }
+        } catch {}
+        catalogLoadPromise = null;
+    })();
+    return catalogLoadPromise;
 }
 ensureCatalogLoaded(); // подгружаем заранее в фоне, чтобы поиск не ждал
 
@@ -524,6 +500,81 @@ let cart = JSON.parse(localStorage.getItem('nure_cart') || '[]');
 function saveCart() { localStorage.setItem('nure_cart', JSON.stringify(cart)); }
 
 function formatPrice(p) { return p.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
+
+// ── СЕКЦИЯ «НАШИ ТОВАРЫ»: реальные карточки, последние добавленные первыми ──
+// Берём уже загруженный каталог (CATALOG_PRODUCTS из ensureCatalogLoaded), сортируем
+// по addedAt (бэкенд проставляет эту метку при синхронизации с Paloma365 — см. server.js),
+// и рендерим тем же способом, что и остальные карточки на сайте (ссылка на product/?id=...).
+// Раз источник — живой API, секция сама обновляется при каждой загрузке страницы,
+// без какого-либо ручного вмешательства, когда в Paloma365 появляются новые товары.
+const HOME_CAT_LABELS = { dress: 'Женское', outer: 'Верхняя одежда', suit: 'Костюмы', top: 'Топы', acc: 'Аксессуары' };
+function getHomeCat(p) {
+    if (p.category) return p.category;
+    const n = (p.name || '').toLowerCase();
+    if (n.includes('плать') || n.includes('dress')) return 'dress';
+    if (n.includes('пальто') || n.includes('плащ') || n.includes('coat')) return 'outer';
+    if (n.includes('костюм') || n.includes('suit')) return 'suit';
+    if (n.includes('топ') || n.includes('блуз')) return 'top';
+    return 'dress';
+}
+function getHomeImg(p) {
+    if (p.images && p.images.default && p.images.default.length) return p.images.default[0];
+    if (p.colors && p.colors.length) {
+        for (const c of p.colors) { if (c.images && c.images.length) return c.images[0]; }
+    }
+    return PLACEHOLDER_IMG;
+}
+function homeProductCardHTML(p) {
+    const img   = getHomeImg(p);
+    const cat   = getHomeCat(p);
+    const price = parseFloat(p.price || 0);
+    const badge = p.badge || '';
+    return `
+    <a href="product/?id=${p.id}" class="product-card">
+        <div class="product-card__img">
+            ${badge ? `<div class="product-card__badge">${badge}</div>` : ''}
+            <img src="${img}" alt="${p.name}" onerror="this.src='${PLACEHOLDER_IMG}'">
+        </div>
+        <div class="product-card__info">
+            <p class="product-card__name">${p.name}</p>
+            <p class="product-card__cat">${HOME_CAT_LABELS[cat] || ''}</p>
+            <p class="product-card__price">${price > 0 ? formatPrice(price) + ' ₸' : 'Цена по запросу'}</p>
+        </div>
+    </a>`;
+}
+async function renderHomeProducts() {
+    const track = document.getElementById('homeProductsTrack');
+    if (!track) return;
+    await ensureCatalogLoaded();
+    if (!catalogLoaded || !CATALOG_PRODUCTS.length) {
+        // Бэкенд/Paloma365 недоступны — показываем статичный фолбэк вместо бесконечного skeleton
+        track.innerHTML = PRODUCTS.map(p => `
+            <a href="catalog/index.html" class="product-card">
+                <div class="product-card__img">
+                    ${p.badge ? `<div class="product-card__badge">${p.badge}</div>` : ''}
+                    <img src="${p.img}" alt="${p.name}">
+                </div>
+                <div class="product-card__info">
+                    <p class="product-card__name">${p.name}</p>
+                    <p class="product-card__cat">${HOME_CAT_LABELS[p.cat] || ''}</p>
+                    <p class="product-card__price">${formatPrice(p.price)} ₸</p>
+                </div>
+            </a>`).join('');
+        if (window.__nureReveal) window.__nureReveal('.product-card', '.products-track', { y: 30, stagger: 0.1, start: 'top 70%' });
+        if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+        return;
+    }
+    const newest = [...CATALOG_PRODUCTS]
+        .filter(p => !p.hidden)
+        .sort((a, b) => (b.addedAt || 0) - (a.addedAt || 0))
+        .slice(0, 6);
+    if (!newest.length) return;
+    track.innerHTML = newest.map(homeProductCardHTML).join('');
+    // Карточки только что пересозданы — переигрываем их scroll-появление через GSAP
+    if (window.__nureReveal) window.__nureReveal('.product-card', '.products-track', { y: 30, stagger: 0.1, start: 'top 70%' });
+    if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+}
+renderHomeProducts();
 
 function updateBadges() {
     const total = cart.reduce((s, i) => s + i.qty, 0);
@@ -737,6 +788,7 @@ updateBadges();
             },
         });
     }
+    window.__nureReveal = reveal; // нужно для повторного запуска анимации на карточках, которые подгружаются асинхронно (секция «Наши товары»)
 
     reveal('.s-collection__title, .s-collection__sub, .s-collection__text, .s-collection .btn-outline', '.s-collection', { stagger: 0.12 });
     reveal('.s-photo img', '.s-photo', { y: 0, duration: 1.1 });
@@ -746,6 +798,7 @@ updateBadges();
     reveal('.s-about .section-title, .s-about__text, .s-about .btn-outline, .s-about__photo', '.s-about', { y: 28, stagger: 0.12 });
     reveal('.s-instagram .section-title, .s-instagram__handle, .s-instagram .btn-outline', '.s-instagram', { y: 20, stagger: 0.1 });
     reveal('.insta-grid img', '.insta-grid', { y: 22, stagger: 0.07, start: 'top 68%' });
+    reveal('.s-location .section-title, .location-row, .location-card__btn', '.s-location', { y: 20, stagger: 0.1 });
     reveal('.footer > *', '.footer', { y: 20, stagger: 0.08, start: 'top 78%' });
 
     // пересчёт позиций после полной подгрузки изображений/видео, чтобы триггеры срабатывали в нужных местах
