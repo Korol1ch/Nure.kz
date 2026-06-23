@@ -24,19 +24,26 @@ a { text-decoration: none; color: inherit; }
 .burger span { display: block; width: 22px; height: 1.5px; background: #1a1a1a; border-radius: 2px; }
 .user-avatar { width: 28px; height: 28px; background: #1a1a1a; color: white; border-radius: 50%; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; letter-spacing: 0.03em; }
 
-/* ─── NAV ─── */
+/* ─── NAV (тёмный — единый с главной страницей) ─── */
 .nav-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0); z-index: 190; pointer-events: none; transition: background 0.4s; }
-.nav-backdrop.active { background: rgba(0,0,0,0.35); pointer-events: auto; }
-.nav-overlay { position: fixed; top: 0; right: 0; width: 90vw; height: 100vh; background: #f8f7f4; z-index: 200; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.77,0,0.175,1); overflow-y: auto; }
+.nav-backdrop.active { background: rgba(0,0,0,0.55); pointer-events: auto; }
+.nav-overlay { position: fixed; top: 0; right: 0; width: 90vw; height: 100vh; background: #1a1a1a; z-index: 200; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.77,0,0.175,1); overflow-y: auto; }
 .nav-overlay.active { transform: translateX(0); }
-.nav-header { display: flex; justify-content: space-between; align-items: center; height: 56px; width: 87%; margin: 0 auto; flex-shrink: 0; border-bottom: 1px solid rgba(0,0,0,0.09); }
-.nav-logo { width: 52px; }
-.nav-close { background: none; border: none; color: #1a1a1a; font-size: 20px; cursor: pointer; }
+.nav-header { display: flex; justify-content: space-between; align-items: center; height: 56px; width: 87%; margin: 0 auto; flex-shrink: 0; border-bottom: 1px solid rgba(255,255,255,0.09); }
+.nav-logo { width: 52px; filter: brightness(0) invert(1); }
+.nav-close { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
 .nav-links { display: flex; flex-direction: column; gap: 28px; margin-top: 32px; padding: 0 24px; }
-.nav-links a { color: #1a1a1a; font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 400; letter-spacing: 0.04em; }
-.nav-links a.active { border-bottom: 1.5px solid #1a1a1a; padding-bottom: 2px; display: inline-block; }
-.nav-socials { display: flex; flex-direction: column; gap: 16px; margin-top: 24px; margin-bottom: 32px; padding: 0 24px; }
-.nav-socials a { color: rgba(0,0,0,0.45); font-size: 13px; display: flex; align-items: center; gap: 10px; }
+.nav-links a { color: white; text-decoration: none; font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 400; letter-spacing: 0.04em; }
+.nav-links a.active { border-bottom: 1.5px solid rgba(255,255,255,0.5); padding-bottom: 2px; display: inline-block; }
+.nav-benefits { margin-top: 28px; border-top: 1px solid rgba(255,255,255,0.1); padding: 24px 24px 0; }
+.nav-benefits__title { font-family: 'Playfair Display', serif; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; color: rgba(255,255,255,0.35); margin-bottom: 18px; }
+.nav-benefit-item { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 16px; }
+.nav-benefit-icon { font-size: 16px; color: rgba(255,255,255,0.5); flex-shrink: 0; margin-top: 1px; }
+.nav-benefit-name { font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.1em; color: white; margin-bottom: 3px; }
+.nav-benefit-desc { font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 300; color: rgba(255,255,255,0.4); line-height: 1.5; }
+.nav-socials { display: flex; flex-direction: column; gap: 16px; margin-top: auto; margin-bottom: 32px; padding: 24px 24px 0; }
+.nav-socials a { color: rgba(255,255,255,0.5); font-size: 13px; display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.social-icon { font-size: 16px; }
 
 /* ─── HERO ─── */
 .catalog-hero { padding: 40px 20px 28px; text-align: center; }
@@ -141,9 +148,9 @@ a { text-decoration: none; color: inherit; }
 /* ─── FOOTER ─── */
 .footer { text-align: center; padding: 40px 20px; border-top: 1px solid rgba(0,0,0,0.07); margin-top: 20px; }
 .footer-logo { height: 24px; margin-bottom: 8px; }
-.footer-sub { font-size: 9px; letter-spacing: 0.2em; color: rgba(0,0,0,0.3); margin-bottom: 16px; }
+.footer-sub { font-size: 9px; letter-spacing: 0.2em; color: rgba(0,0,0,1); margin-bottom: 16px; }
 .footer-nav { display: flex; justify-content: center; gap: 24px; margin-bottom: 16px; }
-.footer-nav a { font-size: 10px; letter-spacing: 0.14em; color: rgba(0,0,0,0.5); }
+.footer-nav a { font-size: 10px; letter-spacing: 0.14em; color: rgba(0,0,0,1); }
 .footer-copy { font-size: 10px; color: rgba(0,0,0,0.25); }
 .footer-socials { display: flex; justify-content: center; gap: 24px; margin-top: 16px; font-size: 18px; }
 .footer-socials a { color: rgba(0,0,0,0.35); }
@@ -155,23 +162,44 @@ a { text-decoration: none; color: inherit; }
 <div class="nav-backdrop" id="navBackdrop"></div>
 <div class="nav-overlay" id="navOverlay">
     <div class="nav-header">
-        <img class="nav-logo" src="../img/logo.png" alt="nuré">
+        <img class="nav-logo" src="../img/logo dark.png" alt="nuré">
         <button class="nav-close" id="navClose">✕</button>
     </div>
     <nav class="nav-links">
         <a href="../index.html">ГЛАВНАЯ</a>
         <a href="index.html" class="active">КАТАЛОГ</a>
-        <a href="#">НОВИНКИ</a>
-        <a href="#">О НАС</a>
-        <a href="#">КОНТАКТЫ</a>
+        <a href="../about/index.html">О НАС</a>
+        <a href="../contacts/index.html">КОНТАКТЫ</a>
     </nav>
-    <div class="nav-socials"><a href="#">◎ Instagram</a><a href="#">✈ Telegram</a></div>
+    <div class="nav-benefits">
+        <p class="nav-benefits__title">НАШИ ПРЕИМУЩЕСТВА</p>
+        <div class="nav-benefit-item">
+            <div class="nav-benefit-icon">◈</div>
+            <div><p class="nav-benefit-name">ПРЕМИУМ КАЧЕСТВО</p><p class="nav-benefit-desc">Используем лучшие материалы и фурнитуру</p></div>
+        </div>
+        <div class="nav-benefit-item">
+            <div class="nav-benefit-icon">⊞</div>
+            <div><p class="nav-benefit-name">ИТАЛЬЯНСКИЕ ТКАНИ</p><p class="nav-benefit-desc">Только проверенные поставщики из Италии</p></div>
+        </div>
+        <div class="nav-benefit-item">
+            <div class="nav-benefit-icon">⊡</div>
+            <div><p class="nav-benefit-name">БЫСТРАЯ ДОСТАВКА</p><p class="nav-benefit-desc">Доставка по Казахстану от 1 до 3 дней</p></div>
+        </div>
+        <div class="nav-benefit-item">
+            <div class="nav-benefit-icon">◇</div>
+            <div><p class="nav-benefit-name">ЛЕГКИЙ ВОЗВРАТ</p><p class="nav-benefit-desc">Возврат в течение 14 дней без лишних вопросов</p></div>
+        </div>
+    </div>
+    <div class="nav-socials">
+        <a href="https://www.instagram.com/nure.kz/" target="_blank"><span class="social-icon">◎</span> Instagram</a>
+        <a href="#"><span class="social-icon">✈</span> Telegram</a>
+    </div>
 </div>
 
 <!-- HEADER: лого слева | поиск корзина аккаунт бургер справа -->
 <header class="header">
     <div class="header-inner">
-        <a href="../index.html" class="header-logo"><img src="../img/logo.png" alt="nuré"></a>
+        <a href="../index.html" class="header-logo"><img src="../img/logo dark.png" alt="nuré"></a>
         <div class="header-icons">
             <!-- Поиск -->
             <button class="icon-btn" id="searchBtn" aria-label="Поиск">
@@ -305,11 +333,9 @@ a { text-decoration: none; color: inherit; }
 
 <!-- FOOTER -->
 <footer class="footer">
-    <img class="footer-logo" src="../img/logo.png" alt="nuré">
+    <img class="footer-logo" src="../img/logo dark.png" alt="nuré">
     <p class="footer-sub">ITALIAN CLOTHING</p>
-    <nav class="footer-nav"><a href="index.html">КАТАЛОГ</a><a href="#">О НАС</a><a href="#">КОНТАКТЫ</a></nav>
-    <div class="footer-socials"><a href="#">◎</a><a href="#">✈</a></div>
-    <p class="footer-copy">© NURE 2025</p>
+    <nav class="footer-nav"><a href="index.html">КАТАЛОГ</a><a href="../about/index.html">О НАС</a><a href="../contacts/index.html">КОНТАКТЫ</a></nav>
 </footer>
 
 <script src="../api-client.js"></script>

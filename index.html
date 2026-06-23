@@ -64,7 +64,31 @@
 <!-- ═══ TOAST ═══ -->
 <div class="toast" id="toast"></div>
 
-<!-- ═══ BACKDROP ═══ -->
+<!-- AUTH MODAL -->
+<div class="auth-modal-backdrop" id="authBackdrop">
+    <div class="auth-modal">
+        <div class="auth-modal__bar"></div>
+        <p class="auth-modal__title">Добро пожаловать</p>
+        <p class="auth-modal__sub">Войдите или создайте аккаунт</p>
+        <div class="auth-tabs">
+            <button class="auth-tab active" id="tabLogin">ВОЙТИ</button>
+            <button class="auth-tab" id="tabRegister">РЕГИСТРАЦИЯ</button>
+        </div>
+        <div id="loginForm">
+            <div class="auth-field"><label>EMAIL</label><input type="email" id="loginEmail" placeholder="your@email.com"></div>
+            <div class="auth-field"><label>ПАРОЛЬ</label><input type="password" id="loginPass" placeholder="••••••"></div>
+            <p class="auth-error" id="loginError"></p>
+            <button class="auth-submit" id="loginSubmit">ВОЙТИ</button>
+        </div>
+        <div id="registerForm" style="display:none">
+            <div class="auth-field"><label>ИМЯ</label><input type="text" id="regName" placeholder="Ваше имя"></div>
+            <div class="auth-field"><label>EMAIL</label><input type="email" id="regEmail" placeholder="your@email.com"></div>
+            <div class="auth-field"><label>ПАРОЛЬ</label><input type="password" id="regPass" placeholder="Минимум 6 символов"></div>
+            <p class="auth-error" id="regError"></p>
+            <button class="auth-submit" id="regSubmit">СОЗДАТЬ АККАУНТ</button>
+        </div>
+    </div>
+</div>
 <div class="nav-backdrop" id="navBackdrop"></div>
 
 <!-- ═══ NAV OVERLAY ═══ -->
@@ -76,8 +100,8 @@
     <nav class="nav-links">
         <a href="index.html" class="active">ГЛАВНАЯ</a>
         <a href="catalog/index.html">КАТАЛОГ</a>
-        <a href="#">О НАС</a>
-        <a href="#location">КОНТАКТЫ</a>
+        <a href="about/index.html">О НАС</a>
+        <a href="contacts/index.html">КОНТАКТЫ</a>
     </nav>
 
     <div class="nav-benefits">
@@ -136,9 +160,17 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                     <span class="badge" id="cartBadge" style="display:none">0</span>
                 </button>
-                <button class="icon-btn" aria-label="Аккаунт" id="accountBtn" onclick="window.location.href='catalog/index.html'">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                </button>
+                <div id="userBtnWrap" style="position:relative">
+                    <button class="user-avatar" id="userBtn" style="display:none;background:white;color:#1a1a1a;"></button>
+                    <button class="icon-btn" id="loginBtn" aria-label="Войти">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </button>
+                    <div class="user-menu" id="userMenu">
+                        <p class="user-menu__email" id="userMenuEmail"></p>
+                        <button class="user-menu-item" id="adminPanelBtn" style="display:none" onclick="window.location='admin/index.html'">⚙ Админ панель</button>
+                        <button class="user-menu-item danger" onclick="API.logout();updateAuthUI();showToast('Вы вышли из аккаунта')">Выйти</button>
+                    </div>
+                </div>
                 <button class="burger" id="burgerBtn">
                     <span></span><span></span><span></span>
                 </button>
@@ -159,7 +191,7 @@
 <!-- ═══ СЕКЦИЯ 2 — НОВАЯ КОЛЛЕКЦИЯ ═══ -->
 <section class="s-collection">
     <p class="s-collection__title">НОВАЯ КОЛЛЕКЦИЯ</p>
-    <p class="s-collection__sub">ОСЕНЬ / ЗИМА 2025</p>
+    <p class="s-collection__sub">ЛЕТО / ОСЕНЬ 2026</p>
     <p class="s-collection__text">Элегантность, комфорт<br>и безупречное качество<br>в каждой детали.</p>
     <a href="catalog/index.html" class="btn-outline">СМОТРЕТЬ КОЛЛЕКЦИЮ →</a>
 </section>
@@ -173,23 +205,23 @@
 <section class="s-categories">
     <p class="section-title">КАТЕГОРИИ</p>
     <a class="cat-item" href="catalog/index.html">
-        <img src="img/img 1.png" alt="Женское">
+        <img src="img/img 11.png" alt="Женское">
         <div class="cat-label">
             <p>ЖЕНСКОЕ</p>
             <button class="btn-small">СМОТРЕТЬ →</button>
         </div>
     </a>
     <a class="cat-item" href="catalog/index.html">
-        <img src="img/img 2.png" alt="Аксессуары">
+        <img src="img/img 10.png" alt="Аксессуары">
         <div class="cat-label">
-            <p>АКСЕССУАРЫ</p>
+            <p>ОБРАЗЫ</p>
             <button class="btn-small">СМОТРЕТЬ →</button>
         </div>
     </a>
     <a class="cat-item" href="catalog/index.html">
-        <img src="img/img 1.png" alt="Обувь">
+        <img src="img/img 12.png" alt="Обувь">
         <div class="cat-label">
-            <p>ОБУВЬ</p>
+            <p>АКСЕССУАРЫ</p>
             <button class="btn-small">СМОТРЕТЬ →</button>
         </div>
     </a>
@@ -218,9 +250,9 @@
 <section class="s-about">
     <p class="section-title">О БРЕНДЕ</p>
     <p class="s-about__text">NURÉ — это итальянская эстетика, внимание к деталям и любовь к качеству. Мы создаём одежду для женщин, которые ценят стиль, комфорт и индивидуальность.</p>
-    <button class="btn-outline">ПОДРОБНЕЕ О НАС</button>
+    <a href="about/index.html" class="btn-outline">ПОДРОБНЕЕ О НАС</a>
     <div class="s-about__photo">
-        <img src="img/img 2.png" alt="">
+        <img src="img/img 7.png" alt="">
     </div>
 </section>
 
@@ -229,14 +261,14 @@
     <p class="section-title">INSTAGRAM</p>
     <p class="s-instagram__handle">@nure_brand</p>
     <div class="insta-grid">
-        <img src="img/img 1.png" alt="">
         <img src="img/img 2.png" alt="">
-        <img src="img/img 1.png" alt="">
-        <img src="img/img 2.png" alt="">
-        <img src="img/img 1.png" alt="">
-        <img src="img/img 2.png" alt="">
+        <img src="img/img 4.png" alt="">
+        <img src="img/img 5.png" alt="">
+        <img src="img/img 6.png" alt="">
+        <img src="img/img 8.png" alt="">
+        <img src="img/img 9.png" alt="">
     </div>
-    <button class="btn-outline">ПОДПИСАТЬСЯ</button>
+    <button onclick="window.location.href='https://www.instagram.com/nure.kz/'" class="btn-outline">ПОДПИСАТЬСЯ</button>
 </section>
 
 <!-- ═══ СЕКЦИЯ — ГДЕ НАС НАЙТИ ═══ -->
@@ -246,18 +278,18 @@
         <div class="location-row">
             <svg class="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
             <div>
-                <p class="location-card__title">Шоурум NURÉ</p>
-                <p class="location-card__text">г. Актау, ул. Нурсат 12</p>
+                <p class="location-card__title">NURE</p>
+                <p class="location-card__text">г. Актау, цокольный этаж SayaPark</p>
             </div>
         </div>
         <div class="location-row">
             <svg class="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>
             <div>
                 <p class="location-card__title">Часы работы</p>
-                <p class="location-card__text">Ежедневно · 10:00 – 20:00</p>
+                <p class="location-card__text">Ежедневно · 10:00 – 22:00</p>
             </div>
         </div>
-        <a class="btn-outline location-card__btn" href="https://2gis.kz/aktau/search/%D1%83%D0%BB.%20%D0%9D%D1%83%D1%80%D1%81%D0%B0%D1%82%2012" target="_blank" rel="noopener noreferrer">ОТКРЫТЬ В 2GIS →</a>
+        <a class="btn-outline location-card__btn" href="https://2gis.kz/aktau/firm/70000001101969056?m=51.154643%2C43.652069%2F16" target="_blank" rel="noopener noreferrer">ОТКРЫТЬ В 2GIS →</a>
     </div>
 </section>
 
@@ -265,35 +297,24 @@
 <footer class="footer">
     <img class="footer-logo" src="img/logo.png" alt="nuré">
     <p class="footer-sub">ITALIAN CLOTHING</p>
-    <p class="footer-copy">© NURE 2025</p>
     <nav class="footer-nav">
         <a href="catalog/index.html">КАТАЛОГ</a>
-        <a href="#">ПОКУПАТЕЛЮ</a>
-        <a href="#">О НАС</a>
-        <a href="#location">КОНТАКТЫ</a>
+        <a href="about/index.html">О НАС</a>
+        <a href="contacts/index.html">КОНТАКТЫ</a>
     </nav>
-    <div class="footer-socials">
-        <a href="#">◎</a>
-        <a href="#">✈</a>
-    </div>
 </footer>
 
 <style>
-/* ─── ПОИСК ОВЕРЛЕЙ (тёмный для главной) ─── */
+/* ─── CART / TOAST / SEARCH / OVERLAY (копия из style.css) ─── */
 .search-overlay {
-    position: fixed; inset: 0;
-    background: #161616;
-    z-index: 300;
+    position: fixed; inset: 0; background: #161616; z-index: 300;
     display: flex; flex-direction: column;
-    transform: translateY(-100%);
-    transition: transform 0.38s cubic-bezier(0.77,0,0.175,1);
+    transform: translateY(-100%); transition: transform 0.38s cubic-bezier(0.77,0,0.175,1);
 }
 .search-overlay.active { transform: translateY(0); }
 .search-overlay__top {
     display: flex; align-items: center; gap: 10px;
-    padding: 56px 16px 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.09);
-    flex-shrink: 0;
+    padding: 56px 16px 12px; border-bottom: 1px solid rgba(255,255,255,0.09); flex-shrink: 0;
 }
 .search-input-wrap {
     flex: 1; display: flex; align-items: center;
@@ -301,52 +322,21 @@
     padding: 0 12px; gap: 10px; height: 44px;
 }
 .search-icon-inp { width: 18px; height: 18px; flex-shrink: 0; color: rgba(255,255,255,0.4); }
-.search-input {
-    flex: 1; background: none; border: none; outline: none;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 15px; font-weight: 400; color: white;
-}
+.search-input { flex: 1; background: none; border: none; outline: none; font-family: 'Montserrat', sans-serif; font-size: 15px; color: white; }
 .search-input::placeholder { color: rgba(255,255,255,0.32); }
-.search-clear {
-    background: none; border: none;
-    font-size: 14px; color: rgba(255,255,255,0.35); cursor: pointer;
-    display: none; padding: 4px;
-}
+.search-clear { background: none; border: none; font-size: 14px; color: rgba(255,255,255,0.35); cursor: pointer; display: none; padding: 4px; }
 .search-clear.visible { display: block; }
-.search-cancel {
-    background: none; border: none;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 13px; font-weight: 400; color: white;
-    cursor: pointer; white-space: nowrap; padding: 4px 0;
-}
-.search-suggestions { padding: 20px 20px; flex-shrink: 0; }
-.search-hint {
-    font-size: 10px; font-weight: 500; letter-spacing: 0.12em;
-    color: rgba(255,255,255,0.38); margin-bottom: 14px;
-}
+.search-cancel { background: none; border: none; font-family: 'Montserrat', sans-serif; font-size: 13px; color: white; cursor: pointer; white-space: nowrap; padding: 4px 0; }
+.search-suggestions { padding: 20px; flex-shrink: 0; }
+.search-hint { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; color: rgba(255,255,255,0.38); margin-bottom: 14px; }
 .search-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-.search-tag {
-    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 30px; padding: 7px 16px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 12px; font-weight: 400; color: rgba(255,255,255,0.8);
-    cursor: pointer; transition: background 0.15s;
-}
+.search-tag { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 30px; padding: 7px 16px; font-family: 'Montserrat', sans-serif; font-size: 12px; color: rgba(255,255,255,0.8); cursor: pointer; }
 .search-results { flex: 1; overflow-y: auto; padding: 0 16px 20px; }
-.search-results__title {
-    font-size: 10px; font-weight: 500; letter-spacing: 0.12em;
-    color: rgba(255,255,255,0.38); padding: 16px 4px 12px;
-}
+.search-results__title { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; color: rgba(255,255,255,0.38); padding: 16px 4px 12px; }
 .search-results__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .search-pcard { cursor: pointer; }
-.search-pcard__img {
-    width: 100%; aspect-ratio: 3/4; object-fit: cover;
-    border-radius: 6px; background: #2a2a2a; display: block; margin-bottom: 8px;
-}
-.search-pcard__name {
-    font-family: 'Playfair Display', serif;
-    font-size: 12px; font-weight: 500; color: white; margin-bottom: 2px;
-}
+.search-pcard__img { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 6px; background: #2a2a2a; display: block; margin-bottom: 8px; }
+.search-pcard__name { font-family: 'Playfair Display', serif; font-size: 12px; color: white; margin-bottom: 2px; }
 .search-pcard__price { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.8); }
 
 /* ─── КОРЗИНА / ИЗБРАННОЕ ДРАВЕР (тёмный) ─── */
@@ -450,6 +440,32 @@
 }
 .toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+/* ─── USER AVATAR + MENU ─── */
+.user-avatar { width: 28px; height: 28px; background: white; color: #1a1a1a; border-radius: 50%; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; letter-spacing: 0.03em; }
+.user-menu { position: absolute; top: 48px; right: 0; background: #1a1a1a; border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 8px; min-width: 180px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); z-index: 200; display: none; }
+.user-menu.open { display: block; }
+.user-menu-item { display: block; padding: 10px 16px; font-size: 12px; letter-spacing: 0.06em; color: white; cursor: pointer; border-radius: 8px; border: none; background: none; width: 100%; text-align: left; font-family: 'Montserrat', sans-serif; }
+.user-menu-item:hover { background: rgba(255,255,255,0.08); }
+.user-menu-item.danger { color: #e07070; }
+.user-menu__email { padding: 8px 16px 12px; font-size: 10px; color: rgba(255,255,255,0.4); border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 4px; letter-spacing: 0.04em; }
+
+/* ─── AUTH MODAL ─── */
+.auth-modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 300; display: none; align-items: flex-end; }
+.auth-modal-backdrop.open { display: flex; }
+.auth-modal { background: #1a1a1a; border-radius: 20px 20px 0 0; width: 100%; padding: 32px 24px 48px; border-top: 1px solid rgba(255,255,255,0.1); }
+.auth-modal__bar { width: 40px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 2px; margin: 0 auto 28px; }
+.auth-modal__title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 500; margin-bottom: 6px; color: white; }
+.auth-modal__sub { font-size: 12px; color: rgba(255,255,255,0.45); margin-bottom: 28px; letter-spacing: 0.03em; }
+.auth-tabs { display: flex; margin-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.12); }
+.auth-tab { background: none; border: none; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.12em; color: rgba(255,255,255,0.35); cursor: pointer; padding: 10px 20px 12px; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.auth-tab.active { color: white; border-bottom-color: white; }
+.auth-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.auth-field label { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; color: rgba(255,255,255,0.4); }
+.auth-field input { height: 48px; background: rgba(255,255,255,0.07); border: none; border-radius: 10px; padding: 0 16px; font-family: 'Montserrat', sans-serif; font-size: 14px; color: white; outline: none; transition: box-shadow 0.2s; }
+.auth-field input:focus { box-shadow: inset 0 0 0 1.5px rgba(255,255,255,0.5); }
+.auth-submit { width: 100%; height: 52px; background: white; color: #1a1a1a; border: none; border-radius: 12px; font-family: 'Montserrat', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 0.2em; cursor: pointer; margin-top: 8px; }
+.auth-error { color: #e07070; font-size: 11px; text-align: center; margin-top: 8px; display: none; }
+
 /* ─── BADGE ─── */
 .badge {
     position: absolute; top: -4px; right: -6px;
@@ -493,7 +509,7 @@ function ensureCatalogLoaded() {
     })();
     return catalogLoadPromise;
 }
-ensureCatalogLoaded(); // подгружаем заранее в фоне, чтобы поиск не ждал
+ensureCatalogLoaded(); // подгружаем заранее для секции «Наши товары»
 
 let cart = JSON.parse(localStorage.getItem('nure_cart') || '[]');
 
@@ -678,75 +694,97 @@ const searchResults = document.getElementById('searchResults');
 const searchResultsGrid = document.getElementById('searchResultsGrid');
 const searchResultsTitle = document.getElementById('searchResultsTitle');
 
-function openSearch() {
-    searchOverlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
-    ensureCatalogLoaded();
-    setTimeout(() => searchInput.focus(), 350);
-}
-function closeSearch() {
-    searchOverlay.classList.remove('active');
-    document.body.style.overflow = '';
-    searchInput.value = ''; searchClear.classList.remove('visible');
-    searchSuggestions.style.display = ''; searchResults.style.display = 'none';
-}
+function openSearch() { searchOverlay.classList.add('active'); document.body.style.overflow = 'hidden'; setTimeout(() => searchInput.focus(), 350); }
+function closeSearch() { searchOverlay.classList.remove('active'); document.body.style.overflow = ''; searchInput.value = ''; searchClear.classList.remove('visible'); searchSuggestions.style.display = ''; searchResults.style.display = 'none'; }
 searchBtn.addEventListener('click', openSearch);
 searchCancel.addEventListener('click', closeSearch);
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSearch(); });
-
-const SEARCH_CAT_LABELS = { dress: 'Платья', outer: 'Верхняя одежда', suit: 'Костюмы', top: 'Топы', acc: 'Аксессуары' };
-
-searchInput.addEventListener('input', async () => {
-    const rawQuery = searchInput.value.trim();
-    const q = rawQuery.toLowerCase();
-    searchClear.classList.toggle('visible', q.length > 0);
-    if (q.length === 0) { searchSuggestions.style.display = ''; searchResults.style.display = 'none'; return; }
-    searchSuggestions.style.display = 'none'; searchResults.style.display = '';
-
-    await ensureCatalogLoaded();
-    // Пока реальный каталог не подгрузился (или недоступен) — ищем по статичному фолбэку
-    const source = catalogLoaded ? CATALOG_PRODUCTS : PRODUCTS.map(p => ({
-        id: p.id, name: p.name, category: p.cat, price: p.price,
-        images: { default: [p.img] }, badge: p.badge
-    }));
-
-    const found = source.filter(p => {
-        const name = (p.name || '').toLowerCase();
-        const cat  = (p.category || '').toLowerCase();
-        const catLabel = (SEARCH_CAT_LABELS[p.category] || '').toLowerCase();
-        return name.includes(q) || cat.includes(q) || catLabel.includes(q);
-    }).slice(0, 12);
-
-    searchResultsTitle.textContent = found.length > 0 ? `НАЙДЕНО ${found.length} ТОВАРА` : 'НИЧЕГО НЕ НАЙДЕНО';
-    const catalogLink = `<a href="catalog/index.html?q=${encodeURIComponent(rawQuery)}" style="grid-column:1/-1;display:block;text-align:center;padding:14px 0;font-size:10px;letter-spacing:0.12em;color:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.15);border-radius:10px;margin-top:4px;">ВСЕ РЕЗУЛЬТАТЫ В КАТАЛОГЕ →</a>`;
-    searchResultsGrid.innerHTML = found.map(p => {
-        const img = (p.images && p.images.default && p.images.default[0]) || PLACEHOLDER_IMG;
-        const price = parseFloat(p.price || 0);
-        return `
-        <div class="search-pcard" onclick="location.href='product/?id=${p.id}'">
-            <img class="search-pcard__img" src="${img}" alt="${p.name}" onerror="this.src='${PLACEHOLDER_IMG}'">
-            <p class="search-pcard__name">${p.name}</p>
-            <p class="search-pcard__price">${price > 0 ? formatPrice(price) + ' ₸' : '—'}</p>
-        </div>
-    `;
-    }).join('') + catalogLink;
-});
-searchClear.addEventListener('click', () => {
-    searchInput.value = ''; searchClear.classList.remove('visible');
-    searchSuggestions.style.display = ''; searchResults.style.display = 'none';
-    searchInput.focus();
-});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeSearch(); closeMenu(); } });
+searchClear.addEventListener('click', () => { searchInput.value = ''; searchClear.classList.remove('visible'); searchSuggestions.style.display = ''; searchResults.style.display = 'none'; searchInput.focus(); });
 document.querySelectorAll('.search-tag').forEach(tag => {
-    tag.addEventListener('click', () => {
-        searchInput.value = tag.textContent;
-        searchInput.dispatchEvent(new Event('input'));
-    });
+    tag.addEventListener('click', () => { searchInput.value = tag.textContent; searchInput.dispatchEvent(new Event('input')); });
+});
+
+// ── ПОИСК: загрузка товаров и отображение результатов ──
+let _searchProducts = null;
+async function ensureProducts() {
+    if (_searchProducts) return _searchProducts;
+    try { const d = await API.getProducts(); _searchProducts = d.products || []; } catch(e) { _searchProducts = []; }
+    return _searchProducts;
+}
+const CAT_LABELS = { dress:'Платья', outer:'Верхняя одежда', suit:'Костюмы', top:'Топы', acc:'Аксессуары' };
+function getProductImg(p) {
+    if (p.images && p.images.default && p.images.default[0]) return p.images.default[0];
+    if (p.colors && p.colors.length && p.colors[0].images && p.colors[0].images[0]) return p.colors[0].images[0];
+    return '';
+}
+searchInput.addEventListener('input', async function() {
+    const q = this.value.trim().toLowerCase();
+    searchClear.classList.toggle('visible', q.length > 0);
+    if (!q) { searchSuggestions.style.display = ''; searchResults.style.display = 'none'; return; }
+    searchSuggestions.style.display = 'none'; searchResults.style.display = '';
+    searchResultsTitle.textContent = 'ПОИСК...';
+    const products = await ensureProducts();
+    const found = products.filter(p =>
+        (p.name||'').toLowerCase().includes(q) ||
+        (CAT_LABELS[p.category]||'').toLowerCase().includes(q)
+    ).slice(0, 12);
+    searchResultsTitle.textContent = found.length > 0 ? `НАЙДЕНО ${found.length} ТОВАРА` : 'НИЧЕГО НЕ НАЙДЕНО';
+    const catalogLink = `<a href="catalog/index.html?q=${encodeURIComponent(this.value.trim())}" style="grid-column:1/-1;display:block;text-align:center;padding:14px 0;font-size:10px;letter-spacing:0.12em;color:rgba(255,255,255,0.65);border:1px solid rgba(255,255,255,0.15);border-radius:10px;margin-top:4px;">ВСЕ РЕЗУЛЬТАТЫ В КАТАЛОГЕ →</a>`;
+    searchResultsGrid.innerHTML = found.map(p => `
+        <div class="search-pcard" onclick="location.href='product/?id=${p.id}'">
+            <img class="search-pcard__img" src="${getProductImg(p)}" alt="${p.name}" onerror="this.src='${PLACEHOLDER_IMG}'">
+            <p class="search-pcard__name">${p.name}</p>
+            <p class="search-pcard__price">${parseFloat(p.price||0) > 0 ? formatPrice(parseFloat(p.price)) + ' ₸' : '—'}</p>
+        </div>
+    `).join('') + catalogLink;
 });
 
 updateBadges();
+
+// ── AUTH ──
+function updateAuthUI() {
+    const user = API.getUser();
+    if (user) {
+        document.getElementById('loginBtn').style.display = 'none';
+        document.getElementById('userBtn').style.display = 'flex';
+        document.getElementById('userBtn').textContent = user.name.charAt(0).toUpperCase();
+        document.getElementById('userMenuEmail').textContent = user.email;
+        if (user.role === 'admin') document.getElementById('adminPanelBtn').style.display = 'block';
+    } else {
+        document.getElementById('loginBtn').style.display = 'flex';
+        document.getElementById('userBtn').style.display = 'none';
+    }
+}
+document.getElementById('loginBtn').addEventListener('click', () => { document.getElementById('authBackdrop').classList.add('open'); document.body.style.overflow = 'hidden'; });
+document.getElementById('authBackdrop').addEventListener('click', e => { if (e.target === document.getElementById('authBackdrop')) { document.getElementById('authBackdrop').classList.remove('open'); document.body.style.overflow = ''; } });
+document.getElementById('userBtn').addEventListener('click', e => { e.stopPropagation(); document.getElementById('userMenu').classList.toggle('open'); });
+document.addEventListener('click', () => document.getElementById('userMenu').classList.remove('open'));
+document.getElementById('tabLogin').addEventListener('click', () => { document.getElementById('tabLogin').classList.add('active'); document.getElementById('tabRegister').classList.remove('active'); document.getElementById('loginForm').style.display = ''; document.getElementById('registerForm').style.display = 'none'; });
+document.getElementById('tabRegister').addEventListener('click', () => { document.getElementById('tabRegister').classList.add('active'); document.getElementById('tabLogin').classList.remove('active'); document.getElementById('registerForm').style.display = ''; document.getElementById('loginForm').style.display = 'none'; });
+document.getElementById('loginSubmit').addEventListener('click', async () => {
+    const email = document.getElementById('loginEmail').value.trim();
+    const pass = document.getElementById('loginPass').value;
+    const err = document.getElementById('loginError');
+    err.style.display = 'none';
+    const res = await API.login(email, pass);
+    if (res.error) { err.textContent = res.error; err.style.display = 'block'; return; }
+    updateAuthUI(); document.getElementById('authBackdrop').classList.remove('open'); document.body.style.overflow = '';
+    showToast('Добро пожаловать, ' + res.user.name + '!');
+});
+document.getElementById('regSubmit').addEventListener('click', async () => {
+    const name = document.getElementById('regName').value.trim();
+    const email = document.getElementById('regEmail').value.trim();
+    const pass = document.getElementById('regPass').value;
+    const err = document.getElementById('regError');
+    err.style.display = 'none';
+    const res = await API.register(name, email, pass);
+    if (res.error) { err.textContent = res.error; err.style.display = 'block'; return; }
+    updateAuthUI(); document.getElementById('authBackdrop').classList.remove('open'); document.body.style.overflow = '';
+    showToast('Аккаунт создан!');
+});
+updateAuthUI();
 </script>
 
-<!-- ═══ GSAP — лёгкие анимации появления (только главная страница) ═══ -->
 <script src="libs/gsap/gsap.min.js"></script>
 <script src="libs/gsap/ScrollTrigger.min.js"></script>
 <script>
