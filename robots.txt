@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+
+Sitemap: https://korol1ch.github.io/Nure.kz/sitemap.xml

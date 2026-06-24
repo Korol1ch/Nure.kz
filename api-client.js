@@ -105,6 +105,12 @@ const API = {
         let data = null;
         try { data = await res.json(); } catch { /* пустой/не-JSON ответ */ }
         if (!res.ok) {
+          if (res.status === 401) {
+            localStorage.removeItem('nure_token');
+            localStorage.removeItem('nure_user');
+            if (typeof updateAuthUI === 'function') updateAuthUI();
+            return { success: false, error: 'Сессия истекла. Пожалуйста, войдите снова.', unauthorized: true };
+          }
           return { success: false, error: (data && data.error) || `Ошибка сервера (${res.status})` };
         }
         return data || { success: true };

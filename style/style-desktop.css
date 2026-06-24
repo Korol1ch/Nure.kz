@@ -1,7 +1,237 @@
-@media (min-width: 1000px) {
+/* ═══════════════════════════════════════
+   NURE — Desktop overrides (min-width: 768px)
+   Все vw-значения из style.css фиксируются
+   ═══════════════════════════════════════ */
 
+@media (min-width: 768px) {
+
+    /* ── HERO ── */
     .main video {
         display: none;
     }
 
+    .hero-content {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: auto;
+        max-width: 640px;
+        text-align: center;
+    }
+
+    .hero-logo {
+        font-size: 28px;
+        letter-spacing: 0.4em;
+    }
+
+    .hero-sub-tagline {
+        font-size: 14px;
+        letter-spacing: 0.3em;
+    }
+
+    .hero-sub {
+        font-size: 13px;
+        letter-spacing: 0.2em;
+    }
+
+    .scroll-hint-line {
+        width: 32px;
+        height: 52px;
+    }
+
+    .scroll-dot {
+        width: 7px;
+        height: 7px;
+    }
+
+    /* ── SECTION HEADINGS ── */
+    .section-title {
+        font-size: 36px;
+    }
+
+    /* ── BUTTONS ── */
+    .btn-outline {
+        width: auto;
+        min-width: 280px;
+        height: 52px;
+        font-size: 13px;
+    }
+
+    /* ── S-NEW (products) ── */
+    .s-new {
+        padding: 80px 0;
+    }
+
+    .s-products__header {
+        padding: 0 40px;
+    }
+
+    .s-products__subtitle {
+        font-size: 13px;
+        letter-spacing: 0.2em;
+    }
+
+    /* ── S-ABOUT ── */
+    .s-about {
+        padding: 80px 40px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+    }
+
+    .s-about__title {
+        font-size: 40px;
+        font-weight: 500;
+    }
+
+    .s-about__body {
+        font-size: 14px;
+        letter-spacing: 0.2em;
+    }
+
+    .s-about__desc {
+        font-size: 15px;
+        font-weight: 300;
+    }
+
+    /* ── S-CATEGORIES ── */
+    .s-categories {
+        padding: 80px 40px;
+    }
+
+    .cat-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
+
+    .cat-item {
+        height: 460px;
+    }
+
+    /* ── S-PROMISE ── */
+    .s-promise {
+        padding: 80px 40px;
+    }
+
+    .promise-icon {
+        font-size: 56px;
+        color: rgba(255,255,255,0.3);
+    }
+
+    .promise-body {
+        font-size: 15px;
+        font-weight: 300;
+    }
+
+    .promise-sign {
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    /* ── CAROUSEL (s-new products) ── */
+    .products-carousel-track {
+        padding: 0 12px;
+    }
+
+    /* ── S-INSTA ── */
+    .s-instagram {
+        padding: 80px 40px;
+    }
+
+    .s-instagram .section-sub {
+        font-size: 13px;
+        letter-spacing: 0.2em;
+    }
+
+    .insta-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    /* ── S-PHOTO ── */
+    .s-photo img {
+        height: 55vw;
+        max-height: 720px;
+    }
+
+    /* ── BURGER MENU ── */
+    .nav-overlay {
+        max-width: 480px;
+    }
+
+    /* ── NAV BENEFITS ICONS ── */
+    .nav-benefit-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+        padding: 60px 40px;
+    }
+
+    .footer-logo {
+        width: 120px;
+    }
+
+    .footer-sub {
+        font-size: 11px;
+        letter-spacing: 0.35em;
+    }
+
+    .footer-nav a {
+        font-size: 11px;
+        letter-spacing: 0.1em;
+    }
+
+    /* ── CART DRAWER ── */
+    .cart-drawer {
+        max-width: 480px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100%);
+        right: auto;
+        width: 100%;
+    }
+    .cart-drawer.open {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    /* ── SEARCH OVERLAY ── */
+    .search-results-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* ── HEADER ── */
+    .header-inner {
+        max-width: 1200px;
+        padding: 0 40px;
+    }
+}
+
+/* ── WIDE DESKTOP (1024px+) ── */
+@media (min-width: 1024px) {
+    .hero-logo {
+        font-size: 32px;
+    }
+
+    .section-title {
+        font-size: 42px;
+    }
+
+    .s-about {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 100px 60px;
+    }
+
+    .s-categories {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .s-new, .s-promise, .s-instagram {
+        max-width: 1100px;
+        margin-left: auto;
+        margin-right: auto;
+    }
 }

@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NURE — Каталог</title>
+    <title>NURE — Каталог женской одежды</title>
+    <meta name="description" content="Каталог итальянской женской одежды NURE. Платья, пальто, костюмы, топы и аксессуары. Доставка по Казахстану.">
+    <meta property="og:title" content="NURE — Каталог">
+    <meta property="og:description" content="Итальянская женская одежда. Платья, пальто, костюмы и аксессуары.">
+    <meta property="og:image" content="../img/og-cover.jpg">
+    <meta property="og:type" content="website">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -358,6 +363,18 @@ async function loadProducts() {
     }
     renderProducts();
 
+    // Поддержка фильтра по категории: catalog/index.html?cat=dress
+    const presetCat = new URLSearchParams(location.search).get('cat');
+    if (presetCat) {
+        const catBtn = document.querySelector(`.cat-btn[data-cat="${presetCat}"]`);
+        if (catBtn) {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            catBtn.classList.add('active');
+            currentCat = presetCat;
+            renderProducts();
+        }
+    }
+
     // Поддержка перехода из поиска на главной: catalog/index.html?q=запрос
     const presetQuery = new URLSearchParams(location.search).get('q');
     if (presetQuery) {
@@ -537,13 +554,10 @@ cartBackdrop.addEventListener('click', closeCart);
 
 document.getElementById('checkoutBtn').addEventListener('click', async function() {
     if (!cart.length) return;
-    this.textContent='ОТПРАВКА...'; this.disabled=true;
-    const result = await API.createOrder(cart).catch(()=>({}));
-    if (result && !result.error) {
-        showToast('✅ Заказ принят! Мы скоро свяжемся с вами.');
-        cart=[]; saveCart(); renderCart(); updateBadge(); closeCart();
-    } else { showToast('❌ Ошибка. Позвоните нам.'); }
-    this.textContent='ОФОРМИТЬ ЗАКАЗ →'; this.disabled=false;
+    const lines = cart.map(i => `• ${i.name}${i.size && i.size !== 'ONE SIZE' ? ', р.' + i.size : ''}${i.color ? ', ' + i.color : ''} — ${formatPrice(i.price * i.qty)} ₸`).join('\n');
+    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const msg = encodeURIComponent(`Здравствуйте! Хочу оформить заказ:\n\n${lines}\n\nИтого: ${formatPrice(total)} ₸`);
+    window.open(`https://wa.me/+77000000000?text=${msg}`, '_blank');
 });
 
 // ── ФИЛЬТР / СОРТИРОВКА ──

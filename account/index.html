@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой профиль — NURE</title>
+    <meta name="robots" content="noindex">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Montserrat', sans-serif; background: #f8f7f4; color: #1a1a1a; min-height: 100vh; }
+
+/* HEADER */
+.header { position: sticky; top: 0; width: 100%; height: 56px; background: #f8f7f4; border-bottom: 1px solid rgba(0,0,0,0.07); z-index: 100; display: flex; justify-content: center; }
+.header-inner { width: 100%; max-width: 480px; height: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; }
+.header-back { background: none; border: none; font-family: 'Montserrat', sans-serif; font-size: 11px; letter-spacing: 0.1em; color: rgba(0,0,0,0.5); cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 4px 0; }
+.header-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 500; letter-spacing: 0.08em; }
+.header-spacer { width: 60px; }
+
+/* MAIN */
+.page { max-width: 480px; margin: 0 auto; padding: 24px 16px 60px; }
+
+/* PROFILE CARD */
+.profile-card { background: #1a1a1a; color: white; border-radius: 16px; padding: 24px; margin-bottom: 24px; display: flex; align-items: center; gap: 16px; }
+.profile-avatar { width: 56px; height: 56px; border-radius: 50%; background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 600; flex-shrink: 0; color: white; }
+.profile-name { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 500; margin-bottom: 4px; }
+.profile-email { font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 0.04em; }
+
+/* SECTION */
+.section-label { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; color: rgba(0,0,0,0.35); margin-bottom: 12px; }
+
+/* MENU LINKS */
+.menu-list { background: white; border-radius: 14px; overflow: hidden; margin-bottom: 24px; }
+.menu-item { display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 13px; font-weight: 400; cursor: pointer; transition: background 0.15s; text-decoration: none; color: #1a1a1a; }
+.menu-item:last-child { border-bottom: none; }
+.menu-item:active { background: rgba(0,0,0,0.03); }
+.menu-item-left { display: flex; align-items: center; gap: 12px; }
+.menu-icon { font-size: 16px; width: 22px; text-align: center; }
+.menu-arrow { color: rgba(0,0,0,0.2); font-size: 14px; }
+.menu-item.danger { color: #c0392b; }
+
+/* ORDERS */
+.orders-section { margin-bottom: 24px; }
+.order-card { background: white; border-radius: 14px; padding: 16px 18px; margin-bottom: 10px; }
+.order-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.order-id { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; }
+.order-date { font-size: 11px; color: rgba(0,0,0,0.4); }
+.order-status { font-size: 10px; font-weight: 500; padding: 3px 10px; border-radius: 20px; letter-spacing: 0.06em; }
+.status-new { background: #EAF3DE; color: #3B6D11; }
+.status-processing { background: #FAEEDA; color: #854F0B; }
+.status-done { background: #e8e8e8; color: #555; }
+.order-items { font-size: 12px; color: rgba(0,0,0,0.55); line-height: 1.7; margin-bottom: 10px; }
+.order-total { font-size: 13px; font-weight: 600; letter-spacing: 0.04em; }
+
+/* EMPTY ORDERS */
+.empty-orders { text-align: center; padding: 40px 20px; background: white; border-radius: 14px; }
+.empty-orders p { font-size: 12px; color: rgba(0,0,0,0.35); letter-spacing: 0.06em; margin-bottom: 16px; }
+.btn-catalog { display: inline-block; padding: 12px 28px; background: #1a1a1a; color: white; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.14em; border-radius: 10px; text-decoration: none; }
+
+/* SKELETON */
+.skeleton { background: linear-gradient(90deg, #ece9e2 25%, #e4e1da 50%, #ece9e2 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 8px; }
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+.skeleton-card { height: 90px; border-radius: 14px; margin-bottom: 10px; }
+
+/* NOT LOGGED IN */
+.auth-prompt { text-align: center; padding: 60px 20px; }
+.auth-prompt h2 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 500; margin-bottom: 10px; }
+.auth-prompt p { font-size: 12px; color: rgba(0,0,0,0.45); letter-spacing: 0.06em; margin-bottom: 24px; }
+.btn-login { display: inline-block; padding: 14px 36px; background: #1a1a1a; color: white; font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.14em; border-radius: 12px; text-decoration: none; cursor: pointer; border: none; }
+</style>
+</head>
+<body>
+
+<header class="header">
+    <div class="header-inner">
+        <button class="header-back" onclick="history.back()">← НАЗАД</button>
+        <span class="header-title">ПРОФИЛЬ</span>
+        <div class="header-spacer"></div>
+    </div>
+</header>
+
+<main class="page" id="pageContent">
+    <!-- Контент загружается через JS -->
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton skeleton-card"></div>
+</main>
+
+<script src="../api-client.js"></script>
+<script>
+function formatPrice(n) {
+    return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+}
+function formatDate(str) {
+    if (!str) return '';
+    const d = new Date(str);
+    return d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+function statusLabel(s) {
+    const map = { new: ['НОВЫЙ', 'status-new'], processing: ['В РАБОТЕ', 'status-processing'], done: ['ВЫПОЛНЕН', 'status-done'], cancelled: ['ОТМЕНЁН', 'status-done'] };
+    return map[s] || ['НОВЫЙ', 'status-new'];
+}
+
+async function render() {
+    const page = document.getElementById('pageContent');
+    const user = API.getUser();
+
+    if (!user) {
+        page.innerHTML = `
+            <div class="auth-prompt">
+                <h2>Войдите в аккаунт</h2>
+                <p>ЧТОБЫ УВИДЕТЬ СВОЙ ПРОФИЛЬ<br>И ИСТОРИЮ ЗАКАЗОВ</p>
+                <button class="btn-login" onclick="window.location='../'">ВОЙТИ</button>
+            </div>`;
+        return;
+    }
+
+    // Profile card
+    const initials = user.name ? user.name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) : '?';
+    page.innerHTML = `
+        <div class="profile-card">
+            <div class="profile-avatar">${initials}</div>
+            <div>
+                <p class="profile-name">${user.name || 'Пользователь'}</p>
+                <p class="profile-email">${user.email || ''}</p>
+            </div>
+        </div>
+
+        <p class="section-label">МОИ ЗАКАЗЫ</p>
+        <div class="orders-section" id="ordersSection">
+            <div class="skeleton skeleton-card"></div>
+            <div class="skeleton skeleton-card"></div>
+        </div>
+
+        <p class="section-label">НАВИГАЦИЯ</p>
+        <div class="menu-list">
+            <a class="menu-item" href="../catalog/index.html">
+                <span class="menu-item-left"><span class="menu-icon">🛍</span> Каталог</span>
+                <span class="menu-arrow">›</span>
+            </a>
+            <a class="menu-item" href="../about/index.html">
+                <span class="menu-item-left"><span class="menu-icon">◎</span> О бренде</span>
+                <span class="menu-arrow">›</span>
+            </a>
+            <a class="menu-item" href="../contacts/index.html">
+                <span class="menu-item-left"><span class="menu-icon">✉</span> Контакты</span>
+                <span class="menu-arrow">›</span>
+            </a>
+        </div>
+
+        <div class="menu-list">
+            <button class="menu-item danger" onclick="API.logout()">
+                <span class="menu-item-left"><span class="menu-icon">↩</span> Выйти из аккаунта</span>
+            </button>
+        </div>
+    `;
+
+    // Load orders
+    const ordersEl = document.getElementById('ordersSection');
+    try {
+        const token = API.getToken();
+        if (!token) throw new Error('no token');
+
+        const data = await API._get('/api/orders', true);
+
+        if (!data || data.error || !Array.isArray(data)) {
+            // Попробуем без auth — может быть другой эндпоинт
+            throw new Error('no orders endpoint');
+        }
+
+        if (data.length === 0) {
+            ordersEl.innerHTML = `
+                <div class="empty-orders">
+                    <p>У ВАС ЕЩЁ НЕТ ЗАКАЗОВ</p>
+                    <a href="../catalog/index.html" class="btn-catalog">ПЕРЕЙТИ В КАТАЛОГ</a>
+                </div>`;
+            return;
+        }
+
+        ordersEl.innerHTML = data.map(order => {
+            const [label, cls] = statusLabel(order.status);
+            const items = Array.isArray(order.items)
+                ? order.items.map(i => `${i.name}${i.size ? ', р.' + i.size : ''} × ${i.qty}`).join(', ')
+                : '—';
+            const total = Array.isArray(order.items)
+                ? order.items.reduce((s, i) => s + (i.price || 0) * (i.qty || 1), 0)
+                : 0;
+            return `
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <p class="order-id">ЗАКАЗ #${(order.id || order._id || '').toString().slice(-6).toUpperCase()}</p>
+                            <p class="order-date">${formatDate(order.createdAt || order.date)}</p>
+                        </div>
+                        <span class="order-status ${cls}">${label}</span>
+                    </div>
+                    <p class="order-items">${items}</p>
+                    ${total > 0 ? `<p class="order-total">${formatPrice(total)} ₸</p>` : ''}
+                </div>`;
+        }).join('');
+
+    } catch (e) {
+        ordersEl.innerHTML = `
+            <div class="empty-orders">
+                <p>ИСТОРИЯ ЗАКАЗОВ НЕДОСТУПНА</p>
+                <a href="../catalog/index.html" class="btn-catalog">ПЕРЕЙТИ В КАТАЛОГ</a>
+            </div>`;
+    }
+}
+
+render();
+</script>
+</body>
+</html>
